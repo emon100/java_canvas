@@ -4,7 +4,7 @@ import javax.swing.*;
 public class Canvas extends JFrame {
 
     /**
-     *
+     *测试用主窗口
      */
     private static final long serialVersionUID = 1L;
 
