@@ -39,6 +39,12 @@ class PaintSurface extends JComponent {
             public void mouseReleased(MouseEvent e) {
                 startDrag = null;
                 endDrag = null;
+
+                tmpDrawable.setColor(stm.getColor());
+                tmpDrawable.setAlpha(stm.getAlpha());
+                tmpDrawable.setBorder(stm.getColor(), new BasicStroke());
+                stmo.getAllDrawable().add(tmpDrawable);
+                tmpDrawable = null;
                 repaint();
             }
         });
@@ -101,6 +107,10 @@ class PaintSurface extends JComponent {
         if (startDrag != null && endDrag != null) {
             var oldComposite = g2.getComposite();
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
+
+            tmpDrawable.drawOnGraphics2D(g2);
+
+
             //提示坐标
             Point toolTipPoint = getToolTipdrawPoint(endDrag);
             g2.setPaint(Color.BLACK);

@@ -9,7 +9,7 @@ public class BasicDrawableFactory {
         float alpha= 1f;
         Color color=Color.BLACK;
 
-        public Line(Point point) {
+        private Line(Point point) {
             line = new Line2D.Float(point.x,point.y,point.x,point.y);
             borderStroke = new BasicStroke();
         }
@@ -101,6 +101,13 @@ public class BasicDrawableFactory {
         }
 
     }
+
+    private static class Path implements Drawable{
+
+
+    }
+
+
     public static Drawable makeLine(int startx,int starty,int endx,int endy) {
         var a =  new Line(new Point(startx,starty));
         a.putEndPoint(new Point2D.Float(endx,endy));

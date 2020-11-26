@@ -17,11 +17,13 @@ public interface Drawable{
     public Color getFillColor();
 
     public void scale(float times); //设置缩放倍数
-    public void MovestartTo(Point2D.Float p); //设置起始点
+    public void moveStartTo(Point2D.Float p); //设置起始点
+    public void moveStartTo(float x,float y); //设置起始点
     public Point2D.Float getStart();  //得到起始点
     public void putEndPoint(Point2D.Float p); //设置结束点
+    public void putEndPoint(float x,float y); //设置结束点
     public Point2D.Float getEndPoint(); //获得结束点
 
-    public boolean pointOn(Point2D.Float p);  //返回一个点是否在可绘制对象上
-
+    public boolean pointOn(Point2D.Float p);  //返回点是否在可绘制对象上
+    public boolean pointOn(float x,float y);
 }
