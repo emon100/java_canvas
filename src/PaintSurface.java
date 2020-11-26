@@ -13,36 +13,30 @@ class PaintSurface extends JComponent {
     
     ArrayList<Shape> shapes = new ArrayList<Shape>();
     
-    public Color[] colors = { Color.YELLOW, Color.MAGENTA, Color.CYAN, Color.RED, Color.BLUE, Color.PINK };
-    int ra = 0;// 控制下一个图形的形状
+    //public Color[] colors = { Color.YELLOW, Color.MAGENTA, Color.CYAN, Color.RED, Color.BLUE, Color.PINK };
+    //GeneralPath gp =  new GeneralPath();
+    //int ra = 0;// 控制下一个图形的形状
     
-    Point startDrag, endDrag;
+    Point startDrag, endDrag; //鼠标起始点，终止点
     Dimension size = getSize(); //当前窗口大小
 
+    StatesModel stm;//程序中所有的的状态
 
-    GeneralPath gp =  new GeneralPath();
-    public PaintSurface() {
+    Drawable tmpDrawable=null; //用于显示提示的临时Drawable对象
+    
+    public PaintSurface(StatesModel stmo) {
+        stm = stmo;
+
         this.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 startDrag = e.getPoint();
                 endDrag = e.getPoint();
-                gp =  new GeneralPath();
-                gp.moveTo(startDrag.getX(), startDrag.getY());
-                ++ra;
+                createTmpDrawable();
                 repaint();
             }
             
             // 鼠标松开是可以创建一个矩形，将起始点归零
             public void mouseReleased(MouseEvent e) {
-                if (ra%3 == 0) {
-                    Shape r = makeRectangle(startDrag.x, startDrag.y, e.getX(), e.getY());
-                    shapes.add(r);
-                } else if(ra%3 == 1){
-                    Shape r = makeLine(startDrag.x, startDrag.y, e.getX(), e.getY());
-                    shapes.add(r);
-                }else if(ra %3 == 2){
-                    shapes.add(gp);
-                }
                 startDrag = null;
                 endDrag = null;
                 repaint();
@@ -52,15 +46,25 @@ class PaintSurface extends JComponent {
         // 鼠标移动时，我们只需要知道鼠标的重点位置就好
         this.addMouseMotionListener(new MouseMotionAdapter() {
             public void mouseDragged(MouseEvent e) {
-                // System.out.println(e.getX()+" "+e.getY());
+                System.out.println(e.getX()+" "+e.getY());
                 int x = e.getX();
                 int y = e.getY();
                 endDrag.move(x, y);
-                gp.lineTo(x, y);
-
+                tmpDrawable.putEndPoint(new Point2D.Float(x,y));;
                 repaint();
             }
         });
+    }
+
+    private void createTmpDrawable() {
+        switch(stm.getType()){
+            case LINE -> { tmpDrawable = BasicDrawableFactory.makeLine(startDrag.x, startDrag.y, startDrag.x, startDrag.y);}
+			default -> throw new IllegalArgumentException("Unexpected value: " + stm.getType());
+        }
+        float[] dash1 = { 3.0f, 3.0f };
+        tmpDrawable.setBorder(tmpDrawable.getBorderColor(),new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
+        tmpDrawable.setColor(stm.getColor());
+        tmpDrawable.setAlpha(stm.getAlpha());
     }
     
     // 初始化背景
@@ -80,17 +84,10 @@ class PaintSurface extends JComponent {
     }
 
     private void paintBoard(Graphics2D g2){
-        int colorIndex = 0;
-        g2.setStroke(new BasicStroke(2));
-        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.50f)); //设置透明度
-
-        for (Shape s : shapes) {
-            g2.setPaint(Color.BLACK);
-            g2.draw(s);
-            g2.setPaint(colors[(colorIndex++) % 6]);
-            g2.fill(s);
+        var a = stm.getAllDrawable();
+        for(var d:a){
+            d.drawOnGraphics2D(g2);
         }
-
     }
 
     private Point getToolTipdrawPoint(Point mouseNow){
@@ -101,38 +98,23 @@ class PaintSurface extends JComponent {
 
     private void paintTips(Graphics2D g2){
         //提示的虚线
-        var oldComposite = g2.getComposite();
-        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
         if (startDrag != null && endDrag != null) {
-            var oldStroke = g2.getStroke();
-            g2.setPaint(Color.BLUE);
-            float[] dash1 = { 3.0f, 3.0f };
-            g2.setStroke(new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
-            Shape r=null;
-            if (ra %3 == 0) {
-                r = makeRectangle(startDrag.x, startDrag.y, endDrag.x, endDrag.y);
-            } else if(ra %3 == 1) {
-                r = makeLine(startDrag.x, startDrag.y, endDrag.x, endDrag.y);
-            } else{
-                r = gp;
-            }
-            g2.draw(r);
-            g2.setStroke(oldStroke);
-        
+            var oldComposite = g2.getComposite();
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
             //提示坐标
             Point toolTipPoint = getToolTipdrawPoint(endDrag);
             g2.setPaint(Color.BLACK);
             g2.drawString("H:"+endDrag.y+" W:"+endDrag.x,toolTipPoint.x,toolTipPoint.y);
+            g2.setComposite(oldComposite);
         }
-
-
-        g2.setComposite(oldComposite);
     }
 
 
     public void paintComponent(Graphics g) {
-        size = getSize();
         System.out.println("paintComponent called");
+
+        size = getSize();
+        // step0: initial g2
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -147,7 +129,7 @@ class PaintSurface extends JComponent {
 
 
     }
-
+    /*
     private Rectangle2D.Float makeRectangle(int x1, int y1, int x2, int y2) {
         return new Rectangle2D.Float(Math.min(x1, x2), Math.min(y1, y2), Math.abs(x1 - x2), Math.abs(y1 - y2));
     }
@@ -155,5 +137,5 @@ class PaintSurface extends JComponent {
     private Line2D.Float makeLine(int x1, int y1, int x2, int y2) {
         return new Line2D.Float(x1, y1, x2, y2);
     }
-    //Shape, 种类  ,color,
+    */
 }

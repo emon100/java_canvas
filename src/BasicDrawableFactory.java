@@ -18,6 +18,7 @@ public class BasicDrawableFactory {
         public void drawOnGraphics2D(Graphics2D g) {
             // initial g settings
             g.setPaint(color);
+            g.setStroke(borderStroke);
             g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha)); //设置透明度
             //
             g.draw(line);
@@ -74,7 +75,7 @@ public class BasicDrawableFactory {
 
         @Override
         public void MovestartTo(Point2D.Float p) {
-            line = new Line2D.Float(p.x,p.y,line.x2,line.y2);
+            line.setLine(p.x,p.y,line.x2,line.y2);
         }
 
         @Override
@@ -84,7 +85,7 @@ public class BasicDrawableFactory {
 
         @Override
         public void putEndPoint(Point2D.Float p) {
-            // TODO Auto-generated method stub
+            line.setLine(line.x1,line.y1,p.x,p.y);
         }
 
         @Override
@@ -101,7 +102,9 @@ public class BasicDrawableFactory {
 
     }
     public static Drawable makeLine(int startx,int starty,int endx,int endy) {
-        return new Line(new Point(startx,starty));
+        var a =  new Line(new Point(startx,starty));
+        a.putEndPoint(new Point2D.Float(endx,endy));
+        return a;
     }
     
 }
