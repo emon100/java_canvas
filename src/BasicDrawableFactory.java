@@ -7,7 +7,7 @@ public class BasicDrawableFactory {
         Line2D.Float line;
         BasicStroke borderStroke;
         float alpha= 1f;
-        COLOR color=COLOR.BLACK;
+        Color color=Color.BLACK;
 
         public Line(Point point) {
             line = new Line2D.Float(point.x,point.y,point.x,point.y);
@@ -17,6 +17,7 @@ public class BasicDrawableFactory {
         @Override
         public void drawOnGraphics2D(Graphics2D g) {
             // initial g settings
+            g.setPaint(color);
             g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha)); //设置透明度
             //
             g.draw(line);
@@ -36,18 +37,18 @@ public class BasicDrawableFactory {
         }
 
         @Override
-        public void setColor(COLOR c) {
+        public void setColor(Color c) {
             color = c;
         }
 
         @Override
-        public void setBorder(COLOR c, BasicStroke s) {
+        public void setBorder(Color c, BasicStroke s) {
             color = c;
             borderStroke = s;
         }
 
         @Override
-        public Drawable.COLOR getBorderColor() {
+        public Color getBorderColor() {
             return color;
         }
 
@@ -57,12 +58,12 @@ public class BasicDrawableFactory {
         }
 
         @Override
-        public void setFillColor(COLOR c) {
+        public void setFillColor(Color c) {
             color = c;
         }
 
         @Override
-        public Drawable.COLOR getFillColor() {
+        public Color getFillColor() {
             return color;
         }
 
