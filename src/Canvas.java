@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.*;
 
@@ -18,6 +19,8 @@ public class Canvas extends JFrame {
         this.setSize(300, 300);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.add(new PaintSurface(new StatesModel() {
+            
+
             public void execute(Command command) {
             }
 
@@ -29,17 +32,21 @@ public class Canvas extends JFrame {
 
             ArrayList<Drawable> a = new ArrayList<Drawable>();
 
+            {
+                var r  = new Random();
+                a.add(BasicDrawableFactory.makeLine(r.nextInt(200),r.nextInt(200),r.nextInt(200),r.nextInt(200)));
+            }
+
             public ArrayList<Drawable> getAllDrawable() {
-                a.add(BasicDrawableFactory.makeLine(1, 18, 50, 50));
                 return a;
             }
 
             public Drawable.TYPE getType() {
-                return Drawable.TYPE.LINE;
+                return Drawable.TYPE.PATH;
             }
 
             public Color getColor() {
-                return Color.BLACK;
+                return Color.BLUE;
             }
 
             public String getStringInput() {

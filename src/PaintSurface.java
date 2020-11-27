@@ -52,7 +52,7 @@ class PaintSurface extends JComponent {
         // 鼠标移动时，我们只需要知道鼠标的重点位置就好
         this.addMouseMotionListener(new MouseMotionAdapter() {
             public void mouseDragged(MouseEvent e) {
-                System.out.println(e.getX()+" "+e.getY());
+                //System.out.println(e.getX()+" "+e.getY());
                 int x = e.getX();
                 int y = e.getY();
                 endDrag.move(x, y);
@@ -64,11 +64,14 @@ class PaintSurface extends JComponent {
 
     private void createTmpDrawable() {
         switch(stm.getType()){
-            case LINE -> { tmpDrawable = BasicDrawableFactory.makeLine(startDrag.x, startDrag.y, startDrag.x, startDrag.y);}
-			default -> throw new IllegalArgumentException("Unexpected value: " + stm.getType());
+            case LINE :{ tmpDrawable = BasicDrawableFactory.makeLine(startDrag.x, startDrag.y, startDrag.x, startDrag.y);} break;
+            case PATH :{ tmpDrawable = BasicDrawableFactory.makePath(startDrag.x, startDrag.y, startDrag.x, startDrag.y);} break;
+			default: throw new IllegalArgumentException("Unexpected value: " + stm.getType());
         }
         float[] dash1 = { 3.0f, 3.0f };
-        tmpDrawable.setBorder(tmpDrawable.getBorderColor(),new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
+        //tmp
+        tmpDrawable.setBorder(tmpDrawable.getBorderColor(),new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 3.0f));    
+        tmpDrawable.disableFill();
         tmpDrawable.setColor(stm.getColor());
         tmpDrawable.setAlpha(stm.getAlpha());
     }
@@ -107,21 +110,23 @@ class PaintSurface extends JComponent {
         if (startDrag != null && endDrag != null) {
             var oldComposite = g2.getComposite();
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
-
-            tmpDrawable.drawOnGraphics2D(g2);
-
-
+            
+            
+            
             //提示坐标
             Point toolTipPoint = getToolTipdrawPoint(endDrag);
             g2.setPaint(Color.BLACK);
             g2.drawString("H:"+endDrag.y+" W:"+endDrag.x,toolTipPoint.x,toolTipPoint.y);
             g2.setComposite(oldComposite);
         }
+        if(tmpDrawable!=null){
+            tmpDrawable.drawOnGraphics2D(g2);
+        }
     }
 
 
     public void paintComponent(Graphics g) {
-        System.out.println("paintComponent called");
+        //System.out.println("paintComponent called");
 
         size = getSize();
         // step0: initial g2
@@ -136,8 +141,6 @@ class PaintSurface extends JComponent {
         
         // step3: paintTips
         paintTips(g2);
-
-
     }
     /*
     private Rectangle2D.Float makeRectangle(int x1, int y1, int x2, int y2) {
