@@ -11,7 +11,7 @@ class PaintSurface extends JComponent {
      */
     private static final long serialVersionUID = 1L;
     
-    ArrayList<Shape> shapes = new ArrayList<Shape>();
+    ArrayList<Shape> shapes = new ArrayList<>();
     
     //public Color[] colors = { Color.YELLOW, Color.MAGENTA, Color.CYAN, Color.RED, Color.BLUE, Color.PINK };
     //GeneralPath gp =  new GeneralPath();
@@ -56,7 +56,7 @@ class PaintSurface extends JComponent {
                 int x = e.getX();
                 int y = e.getY();
                 endDrag.move(x, y);
-                tmpDrawable.putEndPoint(new Point2D.Float(x,y));;
+                tmpDrawable.putEndPoint(new Point2D.Float(x,y));
                 repaint();
             }
         });
@@ -66,7 +66,9 @@ class PaintSurface extends JComponent {
         switch(stm.getType()){
             case LINE :{ tmpDrawable = BasicDrawableFactory.makeLine(startDrag.x, startDrag.y, startDrag.x, startDrag.y);} break;
             case PATH :{ tmpDrawable = BasicDrawableFactory.makePath(startDrag.x, startDrag.y, startDrag.x, startDrag.y);} break;
-			default: throw new IllegalArgumentException("Unexpected value: " + stm.getType());
+            case RECTANGLE:{ tmpDrawable = BasicDrawableFactory.makeRec(startDrag.x, startDrag.y, startDrag.x, startDrag.y);} break;
+            case TRIANGLE:{ tmpDrawable = BasicDrawableFactory.makeTri(startDrag.x, startDrag.y,startDrag.x, startDrag.y);} break;
+            default: throw new IllegalArgumentException("Unexpected value: " + stm.getType());
         }
         float[] dash1 = { 3.0f, 3.0f };
         //tmp
