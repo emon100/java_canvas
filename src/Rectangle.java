@@ -22,13 +22,14 @@ public class Rectangle implements Drawable{
         g.setStroke(borderStroke);
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,alpha));
         g.draw(rectangle);
-        if (ifFillRec) {            //填充
+        if (ifFilled()) {            //填充
             g.setColor(fillColor);
             g.fill(rectangle);
         }
 
 
     }
+
 
     @Override
     public void setAlpha(float f) {
