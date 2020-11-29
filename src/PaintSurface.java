@@ -84,19 +84,19 @@ class PaintSurface extends JComponent {
     private void createTmpDrawable() {
         switch (stm.getType()) {
             case LINE: {
+                tmpDrawable = BasicDrawableFactory.makeLine(startDrag.x, startDrag.y, startDrag.x, startDrag.y);
                 tmpDrawable.setBorder(tmpDrawable.getBorderColor(),
                         new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
                 tmpDrawable.setColor(stm.getColor());
                 tmpDrawable.setAlpha(stm.getAlpha());
-                tmpDrawable = BasicDrawableFactory.makeLine(startDrag.x, startDrag.y, startDrag.x, startDrag.y);
             }
                 break;
             case PATH: {
+                tmpDrawable = BasicDrawableFactory.makePath(startDrag.x, startDrag.y, startDrag.x, startDrag.y);
                 tmpDrawable.setBorder(tmpDrawable.getBorderColor(),
                         new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
                 tmpDrawable.setColor(stm.getColor());
                 tmpDrawable.setAlpha(stm.getAlpha());
-                tmpDrawable = BasicDrawableFactory.makePath(startDrag.x, startDrag.y, startDrag.x, startDrag.y);
             }
                 break;
             case TEXTBOX: {
@@ -104,14 +104,14 @@ class PaintSurface extends JComponent {
                 tmpDrawable.setColor(stm.getColor());
                 tmpDrawable.setAlpha(stm.getAlpha());
             }
-                break;
+            break;
             case RECTANGLE: {
+                tmpDrawable = BasicDrawableFactory.makeRec(startDrag.x, startDrag.y, startDrag.x, startDrag.y);
                 tmpDrawable.setBorder(tmpDrawable.getBorderColor(),
                         new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
                 tmpDrawable.disableFill();
                 tmpDrawable.setColor(stm.getColor());
                 tmpDrawable.setAlpha(stm.getAlpha());
-                tmpDrawable = BasicDrawableFactory.makeRec(startDrag.x, startDrag.y, startDrag.x, startDrag.y);
             }
                 break;
             case ELLIPSE:{
