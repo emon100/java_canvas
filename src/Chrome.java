@@ -135,12 +135,22 @@ public class Chrome extends JFrame {
         });
 
         //撤销
-        ImageIcon undoImg = new ImageIcon(this.getClass().getResource("images/undo.png"));
-        JLabel undoImgLabel = new JLabel(undoImg);
+        JLabel undoImgLabel = new JLabel(new ImageIcon(this.getClass().getResource("images/undo.png")));
+        undoImgLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                System.out.println("undo");
+            }
+        });
 
         //重做
-        ImageIcon redoImg = new ImageIcon(this.getClass().getResource("images/redo.png"));
-        JLabel redoImgLabel = new JLabel(redoImg);
+        JLabel redoImgLabel = new JLabel(new ImageIcon(this.getClass().getResource("images/redo.png")));
+        redoImgLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                System.out.println("redo");
+            }
+        });
 
         /*
          * 工具栏图片对象
@@ -148,38 +158,95 @@ public class Chrome extends JFrame {
         JLabel toolsLabel = new JLabel("工具");
 
         //选择
-        ImageIcon chooseImg = new ImageIcon(this.getClass().getResource("images/arrow.png"));
-        JLabel chooseImgLabel = new JLabel(chooseImg);
+        JLabel chooseImgLabel = new JLabel(new ImageIcon(this.getClass().getResource("images/arrow.png")));
+        chooseImgLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                states.setCurrentType(States.TYPE.SELECT);
+                System.out.println("select");
+            }
+        });
 
         //文本
-        ImageIcon textImg = new ImageIcon(this.getClass().getResource("images/text.png"));
-        JLabel textImgLabel = new JLabel(textImg);
+        JLabel textImgLabel = new JLabel(new ImageIcon(this.getClass().getResource("images/text.png")));
+        textImgLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                states.setCurrentType(StatesModel.TYPE.TEXTBOX);
+                System.out.println("textBox");
+            }
+        });
 
         //擦除
-        ImageIcon eraserImg = new ImageIcon(this.getClass().getResource("images/eraser.png"));
-        JLabel eraserImgLabel = new JLabel(eraserImg);
+        JLabel eraserImgLabel = new JLabel(new ImageIcon(this.getClass().getResource("images/eraser.png")));
+        eraserImgLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                System.out.println("eraser but didn't set TYPE");
+            }
+        });
 
         //填充
-        ImageIcon fillColorImg = new ImageIcon(this.getClass().getResource("images/fillColor.png"));
-        JLabel fillColorImgLabel = new JLabel(fillColorImg);
+        JLabel fillColorImgLabel = new JLabel(new ImageIcon(this.getClass().getResource("images/fillColor.png")));
+        fillColorImgLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                System.out.println("fill but didn't set TYPE");
+            }
+        });
 
         //图形
         JLabel graphicLabel = new JLabel("图形");
 
         //笔
         JLabel pencilImgLabel = new JLabel(new ImageIcon(this.getClass().getResource("images/pencil.png")));
+        pencilImgLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                states.setCurrentType(StatesModel.TYPE.PATH);
+                System.out.println("pencil -- PATH");
+            }
+        });
 
         //矩形
         JLabel rectangleImgLabel = new JLabel(new ImageIcon(this.getClass().getResource("images/rectangle.png")));
+        rectangleImgLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                states.setCurrentType(StatesModel.TYPE.RECTANGLE);
+                System.out.println("rectangle");
+            }
+        });
 
         //三角形
         JLabel triangleImgLabel = new JLabel(new ImageIcon(this.getClass().getResource("images/triangle.png")));
+        triangleImgLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                states.setCurrentType(StatesModel.TYPE.TRIANGLE);
+                System.out.println("triangle");
+            }
+        });
 
         //直线
         JLabel lineImgLabel = new JLabel(new ImageIcon(this.getClass().getResource("images/line.png")));
+        lineImgLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                states.setCurrentType(StatesModel.TYPE.LINE);
+                System.out.println("line");
+            }
+        });
 
         //椭圆
         JLabel ellipseImgLabel = new JLabel(new ImageIcon(this.getClass().getResource("images/ellipse.png")));
+        ellipseImgLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                states.setCurrentType(StatesModel.TYPE.ELLIPSE);
+                System.out.println("ellipse");
+            }
+        });
 
         //颜色
         JLabel colorLabel = new JLabel("颜色");
@@ -371,13 +438,13 @@ public class Chrome extends JFrame {
         gridBagLayout.setConstraints(colorLabel, gridBagConstraints);
 
         //颜色Panel
-        setConstrainSizeAndPos(gridBagConstraints,8,1,4,2);
+        setConstrainSizeAndPos(gridBagConstraints,9,1,4,2);
         gridBagLayout.setConstraints(colorPanel, gridBagConstraints);
 
         //当前颜色Label
-        setConstrainSizeAndPos(gridBagConstraints,12,1,1,1);
+        setConstrainSizeAndPos(gridBagConstraints,8,1,1,1);
         gridBagLayout.setConstraints(currentColorTextLabel, gridBagConstraints);
-        setConstrainSizeAndPos(gridBagConstraints,12,2,1,1);
+        setConstrainSizeAndPos(gridBagConstraints,8,2,1,1);
         gridBagLayout.setConstraints(currentColorPanel, gridBagConstraints);
 
         //选择颜色Label
@@ -410,10 +477,10 @@ public class Chrome extends JFrame {
         add(triangleImgLabel);
         add(lineImgLabel);
         add(ellipseImgLabel);
-        add(colorLabel);
-        add(colorPanel);
         add(currentColorTextLabel);
         add(currentColorPanel);
+        add(colorLabel);
+        add(colorPanel);
         add(chooseColorTextLabel);
         add(chooseColorPanel);
 
