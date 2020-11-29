@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.nio.channels.Pipe;
 
 public class Rectangle implements Drawable{
     Rectangle2D.Float rectangle;
@@ -22,7 +21,7 @@ public class Rectangle implements Drawable{
         g.setStroke(borderStroke);
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,alpha));
         g.draw(rectangle);
-        if (ifFilled()) {            //填充
+        if (isFilled()) {            //填充
             g.setColor(fillColor);
             g.fill(rectangle);
         }
@@ -60,7 +59,7 @@ public class Rectangle implements Drawable{
     }
 
     @Override
-    public boolean ifFilled() {
+    public boolean isFilled() {
         return ifFillRec;
     }
 

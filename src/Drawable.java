@@ -2,9 +2,6 @@ import java.awt.*;
 import java.awt.geom.*;
 
 public interface Drawable{
-    public static enum TYPE{
-        LINE,PATH,TRIANGLE,RECTANGLE,ELLIPSE,TEXTBOX
-    }
 
     public void drawOnGraphics2D(Graphics2D g);//实现往g上作画
     public void setAlpha(float f);//设置整个图形透明度，from 0 to 1.0f
@@ -13,7 +10,7 @@ public interface Drawable{
     public Color getBorderColor(); //获得边缘颜色
     public BasicStroke getBasicStroke();
 
-    public boolean ifFilled(); //是否开启填充
+    public boolean isFilled();  //是否开启填充
     public void setFill();        //开启默认填充
     public void setFill(Color c); //开启填充，设置填充的颜色
     public Color getFillColor();  //获得填充的颜色

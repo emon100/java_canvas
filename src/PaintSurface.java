@@ -93,6 +93,10 @@ class PaintSurface extends JComponent {
                 tmpDrawable = BasicDrawableFactory.makeTextBox(startDrag.x, startDrag.y, startDrag.x, startDrag.y);
             }
                 break;
+            case RECTANGLE:{
+                tmpDrawable = BasicDrawableFactory.makeRec(startDrag.x, startDrag.y, startDrag.x, startDrag.y);
+            } 
+                break;
             default:
                 throw new IllegalArgumentException("Unexpected value: " + stm.getType());
         }

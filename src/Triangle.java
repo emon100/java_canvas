@@ -22,7 +22,7 @@ public class Triangle implements Drawable{
         g.setStroke(borderStroke);
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,alpha));
         g.draw(triangle);
-        if (ifFilled()) {
+        if (isFilled()) {
             g.setColor(fillColor);
             g.fill(triangle);
         }
@@ -57,7 +57,7 @@ public class Triangle implements Drawable{
     }
 
     @Override
-    public boolean ifFilled() {
+    public boolean isFilled() {
         return ifFillTri;
     }
 

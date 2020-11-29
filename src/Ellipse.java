@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
-import java.io.StringReader;
 
 public class Ellipse implements Drawable {
 
@@ -46,7 +45,7 @@ public class Ellipse implements Drawable {
     }
 
     @Override
-    public boolean ifFilled() {
+    public boolean isFilled() {
         return iffFillEll;
     }
 
