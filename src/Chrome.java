@@ -164,7 +164,7 @@ public class Chrome extends JFrame {
         chooseImgLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                states.setCurrentType(States.TYPE.SELECT);
+                states.setCursorType(States.TYPE.SELECT);
                 System.out.println("select");
             }
         });
@@ -174,7 +174,7 @@ public class Chrome extends JFrame {
         textImgLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                states.setCurrentType(StatesModel.TYPE.TEXTBOX);
+                states.setCursorType(StatesModel.TYPE.TEXTBOX);
                 System.out.println("textBox");
             }
         });
@@ -205,7 +205,7 @@ public class Chrome extends JFrame {
         pencilImgLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                states.setCurrentType(StatesModel.TYPE.PATH);
+                states.setCursorType(StatesModel.TYPE.PATH);
                 System.out.println("pencil -- PATH");
             }
         });
@@ -215,7 +215,7 @@ public class Chrome extends JFrame {
         rectangleImgLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                states.setCurrentType(StatesModel.TYPE.RECTANGLE);
+                states.setCursorType(StatesModel.TYPE.RECTANGLE);
                 System.out.println("rectangle");
             }
         });
@@ -225,7 +225,7 @@ public class Chrome extends JFrame {
         triangleImgLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                states.setCurrentType(StatesModel.TYPE.TRIANGLE);
+                states.setCursorType(StatesModel.TYPE.TRIANGLE);
                 System.out.println("triangle");
             }
         });
@@ -235,7 +235,7 @@ public class Chrome extends JFrame {
         lineImgLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                states.setCurrentType(StatesModel.TYPE.LINE);
+                states.setCursorType(StatesModel.TYPE.LINE);
                 System.out.println("line");
             }
         });
@@ -245,7 +245,7 @@ public class Chrome extends JFrame {
         ellipseImgLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                states.setCurrentType(StatesModel.TYPE.ELLIPSE);
+                states.setCursorType(StatesModel.TYPE.ELLIPSE);
                 System.out.println("ellipse");
             }
         });

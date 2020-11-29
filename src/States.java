@@ -9,7 +9,9 @@ public class States implements StatesModel {
 
     protected float alpha = 1.0f;
 
-    protected TYPE cursorType=TYPE.RECTANGLE;
+    //当前选择类型
+    protected TYPE cursorType = TYPE.RECTANGLE;
+
     //设置当前颜色
     public void setCurrentColor(Color cur) {
         this.currentColor = cur;
@@ -23,12 +25,9 @@ public class States implements StatesModel {
         a.add(BasicDrawableFactory.makeLine(r.nextInt(200),r.nextInt(200),r.nextInt(200),r.nextInt(200)));
     }
 
-
-    //当前选择类型
-    protected TYPE currentType;
-    //设置当前类型
-    public void setCurrentType(TYPE currentType) {
-        this.currentType = currentType;
+    //设置当前光标类型
+    public void setCursorType(TYPE cursorType) {
+        this.cursorType = cursorType;
     }
 
     @Override
