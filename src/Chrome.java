@@ -165,7 +165,6 @@ public class Chrome extends JFrame {
             @Override
             public void mouseReleased(MouseEvent e) {
                 states.setType(States.TYPE.SELECT);
-                System.out.println("select");
             }
         });
 
@@ -175,7 +174,6 @@ public class Chrome extends JFrame {
             @Override
             public void mouseReleased(MouseEvent e) {
                 states.setType(StatesModel.TYPE.TEXTBOX);
-                System.out.println("textBox");
             }
         });
 
@@ -184,7 +182,7 @@ public class Chrome extends JFrame {
         eraserImgLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                System.out.println("eraser but didn't set TYPE");
+                states.setType(StatesModel.TYPE.ERASER);
             }
         });
 
@@ -193,7 +191,7 @@ public class Chrome extends JFrame {
         fillColorImgLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                System.out.println("fill but didn't set TYPE");
+                states.setType(States.TYPE.FILL);
             }
         });
 
