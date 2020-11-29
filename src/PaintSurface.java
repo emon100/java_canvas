@@ -116,6 +116,20 @@ class PaintSurface extends JComponent {
                 break;
             case ELLIPSE:{
                 tmpDrawable = BasicDrawableFactory.makeEllipse(startDrag.x, startDrag.y, startDrag.x, startDrag.y);
+                tmpDrawable.setBorder(tmpDrawable.getBorderColor(),
+                        new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
+                tmpDrawable.disableFill();
+                tmpDrawable.setColor(stm.getColor());
+                tmpDrawable.setAlpha(stm.getAlpha());
+            }
+                break;
+            case TRIANGLE:{
+                tmpDrawable = BasicDrawableFactory.makeTri(startDrag.x, startDrag.y, startDrag.x, startDrag.y);
+                tmpDrawable.setBorder(tmpDrawable.getBorderColor(),
+                        new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
+                tmpDrawable.disableFill();
+                tmpDrawable.setColor(stm.getColor());
+                tmpDrawable.setAlpha(stm.getAlpha());
             }
                 break;
             default:

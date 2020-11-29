@@ -40,7 +40,7 @@ public class Canvas extends JFrame {
             }
 
             public StatesModel.TYPE getType() {
-                return TYPE.RECTANGLE;
+                return TYPE.TRIANGLE;
             }
 
             public Color getColor() {
