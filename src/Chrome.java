@@ -140,6 +140,7 @@ public class Chrome extends JFrame {
             @Override
             public void mouseReleased(MouseEvent e) {
                 System.out.println("undo");
+                // TODO: states.undo();
             }
         });
 
@@ -149,6 +150,7 @@ public class Chrome extends JFrame {
             @Override
             public void mouseReleased(MouseEvent e) {
                 System.out.println("redo");
+                // TODO: states.redo();
             }
         });
 
