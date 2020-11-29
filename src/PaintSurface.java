@@ -11,7 +11,7 @@ class PaintSurface extends JComponent {
      */
     private static final long serialVersionUID = 1L;
 
-    ArrayList<Shape> shapes = new ArrayList<Shape>();
+//    ArrayList<Shape> shapes = new ArrayList<Shape>();
 
     // public Color[] colors = { Color.YELLOW, Color.MAGENTA, Color.CYAN, Color.RED,
     // Color.BLUE, Color.PINK };
@@ -55,6 +55,7 @@ class PaintSurface extends JComponent {
                     tmpDrawable.setAlpha(stm.getAlpha());
                     tmpDrawable.setBorder(stm.getColor(), new BasicStroke());
                     tmpDrawable.disableFill();
+                    tmpDrawable.setFill();
                     stmo.getAllDrawable().add(tmpDrawable);
                     tmpDrawable = null;
                     repaint();

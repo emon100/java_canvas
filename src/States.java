@@ -7,9 +7,9 @@ public class States implements StatesModel {
     //当前选择颜色
     protected Color currentColor;
 
-    protected float alpha;
+    protected float alpha = 1.0f;
 
-    protected TYPE cursorType=TYPE.SELECT;
+    protected TYPE cursorType=TYPE.RECTANGLE;
 
     public void setCurrentColor(Color cur) {
         this.currentColor = cur;
@@ -46,7 +46,7 @@ public class States implements StatesModel {
     
     @Override
     public void setAlpha(float f) {
-        f = alpha;
+        alpha = f;
     }
 
     @Override
