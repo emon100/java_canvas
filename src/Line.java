@@ -1,5 +1,10 @@
 import java.awt.*;
 import java.awt.geom.*;
+import java.awt.geom.Point2D.Float;
+
+/**
+ * 直线类
+ */
 public class Line implements Drawable {
     Line2D.Float line;
     BasicStroke borderStroke;
@@ -62,7 +67,7 @@ public class Line implements Drawable {
 
     @Override
     public Point2D.Float getStart() {
-        return new Point2D.Float(line.x1, line.y1);
+        return (Float) line.getP1();
     }
 
     @Override
@@ -72,8 +77,7 @@ public class Line implements Drawable {
 
     @Override
     public Point2D.Float getEndPoint() {
-        // TODO Auto-generated method stub
-        return new Point2D.Float(line.x1, line.y1);
+        return (Float) line.getP2();
     }
 
     @Override
@@ -84,19 +88,16 @@ public class Line implements Drawable {
 
     @Override
     public void moveStartTo(Point2D.Float p) {
-        // TODO Auto-generated method stub
         line.setLine(p.x, p.y, line.x2, line.y2);
     }
 
     @Override
     public void moveStartTo(float x, float y) {
-        // TODO Auto-generated method stub
         line.setLine(x, y, line.x2, line.y2);
     }
 
     @Override
     public void putEndPoint(float x, float y) {
-        // TODO Auto-generated method stub
         line.setLine(line.x1, line.y1, x, y);
     }
 
@@ -108,26 +109,20 @@ public class Line implements Drawable {
 
     @Override
     public boolean isFilled() {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public void setFill() {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public void setFill(Color c) {
-        // TODO Auto-generated method stub
-
+        color = c;
     }
 
     @Override
     public void disableFill() {
-        // TODO Auto-generated method stub
-
     }
 
     @Override

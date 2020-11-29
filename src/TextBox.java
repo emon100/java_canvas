@@ -6,6 +6,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class TextBox implements Drawable{
+
+    private class TextBoxDialog {
+    }
+
+
     Color color = Color.BLACK;      //画笔颜色
     float alpha = 1f;       //透明度
 
@@ -23,14 +28,14 @@ public class TextBox implements Drawable{
 
     @Override
     public void drawOnGraphics2D(Graphics2D g) {
+        g.setColor(color);
         if(isFilled()){
             Font f = new Font("SansSerif",Font.BOLD,14);
             var oldFont = g.getFont();
-            g.setColor(color);
             g.drawString(filled,startPoint.x,startPoint.y);
             g.setFont(oldFont);
         }else{
-            g.drawOval((int)startPoint.x, (int) startPoint.y,radius,radius);
+            g.drawLine((int)startPoint.x,(int)startPoint.y,(int)startPoint.x,(int)startPoint.y+-7);
         }
     }
 
@@ -41,8 +46,7 @@ public class TextBox implements Drawable{
 
     @Override
     public void setFill(){ //弹出一个选框，设置文字，影响字体，字号等
-        var p = new JPanel();
-        filled = JOptionPane.showInputDialog(p, "message");
+        filled = JOptionPane.showInputDialog(null, "设置文本","Input Here");
     }
 
     @Override
@@ -67,20 +71,17 @@ public class TextBox implements Drawable{
 
     @Override
     public Color getBorderColor() {
-        // TODO Auto-generated method stub
-        return null;
+        return color;
     }
 
     @Override
     public BasicStroke getBasicStroke() {
-        // TODO Auto-generated method stub
-        return null;
+        return new BasicStroke();
     }
 
     @Override
     public Color getFillColor() {
-        // TODO Auto-generated method stub
-        return null;
+        return color;
     }
 
     @Override
@@ -90,7 +91,6 @@ public class TextBox implements Drawable{
 
     @Override
     public void scale(float times) {
-        // TODO Auto-generated method stub
 
     }
 

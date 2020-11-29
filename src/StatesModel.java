@@ -10,9 +10,11 @@ public interface StatesModel {
     public void redo();
 
     public ArrayList<Drawable> getAllDrawable();
-    public StatesModel.TYPE getType();
-    public Color getColor();
-    public float getAlpha();
-    public String getStringInput();
     public void setDrawable(ArrayList<Drawable> d);
+    public StatesModel.TYPE getType();
+    public void setType(StatesModel.TYPE t);
+    public Color getColor();
+    public void setColor(Color cur);
+    public float getAlpha();
+    public void setAlpha(float f);
 }

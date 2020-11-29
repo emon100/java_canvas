@@ -51,7 +51,6 @@ class PaintSurface extends JComponent {
                 startDrag = null;
                 endDrag = null;
                 if (tmpDrawable != null) {
-                    System.out.println("'ok'");
                     tmpDrawable.setColor(stm.getColor());
                     tmpDrawable.setAlpha(stm.getAlpha());
                     tmpDrawable.setBorder(stm.getColor(), new BasicStroke());
