@@ -2,24 +2,24 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-public class Rectangle implements Drawable{
+public class Rectangle implements Drawable {
     Rectangle2D.Float rectangle;
-    BasicStroke borderStroke;       //画笔轮廓
+    BasicStroke borderStroke = new BasicStroke();       //画笔轮廓
     float alpha = 1f;               //透明度
     Color color = Color.BLACK;      //画笔颜色
     Color fillColor = Color.BLUE;  //填充颜色
     boolean ifFillRec = false;      //是否填充
+    float borderStrokeWidth = this.borderStroke.getLineWidth();
 
-    Rectangle(Point2D.Float point){
-        rectangle = new Rectangle2D.Float(point.x,point.y,0,0);
-        borderStroke = new BasicStroke();
+    Rectangle(Point2D.Float point) {
+        rectangle = new Rectangle2D.Float(point.x, point.y, 0, 0);
     }
 
     @Override
     public void drawOnGraphics2D(Graphics2D g) {
         g.setPaint(color);
         g.setStroke(borderStroke);
-        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,alpha));
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
         g.draw(rectangle);
         if (isFilled()) {            //填充
             g.setColor(fillColor);
@@ -94,167 +94,69 @@ public class Rectangle implements Drawable{
 
     @Override
     public void moveStartTo(Point2D.Float p) {
-        rectangle.setRect(p.x,p.y,rectangle.width,rectangle.height);
+        rectangle.setRect(p.x, p.y, rectangle.width, rectangle.height);
     }
 
     @Override
     public void moveStartTo(float x, float y) {
-        rectangle.setRect(x,y,rectangle.width,rectangle.height);
+        rectangle.setRect(x, y, rectangle.width, rectangle.height);
     }
 
     @Override
     public Point2D.Float getStart() {
-        return new Point2D.Float(rectangle.x,rectangle.y);
+        return new Point2D.Float(rectangle.x, rectangle.y);
     }
 
     @Override
     public void putEndPoint(Point2D.Float p) {
-        rectangle.setRect(rectangle.x,rectangle.y,p.x - rectangle.x,p.y - rectangle.y);
+        rectangle.setRect(rectangle.x, rectangle.y, p.x - rectangle.x, p.y - rectangle.y);
     }
 
     @Override
     public void putEndPoint(float x, float y) {
-        rectangle.setRect(rectangle.x,rectangle.y,x - rectangle.x,y - rectangle.y);
+        rectangle.setRect(rectangle.x, rectangle.y, x - rectangle.x, y - rectangle.y);
     }
 
     @Override
     public Point2D.Float getEndPoint() {
-        return new Point2D.Float(rectangle.x + rectangle.width,rectangle.y + rectangle.height);
+        return new Point2D.Float(rectangle.x + rectangle.width, rectangle.y + rectangle.height);
     }
 
     @Override
     public boolean pointOn(Point2D.Float p) {
-        if (rectangle.width >= 0) {
-            if (rectangle.height >= 0) {
-                return (((p.x >= rectangle.x && p.x <= rectangle.x + rectangle.width)
-                        && (p.y == rectangle.y || p.y == rectangle.y + rectangle.height))
-                        || ((p.x == rectangle.x || p.x == rectangle.x + rectangle.width)
-                        && (p.y >= rectangle.y && p.y <= rectangle.y + rectangle.height)));
-
-            }
-            else {
-                return (((p.x >= rectangle.x && p.x <= rectangle.x + rectangle.width)
-                        && (p.y == rectangle.y || p.y == rectangle.y + rectangle.height))
-                        || ((p.x == rectangle.x || p.x == rectangle.x + rectangle.width)
-                        && (p.y <= rectangle.y && p.y >= rectangle.y + rectangle.height)));
-
-            }
-        }
-
-        else {
-            if (rectangle.height >= 0) {
-                return (((p.x <= rectangle.x && p.x >= rectangle.x + rectangle.width)
-                        && (p.y == rectangle.y || p.y == rectangle.y + rectangle.height))
-                        || ((p.x == rectangle.x || p.x == rectangle.x + rectangle.width)
-                        && (p.y >= rectangle.y && p.y <= rectangle.y + rectangle.height)));
-
-            }
-            else {
-                return (((p.x <= rectangle.x && p.x >= rectangle.x + rectangle.width)
-                        && (p.y == rectangle.y || p.y == rectangle.y + rectangle.height))
-                        || ((p.x == rectangle.x || p.x == rectangle.x + rectangle.width)
-                        && (p.y <= rectangle.y && p.y >= rectangle.y + rectangle.height)));
-
-            }
-
-        }
+        Rectangle2D.Float r1 = new Rectangle2D.Float(rectangle.x - borderStrokeWidth,
+                rectangle.y - borderStrokeWidth,
+                rectangle.width - borderStrokeWidth,
+                rectangle.height - borderStrokeWidth);
+        return (rectangle.contains(p) && (!r1.contains(p)));
     }
 
     @Override
     public boolean pointOn(float x, float y) {
-        if (rectangle.width >= 0) {
-            if (rectangle.height >= 0) {
-                return (((x >= rectangle.x && x <= rectangle.x + rectangle.width)
-                        && (y == rectangle.y || y == rectangle.y + rectangle.height))
-                        || ((x == rectangle.x || x == rectangle.x + rectangle.width)
-                        && (y >= rectangle.y && y <= rectangle.y + rectangle.height)));
-
-            }
-            else {
-                return (((x >= rectangle.x && x <= rectangle.x + rectangle.width)
-                        && (y == rectangle.y || y == rectangle.y + rectangle.height))
-                        || ((x == rectangle.x || x == rectangle.x + rectangle.width)
-                        && (y <= rectangle.y && y >= rectangle.y + rectangle.height)));
-
-            }
-        }
-
-        else {
-            if (rectangle.height >= 0) {
-                return (((x <= rectangle.x && x >= rectangle.x + rectangle.width)
-                        && (y == rectangle.y || y == rectangle.y + rectangle.height))
-                        || ((x == rectangle.x || x == rectangle.x + rectangle.width)
-                        && (y >= rectangle.y && y <= rectangle.y + rectangle.height)));
-
-            }
-            else {
-                return (((x <= rectangle.x && x >= rectangle.x + rectangle.width)
-                        && (y == rectangle.y || y == rectangle.y + rectangle.height))
-                        || ((x == rectangle.x || x == rectangle.x + rectangle.width)
-                        && (y <= rectangle.y && y >= rectangle.y + rectangle.height)));
-
-            }
-
-        }
+        Rectangle2D.Float r1 = new Rectangle2D.Float(rectangle.x - borderStrokeWidth,
+                rectangle.y - borderStrokeWidth,
+                rectangle.width - borderStrokeWidth,
+                rectangle.height - borderStrokeWidth);
+        return (rectangle.contains(x, y) && (!r1.contains(x, y)));
 
     }
 
     @Override
     public boolean pointOnFill(Point2D.Float p) {
-        if (rectangle.width >= 0) {
-            if (rectangle.height >= 0) {
-                return (p.x < rectangle.x + rectangle.width && p.x > rectangle.x)
-                        && (p.y < rectangle.y + rectangle.height && p.y > rectangle.y);
-            }
+        Rectangle2D.Float r1 = new Rectangle2D.Float(rectangle.x - borderStrokeWidth,
+                rectangle.y - borderStrokeWidth,
+                rectangle.width - borderStrokeWidth,
+                rectangle.height - borderStrokeWidth);
+        return (r1.contains(p));
 
-            else {
-                return (p.x < rectangle.x + rectangle.width && p.x > rectangle.x)
-                        && (p.y > rectangle.y + rectangle.height && p.y < rectangle.y);
-
-            }
-        }
-
-        else {
-            if (rectangle.height >= 0) {
-                return (p.x > rectangle.x + rectangle.width && p.x < rectangle.x)
-                        && (p.y < rectangle.y + rectangle.height && p.y > rectangle.y);
-            }
-
-            else {
-                return (p.x > rectangle.x + rectangle.width && p.x < rectangle.x)
-                        && (p.y > rectangle.y + rectangle.height && p.y < rectangle.y);
-
-            }
-        }
     }
 
     @Override
     public boolean pointOnFill(float x, float y) {
-        if (rectangle.width >= 0) {
-            if (rectangle.height >= 0) {
-                return (x < rectangle.x + rectangle.width && x > rectangle.x)
-                        && (y < rectangle.y + rectangle.height && y > rectangle.y);
-            }
-
-            else {
-                return (x < rectangle.x + rectangle.width && x > rectangle.x)
-                        && (y > rectangle.y + rectangle.height && y < rectangle.y);
-
-            }
-        }
-
-        else {
-            if (rectangle.height >= 0) {
-                return (x > rectangle.x + rectangle.width && x < rectangle.x)
-                        && (y < rectangle.y + rectangle.height && y > rectangle.y);
-            }
-
-            else {
-                return (x > rectangle.x + rectangle.width && x < rectangle.x)
-                        && (y > rectangle.y + rectangle.height && y < rectangle.y);
-
-            }
-        }
-
+        Rectangle2D.Float r1 = new Rectangle2D.Float(rectangle.x - borderStrokeWidth,
+                rectangle.y - borderStrokeWidth,
+                rectangle.width - borderStrokeWidth,
+                rectangle.height - borderStrokeWidth);
+        return (r1.contains(x, y));
     }
 }

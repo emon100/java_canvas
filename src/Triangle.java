@@ -5,15 +5,15 @@ import java.awt.geom.Point2D;
 public class Triangle implements Drawable{
 
     Triangle2D triangle;
-    BasicStroke borderStroke;
+    BasicStroke borderStroke = new BasicStroke();
     float alpha = 1f;
     Color color = Color.BLACK;
     Color fillColor = Color.BLUE;
     boolean ifFillTri = false;
+    float borderStrokeWidth = this.borderStroke.getLineWidth();
 
     Triangle(Point2D.Float point) {
         triangle = new Triangle2D(point.x, point.y ,point.x ,point.y);
-        borderStroke = new BasicStroke();
     }
 
     @Override
@@ -122,7 +122,7 @@ public class Triangle implements Drawable{
 
     @Override
     public boolean pointOn(Point2D.Float p) {
-        if (p.y == triangle.y2) {
+    /*    if (p.y == triangle.y2) {
             if (triangle.x2 >= triangle.x1) {
                 return (p.x <= triangle.x2 && p.x >= triangle.x3);
             }
@@ -156,97 +156,42 @@ public class Triangle implements Drawable{
 
             }
 
-        }
+        }*/
+
+        Triangle2D t1 = new Triangle2D(triangle.x1 - borderStrokeWidth,
+                triangle.y1 - borderStrokeWidth,
+                triangle.x2 -borderStrokeWidth,
+                triangle.y2 + borderStrokeWidth);
+        return (triangle.contains(p) && (!t1.contains(p)));
+
     }
 
     @Override
     public boolean pointOn(float x, float y) {
-        if (y == triangle.y2) {
-            if (triangle.x2 >= triangle.x1) {
-                return (x <= triangle.x2 && x >= triangle.x3);
-            }
-            else
-                return (x >= triangle.x2 && x <= triangle.x3);
-        }
-        else {
-            float k1 = triangle.getK(triangle.x1, triangle.y1, triangle.x2, triangle.y2);
-            float k2 = triangle.getK(triangle.x1, triangle.y1, triangle.x3, triangle.y3);
-            float b1 = triangle.getB(triangle.x1, triangle.y1, k1);
-            float b2 = triangle.getB(triangle.x1, triangle.y1, k2);
-
-            if (triangle.x2 >= triangle.x3) {
-                if (x >= triangle.x3 && x <= triangle.x1) {
-                    return (y == triangle.func(k2, b2 , x));
-                }
-                else if (x >= triangle.x1 && x <= triangle.x2) {
-                    return (y == triangle.func(k1, b1, x));
-                }
-                else return false;
-            }
-
-            else {
-                if (x >= triangle.x2 && x <= triangle.x1) {
-                    return (y == triangle.func(k1, b1, x));
-                }
-                else if (x >= triangle.x1 && x <= triangle.x3) {
-                    return (y == triangle.func(k1, b1, x));
-                }
-                else return false;
-
-            }
-
-        }
-
+        Triangle2D t1 = new Triangle2D(triangle.x1 - borderStrokeWidth,
+                triangle.y1 - borderStrokeWidth,
+                triangle.x2 -borderStrokeWidth,
+                triangle.y2 + borderStrokeWidth);
+        return (triangle.contains(x, y) && (!t1.contains(x, y)));
     }
 
     @Override
     public boolean pointOnFill(Point2D.Float p) {
-        float k1 = triangle.getK(triangle.x1, triangle.y1, triangle.x2, triangle.y2);
-        float k2 = triangle.getK(triangle.x1, triangle.y1, triangle.x3, triangle.y3);
-        float b1 = triangle.getB(triangle.x1, triangle.y1, k1);
-        float b2 = triangle.getB(triangle.x1, triangle.y1, k2);
-
-        float y1 = triangle.func(k1, b1, p.x);
-        float y2 = triangle.func(k2, b2, p.x);
-
-
-        if (triangle.y1 >= triangle.y2) {
-            if (p.y > triangle.y2) {
-                return (p.y < y1 && p.y < y2);
-            }
-            else return false;
-        }
-        else {
-            if (p.y < triangle.y2) {
-                return (p.y > y1 && p.y > y2);
-            }
-            else return false;
-        }
+        Triangle2D t1 = new Triangle2D(triangle.x1 - borderStrokeWidth,
+                triangle.y1 - borderStrokeWidth,
+                triangle.x2 -borderStrokeWidth,
+                triangle.y2 + borderStrokeWidth);
+        return (t1.contains(p));
     }
 
     @Override
     public boolean pointOnFill(float x, float y) {
-        float k1 = triangle.getK(triangle.x1, triangle.y1, triangle.x2, triangle.y2);
-        float k2 = triangle.getK(triangle.x1, triangle.y1, triangle.x3, triangle.y3);
-        float b1 = triangle.getB(triangle.x1, triangle.y1, k1);
-        float b2 = triangle.getB(triangle.x1, triangle.y1, k2);
+        Triangle2D t1 = new Triangle2D(triangle.x1 - borderStrokeWidth,
+                triangle.y1 - borderStrokeWidth,
+                triangle.x2 -borderStrokeWidth,
+                triangle.y2 + borderStrokeWidth);
+        return (t1.contains(x, y));
 
-        float y1 = triangle.func(k1, b1, x);
-        float y2 = triangle.func(k2, b2, x);
-
-
-        if (triangle.y1 >= triangle.y2) {
-            if (y > triangle.y2) {
-                return (y < y1 && y < y2);
-            }
-            else return false;
-        }
-        else {
-            if (y < triangle.y2) {
-                return (y > y1 && y > y2);
-            }
-            else return false;
-        }
     }
 
     private static class Triangle2D extends Path2D.Float {
@@ -282,17 +227,6 @@ public class Triangle implements Drawable{
             closePath();
         }
 
-        private float func(float k, float b,float x) {
-            return k * x + b;
-        }
-
-        private float getK(float x1, float y1, float x2, float y2) {
-            return (y2 - y1) / (x2 - x1);
-        }
-
-        private float getB(float x1,float y1, float k) {
-            return y1 - k * x1;
-        }
     }
 
 }
