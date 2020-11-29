@@ -51,17 +51,17 @@ class PaintSurface extends JComponent {
                 startDrag = null;
                 endDrag = null;
                 if (tmpDrawable != null) {
+                    System.out.println("'ok'");
                     tmpDrawable.setColor(stm.getColor());
                     tmpDrawable.setAlpha(stm.getAlpha());
                     tmpDrawable.setBorder(stm.getColor(), new BasicStroke());
+                    tmpDrawable.disableFill();
                     stmo.getAllDrawable().add(tmpDrawable);
                     tmpDrawable = null;
                     repaint();
                 }
             }
         });
-
-        
 
         // 鼠标移动时，我们只需要知道鼠标的重点位置就好
         this.addMouseMotionListener(new MouseMotionAdapter() {
@@ -79,34 +79,47 @@ class PaintSurface extends JComponent {
         });
     }
 
+    final float[] dash1 = { 3.0f, 3.0f };
+
     private void createTmpDrawable() {
         switch (stm.getType()) {
             case LINE: {
+                tmpDrawable.setBorder(tmpDrawable.getBorderColor(),
+                        new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
+                tmpDrawable.setColor(stm.getColor());
+                tmpDrawable.setAlpha(stm.getAlpha());
                 tmpDrawable = BasicDrawableFactory.makeLine(startDrag.x, startDrag.y, startDrag.x, startDrag.y);
             }
                 break;
             case PATH: {
+                tmpDrawable.setBorder(tmpDrawable.getBorderColor(),
+                        new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
+                tmpDrawable.setColor(stm.getColor());
+                tmpDrawable.setAlpha(stm.getAlpha());
                 tmpDrawable = BasicDrawableFactory.makePath(startDrag.x, startDrag.y, startDrag.x, startDrag.y);
             }
                 break;
-            case TEXTBOX:{
+            case TEXTBOX: {
                 tmpDrawable = BasicDrawableFactory.makeTextBox(startDrag.x, startDrag.y, startDrag.x, startDrag.y);
+                tmpDrawable.setColor(stm.getColor());
+                tmpDrawable.setAlpha(stm.getAlpha());
             }
                 break;
-            case RECTANGLE:{
+            case RECTANGLE: {
+                tmpDrawable.setBorder(tmpDrawable.getBorderColor(),
+                        new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
+                tmpDrawable.disableFill();
+                tmpDrawable.setColor(stm.getColor());
+                tmpDrawable.setAlpha(stm.getAlpha());
                 tmpDrawable = BasicDrawableFactory.makeRec(startDrag.x, startDrag.y, startDrag.x, startDrag.y);
-            } 
+            }
                 break;
             default:
                 throw new IllegalArgumentException("Unexpected value: " + stm.getType());
+
         }
-        float[] dash1 = { 3.0f, 3.0f };
         // tmp
-        tmpDrawable.setBorder(tmpDrawable.getBorderColor(),
-                new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
-        tmpDrawable.disableFill();
-        tmpDrawable.setColor(stm.getColor());
-        tmpDrawable.setAlpha(stm.getAlpha());
+
     }
 
     // 初始化背景
