@@ -164,7 +164,7 @@ public class Chrome extends JFrame {
         chooseImgLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                states.setCursorType(States.TYPE.SELECT);
+                states.setType(States.TYPE.SELECT);
                 System.out.println("select");
             }
         });
@@ -174,7 +174,7 @@ public class Chrome extends JFrame {
         textImgLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                states.setCursorType(StatesModel.TYPE.TEXTBOX);
+                states.setType(StatesModel.TYPE.TEXTBOX);
                 System.out.println("textBox");
             }
         });
@@ -205,7 +205,7 @@ public class Chrome extends JFrame {
         pencilImgLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                states.setCursorType(StatesModel.TYPE.PATH);
+                states.setType(StatesModel.TYPE.PATH);
                 System.out.println("pencil -- PATH");
             }
         });
@@ -215,7 +215,7 @@ public class Chrome extends JFrame {
         rectangleImgLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                states.setCursorType(StatesModel.TYPE.RECTANGLE);
+                states.setType(StatesModel.TYPE.RECTANGLE);
                 System.out.println("rectangle");
             }
         });
@@ -225,7 +225,7 @@ public class Chrome extends JFrame {
         triangleImgLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                states.setCursorType(StatesModel.TYPE.TRIANGLE);
+                states.setType(StatesModel.TYPE.TRIANGLE);
                 System.out.println("triangle");
             }
         });
@@ -235,7 +235,7 @@ public class Chrome extends JFrame {
         lineImgLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                states.setCursorType(StatesModel.TYPE.LINE);
+                states.setType(StatesModel.TYPE.LINE);
                 System.out.println("line");
             }
         });
@@ -245,7 +245,7 @@ public class Chrome extends JFrame {
         ellipseImgLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                states.setCursorType(StatesModel.TYPE.ELLIPSE);
+                states.setType(StatesModel.TYPE.ELLIPSE);
                 System.out.println("ellipse");
             }
         });
@@ -277,7 +277,7 @@ public class Chrome extends JFrame {
                 chooseColorPanel.setBackground(color);
                 currentColorPanel.setBackground(color);
                 //当前选取状态设置
-                states.setCurrentColor(color);
+                states.setColor(color);
 
             }
         });
@@ -288,7 +288,7 @@ public class Chrome extends JFrame {
         whiteColorPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                states.setCurrentColor(Color.WHITE);
+                states.setColor(Color.WHITE);
                 currentColorPanel.setBackground(Color.WHITE);
             }
         });
@@ -297,7 +297,7 @@ public class Chrome extends JFrame {
         blackColorPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                states.setCurrentColor(Color.black);
+                states.setColor(Color.black);
                 currentColorPanel.setBackground(Color.black);
             }
         });
@@ -306,7 +306,7 @@ public class Chrome extends JFrame {
         redColorPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                states.setCurrentColor(Color.red);
+                states.setColor(Color.red);
                 currentColorPanel.setBackground(Color.red);
             }
         });
@@ -315,7 +315,7 @@ public class Chrome extends JFrame {
         yellowColorPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                states.setCurrentColor(Color.yellow);
+                states.setColor(Color.yellow);
                 currentColorPanel.setBackground(Color.yellow);
             }
         });
@@ -324,7 +324,7 @@ public class Chrome extends JFrame {
         greenColorPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                states.setCurrentColor(Color.green);
+                states.setColor(Color.green);
                 currentColorPanel.setBackground(Color.green);
             }
         });
@@ -333,7 +333,7 @@ public class Chrome extends JFrame {
         blueColorPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                states.setCurrentColor(Color.blue);
+                states.setColor(Color.blue);
                 currentColorPanel.setBackground(Color.blue);
             }
         });
@@ -342,7 +342,7 @@ public class Chrome extends JFrame {
         grayColorPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                states.setCurrentColor(Color.gray);
+                states.setColor(Color.gray);
                 currentColorPanel.setBackground(Color.gray);
             }
         });
@@ -351,7 +351,7 @@ public class Chrome extends JFrame {
         pinkColorPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                states.setCurrentColor(Color.pink);
+                states.setColor(Color.pink);
                 currentColorPanel.setBackground(Color.pink);
             }
         });
