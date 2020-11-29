@@ -12,22 +12,11 @@ public class States implements StatesModel {
     //当前选择类型
     protected TYPE cursorType = TYPE.RECTANGLE;
 
-    //设置当前颜色
-    public void setCurrentColor(Color cur) {
-        this.currentColor = cur;
-        System.out.println(cur);
-    }
-
     ArrayList<Drawable> a = new ArrayList<>();
 
     {
         var r  = new Random();
         a.add(BasicDrawableFactory.makeLine(r.nextInt(200),r.nextInt(200),r.nextInt(200),r.nextInt(200)));
-    }
-
-    //设置当前光标类型
-    public void setCursorType(TYPE cursorType) {
-        this.cursorType = cursorType;
     }
 
     @Override
@@ -67,6 +56,7 @@ public class States implements StatesModel {
     @Override
     public void setType(TYPE t) {
         cursorType=t;
+        System.out.println(t);
     }
     
     @Override
@@ -82,6 +72,6 @@ public class States implements StatesModel {
     @Override
     public void setColor(Color cur) {
         currentColor = cur;
-
+        System.out.println(cur);
     }
 }
