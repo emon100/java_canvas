@@ -114,6 +114,10 @@ class PaintSurface extends JComponent {
                 tmpDrawable = BasicDrawableFactory.makeRec(startDrag.x, startDrag.y, startDrag.x, startDrag.y);
             }
                 break;
+            case ELLIPSE:{
+                tmpDrawable = BasicDrawableFactory.makeEllipse(startDrag.x, startDrag.y, startDrag.x, startDrag.y);
+            }
+                break;
             default:
                 throw new IllegalArgumentException("Unexpected value: " + stm.getType());
 
