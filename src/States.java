@@ -9,12 +9,8 @@ public class States implements StatesModel {
 
     protected float alpha = 1.0f;
 
-    protected TYPE cursorType=TYPE.RECTANGLE;
-
-    public void setCurrentColor(Color cur) {
-        this.currentColor = cur;
-        System.out.println(cur);
-    }
+    //当前选择类型
+    protected TYPE cursorType = TYPE.RECTANGLE;
 
     ArrayList<Drawable> a = new ArrayList<>();
 
@@ -22,7 +18,6 @@ public class States implements StatesModel {
         var r  = new Random();
         a.add(BasicDrawableFactory.makeLine(r.nextInt(200),r.nextInt(200),r.nextInt(200),r.nextInt(200)));
     }
-
 
     @Override
     public void execute(Command command) {
@@ -46,7 +41,7 @@ public class States implements StatesModel {
     
     @Override
     public void setAlpha(float f) {
-        alpha = f;
+        f = alpha;
     }
 
     @Override
@@ -61,6 +56,7 @@ public class States implements StatesModel {
     @Override
     public void setType(TYPE t) {
         cursorType=t;
+        System.out.println(t);
     }
     
     @Override
@@ -76,6 +72,6 @@ public class States implements StatesModel {
     @Override
     public void setColor(Color cur) {
         currentColor = cur;
-
+        System.out.println(cur);
     }
 }

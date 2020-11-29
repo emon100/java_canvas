@@ -1,9 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
-import java.util.*;
 import javax.swing.*;
-
 class PaintSurface extends JComponent {
 
     /**
@@ -11,12 +9,6 @@ class PaintSurface extends JComponent {
      */
     private static final long serialVersionUID = 1L;
 
-//    ArrayList<Shape> shapes = new ArrayList<Shape>();
-
-    // public Color[] colors = { Color.YELLOW, Color.MAGENTA, Color.CYAN, Color.RED,
-    // Color.BLUE, Color.PINK };
-    // GeneralPath gp = new GeneralPath();
-    // int ra = 0;// 控制下一个图形的形状
 
     Point startDrag, endDrag; // 鼠标起始点，终止点
     Dimension size = getSize(); // 当前窗口大小
@@ -35,10 +27,7 @@ class PaintSurface extends JComponent {
         this.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 if ((e.getModifiersEx() & InputEvent.BUTTON1_DOWN_MASK) != 0) {// left click
-                    startDrag = e.getPoint();
-                    endDrag = e.getPoint();
-                    createTmpDrawable();
-                    repaint();
+                    leftClickListener(e);
                 } else if ((e.getModifiersEx() & InputEvent.BUTTON3_DOWN_MASK) != 0) { // right click
 
                 } else {
@@ -53,9 +42,8 @@ class PaintSurface extends JComponent {
                 if (tmpDrawable != null) {
                     tmpDrawable.setColor(stm.getColor());
                     tmpDrawable.setAlpha(stm.getAlpha());
-                    tmpDrawable.setBorder(stm.getColor(), new BasicStroke());
+                    tmpDrawable.setBorder(stm.getColor(), new BasicStroke()); //todo
                     tmpDrawable.disableFill();
-                    tmpDrawable.setFill();
                     stmo.getAllDrawable().add(tmpDrawable);
                     tmpDrawable = null;
                     repaint();
@@ -71,13 +59,34 @@ class PaintSurface extends JComponent {
                     int x = e.getX();
                     int y = e.getY();
                     endDrag.move(x, y);
-                    tmpDrawable.putEndPoint(new Point2D.Float(x, y));
-                    repaint();
+                    if(tmpDrawable!=null){
+                        tmpDrawable.putEndPoint(x,y);
+                        repaint();
+                    }
                 }
 
             }
         });
     }
+
+    void leftClickListener(MouseEvent e){
+        startDrag=endDrag=e.getPoint();
+        try{
+            createTmpDrawable();
+            repaint();
+        }catch(Exception ex){
+            startDrag=endDrag=null;
+            switch(stm.getType()){
+                case SELECT:{
+                    
+                }
+                     break;
+                default: 
+                    throw new IllegalArgumentException("LeftClickListener: Unexpected value: " + stm.getType());
+            }
+        }        
+    }
+
 
     final float[] dash1 = { 3.0f, 3.0f };
 
@@ -132,8 +141,7 @@ class PaintSurface extends JComponent {
                 tmpDrawable.setAlpha(stm.getAlpha());
             }
                 break;
-            default:
-                throw new IllegalArgumentException("Unexpected value: " + stm.getType());
+            default: throw new IllegalArgumentException("createTmpDrawable: Unexpected value: " + stm.getType());
 
         }
         // tmp

@@ -3,7 +3,7 @@ import java.awt.*;
 
 public interface StatesModel {
     public static enum TYPE{
-        SELECT,LINE,PATH,TRIANGLE,RECTANGLE,ELLIPSE,TEXTBOX
+        SELECT,LINE,PATH,TRIANGLE,RECTANGLE,ELLIPSE,TEXTBOX,ERASER,FILL
     }
     public void execute(Command command);
     public void undo();
