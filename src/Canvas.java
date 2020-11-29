@@ -38,8 +38,8 @@ public class Canvas extends JFrame {
                 return a;
             }
 
-            public Drawable.TYPE getType() {
-                return Drawable.TYPE.PATH;
+            public StatesModel.TYPE getType() {
+                return StatesModel.TYPE.PATH;
             }
 
             public Color getColor() {
@@ -91,8 +91,8 @@ public class Canvas extends JFrame {
                 return a;
             }
 
-            public Drawable.TYPE getType() {
-                return Drawable.TYPE.PATH;
+            public StatesModel.TYPE getType() {
+                return StatesModel.TYPE.ELLIPSE;
             }
 
             public Color getColor() {
