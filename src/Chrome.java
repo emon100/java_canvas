@@ -1,5 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /*
  * author: AlbertTan
@@ -7,6 +10,7 @@ import java.awt.*;
  */
 public class Chrome extends JFrame {
 
+    private States states;
     /**
      * GBC
      */
@@ -68,11 +72,12 @@ public class Chrome extends JFrame {
     /**
      * 构造函数 生成一个完成的Chrome
      */
-    public Chrome() {
+    public Chrome(States states) {
 
         //设置标题
         super("ACE26画图");
 
+        this.states = states;
 
         //设置主题
         setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -89,10 +94,8 @@ public class Chrome extends JFrame {
          */
         GridBagLayout gridBagLayout = new GridBagLayout();
         setLayout(gridBagLayout);                           //窗体对象设置为GridBagLayout布局
-        //addGridBagPanes();
-        GridBagConstraints gridBagConstraints=new GridBagConstraints();//实例化这个对象用来对组件进行管理
-        gridBagConstraints.fill=GridBagConstraints.BOTH;    //该方法是为了设置如果组件所在的区域比组件本身要大时的显示情况
-
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();//实例化这个对象用来对组件进行管理
+        gridBagConstraints.fill = GridBagConstraints.BOTH;    //该方法是为了设置如果组件所在的区域比组件本身要大时的显示情况
 
         /*
          * 文件保存、撤销与重做图片对象
@@ -103,14 +106,33 @@ public class Chrome extends JFrame {
 
         //打开文件
         JButton openFileBtn = new JButton("打开");
+        openFileBtn.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("openFileBtn clicked");
+                //TODO: Open file button listener
+            }
+        });
+
         //新建文件
         JButton newFileBtn = new JButton("新建");
+        newFileBtn.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("newFileBtn clicked");
+                //TODO: New file button listener
+            }
+        });
+
         //保存
         JButton saveFileBtn = new JButton("保存");
-
-//        ImageIcon saveImg = new ImageIcon(this.getClass().getResource("images/save.png"));
-//        JLabel saveImgLabel = new JLabel(saveImg);
-//        JButton saveBtn = new JButton("保存");
+        saveFileBtn.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("saveFileBtn clicked");
+                //TODO: Save file button listener
+            }
+        });
 
         //撤销
         ImageIcon undoImg = new ImageIcon(this.getClass().getResource("images/undo.png"));
@@ -159,20 +181,120 @@ public class Chrome extends JFrame {
         //椭圆
         JLabel ellipseImgLabel = new JLabel(new ImageIcon(this.getClass().getResource("images/ellipse.png")));
 
-
         //颜色
         JLabel colorLabel = new JLabel("颜色");
         JPanel colorPanel = new JPanel();
-        colorPanel.setBackground(Color.BLUE);
-        //TODO:xx
-        //画板
-        JPanel canvasPanel = new JPanel();
-        JFrame canvasFrame = new JFrame();
-        canvasPanel.setBackground(Color.CYAN);
+        colorPanel.setLayout(new GridLayout(2,4));
+        //显示当前颜色
+        JLabel currentColorTextLabel = new JLabel("当前");
+        JPanel currentColorPanel = new JPanel();
+        currentColorPanel.setBackground(Color.black);
+        //颜色选择器
+        JLabel chooseColorTextLabel = new JLabel("任意");
+        JPanel chooseColorPanel = new JPanel();
+        chooseColorPanel.setBackground(Color.black);
+        chooseColorPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                // 显示颜色选取器对话框, 返回选取的颜色（线程将被阻塞, 直到对话框被关闭）
+                Color color = JColorChooser.showDialog(chooseColorPanel, "选取颜色", null);
 
-        //清除
-        JButton clearBtn = new JButton("清除");
+                // 如果用户取消或关闭窗口, 则返回的 color 为 null
+                if (color == null) {
+                    return;
+                }
 
+                // 把选取的颜色设置为标签的背景
+                chooseColorPanel.setBackground(color);
+                currentColorPanel.setBackground(color);
+                //当前选取状态设置
+                states.setCurrentColor(color);
+
+            }
+        });
+        //TODO: Box too small: split into panels
+        
+        JPanel whiteColorPanel = new JPanel();
+        whiteColorPanel.setBackground(Color.white);
+        whiteColorPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                states.setCurrentColor(Color.WHITE);
+                currentColorPanel.setBackground(Color.WHITE);
+            }
+        });
+        JPanel blackColorPanel = new JPanel();
+        blackColorPanel.setBackground(Color.black);
+        blackColorPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                states.setCurrentColor(Color.black);
+                currentColorPanel.setBackground(Color.black);
+            }
+        });
+        JPanel redColorPanel = new JPanel();
+        redColorPanel.setBackground(Color.red);
+        redColorPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                states.setCurrentColor(Color.red);
+                currentColorPanel.setBackground(Color.red);
+            }
+        });
+        JPanel yellowColorPanel = new JPanel();
+        yellowColorPanel.setBackground(Color.yellow);
+        yellowColorPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                states.setCurrentColor(Color.yellow);
+                currentColorPanel.setBackground(Color.yellow);
+            }
+        });
+        JPanel greenColorPanel = new JPanel();
+        greenColorPanel.setBackground(Color.green);
+        greenColorPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                states.setCurrentColor(Color.green);
+                currentColorPanel.setBackground(Color.green);
+            }
+        });
+        JPanel blueColorPanel = new JPanel();
+        blueColorPanel.setBackground(Color.blue);
+        blueColorPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                states.setCurrentColor(Color.blue);
+                currentColorPanel.setBackground(Color.blue);
+            }
+        });
+        JPanel grayColorPanel = new JPanel();
+        grayColorPanel.setBackground(Color.GRAY);
+        grayColorPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                states.setCurrentColor(Color.gray);
+                currentColorPanel.setBackground(Color.gray);
+            }
+        });
+        JPanel pinkColorPanel = new JPanel();
+        pinkColorPanel.setBackground(Color.pink);
+        pinkColorPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                states.setCurrentColor(Color.pink);
+                currentColorPanel.setBackground(Color.pink);
+            }
+        });
+
+        colorPanel.add(whiteColorPanel);
+        colorPanel.add(blackColorPanel);
+        colorPanel.add(redColorPanel);
+        colorPanel.add(yellowColorPanel);
+        colorPanel.add(greenColorPanel);
+        colorPanel.add(blueColorPanel);
+        colorPanel.add(grayColorPanel);
+        colorPanel.add(pinkColorPanel);
         //从左上角开始分布
         //gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
 
@@ -252,13 +374,17 @@ public class Chrome extends JFrame {
         setConstrainSizeAndPos(gridBagConstraints,8,1,4,2);
         gridBagLayout.setConstraints(colorPanel, gridBagConstraints);
 
-        //画板Panel
-        setConstrainSizeAndPos(gridBagConstraints,0,3,15,7);
-        gridBagLayout.setConstraints(canvasPanel, gridBagConstraints);
+        //当前颜色Label
+        setConstrainSizeAndPos(gridBagConstraints,12,1,1,1);
+        gridBagLayout.setConstraints(currentColorTextLabel, gridBagConstraints);
+        setConstrainSizeAndPos(gridBagConstraints,12,2,1,1);
+        gridBagLayout.setConstraints(currentColorPanel, gridBagConstraints);
 
-        //清除
-        setConstrainSizeAndPos(gridBagConstraints,15,10,1,1);
-        gridBagLayout.setConstraints(clearBtn, gridBagConstraints);
+        //选择颜色Label
+        setConstrainSizeAndPos(gridBagConstraints,13,1,1,1);
+        gridBagLayout.setConstraints(chooseColorTextLabel, gridBagConstraints);
+        setConstrainSizeAndPos(gridBagConstraints,13,2,1,1);
+        gridBagLayout.setConstraints(chooseColorPanel, gridBagConstraints);
 
         /*
          * 添加组件至Chrome
@@ -285,8 +411,14 @@ public class Chrome extends JFrame {
         add(lineImgLabel);
         add(ellipseImgLabel);
         add(colorLabel);
-        add(colorPanel,new GBC(8,1,4,2).setFill(GBC.BOTH).setWeight(50, 0));
+        add(colorPanel);
+        add(currentColorTextLabel);
+        add(currentColorPanel);
+        add(chooseColorTextLabel);
+        add(chooseColorPanel);
 
+        //填充颜色后方的空白
+        add(new JPanel(), new GBC(14,1).setWeight(1, 0));
     }
 
     //gridx,gridy:组件的左上角坐标;gridWidth，gridHeight：组件占用的网格行数和列数
@@ -296,7 +428,6 @@ public class Chrome extends JFrame {
         gridBagConstraints.gridwidth=gridWidth;
         gridBagConstraints.gridheight=gridHeight;
     }
-
 
     //设置主题
     public void setLookAndFeel(String lookAndFeel) {

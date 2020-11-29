@@ -14,7 +14,8 @@ public class Canvas extends JFrame {
 
 
     public static void main(String[] args) {
-        Chrome chrome = new Chrome();
+        States states = new States();
+        Chrome chrome = new Chrome(states);
         chrome.add(new PaintSurface(new StatesModel() {
 
 
