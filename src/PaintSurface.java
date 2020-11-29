@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
-import java.util.*;
 import javax.swing.*;
 
 class PaintSurface extends JComponent {
@@ -11,12 +10,6 @@ class PaintSurface extends JComponent {
      */
     private static final long serialVersionUID = 1L;
 
-//    ArrayList<Shape> shapes = new ArrayList<Shape>();
-
-    // public Color[] colors = { Color.YELLOW, Color.MAGENTA, Color.CYAN, Color.RED,
-    // Color.BLUE, Color.PINK };
-    // GeneralPath gp = new GeneralPath();
-    // int ra = 0;// 控制下一个图形的形状
 
     Point startDrag, endDrag; // 鼠标起始点，终止点
     Dimension size = getSize(); // 当前窗口大小
@@ -55,7 +48,6 @@ class PaintSurface extends JComponent {
                     tmpDrawable.setAlpha(stm.getAlpha());
                     tmpDrawable.setBorder(stm.getColor(), new BasicStroke());
                     tmpDrawable.disableFill();
-                    tmpDrawable.setFill();
                     stmo.getAllDrawable().add(tmpDrawable);
                     tmpDrawable = null;
                     repaint();

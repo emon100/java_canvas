@@ -52,7 +52,7 @@ public class States implements StatesModel {
     
     @Override
     public void setAlpha(float f) {
-        alpha = f;
+        f = alpha;
     }
 
     @Override
