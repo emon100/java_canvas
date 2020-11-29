@@ -62,7 +62,10 @@ public class Line implements Drawable {
 
     @Override
     public void scale(float times) {
-        // TODO Auto-generated method stub
+
+        line.setLine(line.x1, line.y1,
+                line.x2 * times - line.x1,
+                line.y2 * times - line.y1);
     }
 
     @Override
@@ -82,8 +85,7 @@ public class Line implements Drawable {
 
     @Override
     public boolean pointOn(Point2D.Float p) {
-        // TODO Auto-generated method stub
-        return false;
+        return (line.contains(p));
     }
 
     @Override
@@ -103,8 +105,7 @@ public class Line implements Drawable {
 
     @Override
     public boolean pointOn(float x, float y) {
-        // TODO Auto-generated method stub
-        return false;
+        return (line.contains(x, y));
     }
 
     @Override

@@ -1,5 +1,7 @@
 import java.awt.*;
 import java.awt.geom.*;
+import java.awt.geom.AffineTransform;
+
 public class Path implements Drawable {
     Point.Float startPoint;
     GeneralPath line;
@@ -58,7 +60,7 @@ public class Path implements Drawable {
 
     @Override
     public void scale(float times) {
-        // TODO Auto-generated method stub
+        line.transform(AffineTransform.getScaleInstance(times, times));
     }
 
     @Override
@@ -73,19 +75,16 @@ public class Path implements Drawable {
 
     @Override
     public Point2D.Float getEndPoint() {
-        // TODO Auto-generated method stub
         return  (Point2D.Float) line.getCurrentPoint();
     }
 
     @Override
     public boolean pointOn(Point2D.Float p) {
-        // TODO Auto-generated method stub
-        return false;
+        return (line.contains(p));
     }
 
     @Override
     public void moveStartTo(Point2D.Float p) {
-        // TODO Auto-generated method stub
         startPoint = p;
         line.moveTo(p.x, p.y);
         
@@ -93,21 +92,18 @@ public class Path implements Drawable {
 
     @Override
     public void moveStartTo(float x, float y) {
-        // TODO Auto-generated method stub
         startPoint.setLocation(x, y);
         line.moveTo(x, y);
     }
 
     @Override
     public void putEndPoint(float x, float y) {
-        // TODO Auto-generated method stub
         line.lineTo(x, y);
     }
 
     @Override
     public boolean pointOn(float x, float y) {
-        // TODO Auto-generated method stub
-        return false;
+        return (line.contains(x, y));
     }
 
     @Override
