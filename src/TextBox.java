@@ -1,19 +1,20 @@
 import java.awt.*;
 import java.awt.geom.*;
-import java.awt.font.*;
 import java.awt.geom.Point2D.Float;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 public class TextBox implements Drawable{
 
-    private class TextBoxDialog {
+    private class TextBoxDialog { //TODO: 字体对话框
     }
 
+    String fontName = "SansSerif"; //字体名
+    int fontstyle = Font.BOLD; //字形
+    int fontSize = 14; //字号
 
     Color color = Color.BLACK;      //画笔颜色
     float alpha = 1f;       //透明度
-
+    
     Point2D.Float startPoint;
     TextBox(Point2D.Float p) {
         startPoint = p;
@@ -22,20 +23,19 @@ public class TextBox implements Drawable{
     //几乎所有的计算都可以借用矩形
     //filled代表是否填充文字
     String filled = null;
-
-
-    final int radius = 5;
-
+    
+    
     @Override
     public void drawOnGraphics2D(Graphics2D g) {
         g.setColor(color);
         if(isFilled()){
-            Font f = new Font("SansSerif",Font.BOLD,14);
             var oldFont = g.getFont();
+            g.setFont(new Font(fontName,fontstyle,fontSize));
             g.drawString(filled,startPoint.x,startPoint.y);
             g.setFont(oldFont);
         }else{
-            g.drawLine((int)startPoint.x,(int)startPoint.y,(int)startPoint.x,(int)startPoint.y+-7);
+            g.setStroke(new BasicStroke(1.5f));
+            g.drawLine((int)startPoint.x,(int)startPoint.y,(int)startPoint.x,(int)startPoint.y-fontSize);
         }
     }
 
