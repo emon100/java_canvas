@@ -127,53 +127,44 @@ public class Rectangle implements Drawable {
 
     @Override
     public boolean pointOn(Point2D.Float p) {
-        Rectangle2D.Float r1 = new Rectangle2D.Float(rectangle.x + borderStrokeWidth,
-                rectangle.y + borderStrokeWidth,
-                rectangle.width - 2 * borderStrokeWidth,
-                rectangle.height - 2 * borderStrokeWidth);
-
-
-        Rectangle2D.Float r2 = new Rectangle2D.Float(rectangle.x - borderStrokeWidth,
-                rectangle.y - borderStrokeWidth,
-                rectangle.width + 2 * borderStrokeWidth,
-                rectangle.height + 2 * borderStrokeWidth);
+        Rectangle2D.Float r1 = getSmallerRec();
+        Rectangle2D.Float r2 = getBiggerRec();
 
         return (r2.contains(p) && (!r1.contains(p)));
     }
 
     @Override
     public boolean pointOn(float x, float y) {
-        Rectangle2D.Float r1 = new Rectangle2D.Float(rectangle.x + borderStrokeWidth,
-                rectangle.y + borderStrokeWidth,
-                rectangle.width - 2 * borderStrokeWidth,
-                rectangle.height - 2 * borderStrokeWidth);
-
-
-        Rectangle2D.Float r2 = new Rectangle2D.Float(rectangle.x - borderStrokeWidth,
-                rectangle.y - borderStrokeWidth,
-                rectangle.width + 2 * borderStrokeWidth,
-                rectangle.height + 2 * borderStrokeWidth);
+        Rectangle2D.Float r1 = getSmallerRec();
+        Rectangle2D.Float r2 = getBiggerRec();
 
         return (r2.contains(x, y) && (!r1.contains(x, y)));
-
     }
 
     @Override
     public boolean pointOnFill(Point2D.Float p) {
-        Rectangle2D.Float r1 = new Rectangle2D.Float(rectangle.x + basicBorderStrokeWidth,
-                rectangle.y + basicBorderStrokeWidth,
-                rectangle.width - 2 * basicBorderStrokeWidth,
-                rectangle.height - 2 * basicBorderStrokeWidth);
+        Rectangle2D.Float r1 = getSmallerRec();
         return (r1.contains(p));
 
     }
 
     @Override
     public boolean pointOnFill(float x, float y) {
-        Rectangle2D.Float r1 = new Rectangle2D.Float(rectangle.x + basicBorderStrokeWidth,
+        Rectangle2D.Float r1 = getSmallerRec();
+        return (r1.contains(x, y));
+    }
+
+    private Rectangle2D.Float getSmallerRec() {
+        return new Rectangle2D.Float(rectangle.x + basicBorderStrokeWidth,
                 rectangle.y + basicBorderStrokeWidth,
                 rectangle.width - 2 * basicBorderStrokeWidth,
                 rectangle.height - 2 * basicBorderStrokeWidth);
-        return (r1.contains(x, y));
+    }
+
+    private Rectangle2D.Float getBiggerRec() {
+        return new Rectangle2D.Float(rectangle.x - borderStrokeWidth,
+                rectangle.y - borderStrokeWidth,
+                rectangle.width + 2 * borderStrokeWidth,
+                rectangle.height + 2 * borderStrokeWidth);
     }
 }
