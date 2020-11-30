@@ -56,11 +56,13 @@ class PaintSurface extends JComponent {
                         @Override
                         public void execute() {
                             stm.getAllDrawable().add(tmp);
+                            repaint();
                         }
 
                         @Override
                         public void unexecute() {
                             stm.getAllDrawable().remove(tmp);
+                            repaint();
                         }
                     });
                     tmpDrawable = null;
@@ -69,18 +71,21 @@ class PaintSurface extends JComponent {
                 if(selectedTip != null){
                     stm.execute(new Command(){
                         Drawable selected = selectedDrawable;
-                        Point2D.Float selectedStart = selected.getStart();
                         double deltax = endDrag.getX() - startDrag.getX();
                         double deltay = endDrag.getY() - startDrag.getY();
-
+                        
                         @Override
                         public void execute() {
+                            Point2D.Float selectedStart = selected.getStart();
                             selected.moveStartTo((float)(selectedStart.getX()+deltax),(float)(selectedStart.getY()+deltay));
+                            repaint();
                         }
                         
                         @Override
                         public void unexecute() {
+                            Point2D.Float selectedStart = selected.getStart();
                             selected.moveStartTo((float)(selectedStart.getX()-deltax),(float)(selectedStart.getY()-deltay));
+                            repaint();
                         }
                     });
                     selectedTip = null;
