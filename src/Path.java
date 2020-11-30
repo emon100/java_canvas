@@ -64,7 +64,7 @@ public class Path implements Drawable {
     }
 
     @Override
-    public Point2D.Float getStartPoint() {
+    public Point2D.Float getStart() {
         return startPoint;
     }
 
