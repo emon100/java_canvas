@@ -4,7 +4,7 @@ import java.awt.geom.Rectangle2D;
 
 public class Rectangle implements Drawable {
     Rectangle2D.Float rectangle;
-    BasicStroke borderStroke = new BasicStroke();       //画笔轮廓
+    MyStroke borderStroke = new MyStroke();       //画笔轮廓
     float alpha = 1f;               //透明度
     Color color = Color.BLACK;      //画笔颜色
     Color fillColor = Color.BLUE;  //填充颜色
@@ -46,7 +46,7 @@ public class Rectangle implements Drawable {
     }
 
     @Override
-    public void setBorder(Color c, BasicStroke s) {
+    public void setBorder(Color c, MyStroke s) {
         color = c;
         borderStroke = s;
     }
@@ -57,7 +57,7 @@ public class Rectangle implements Drawable {
     }
 
     @Override
-    public BasicStroke getBasicStroke() {
+    public MyStroke getMyStroke() {
         return borderStroke;
     }
 

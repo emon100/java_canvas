@@ -7,13 +7,13 @@ import java.awt.geom.Point2D.Float;
  */
 public class Line implements Drawable {
     Line2D.Float line;
-    BasicStroke borderStroke;
+    MyStroke borderStroke;
     float alpha = 1f;
     Color color = Color.BLACK;
 
     public Line(Point point) {
         line = new Line2D.Float(point.x, point.y, point.x, point.y);
-        borderStroke = new BasicStroke();
+        borderStroke = new MyStroke();
     }
 
     @Override
@@ -40,7 +40,7 @@ public class Line implements Drawable {
     }
 
     @Override
-    public void setBorder(Color c, BasicStroke s) {
+    public void setBorder(Color c, MyStroke s) {
         color = c;
         borderStroke = s;
     }
@@ -51,7 +51,7 @@ public class Line implements Drawable {
     }
 
     @Override
-    public BasicStroke getBasicStroke() {
+    public MyStroke getMyStroke() {
         return borderStroke;
     }
 

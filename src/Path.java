@@ -5,7 +5,7 @@ import java.awt.geom.AffineTransform;
 public class Path implements Drawable {
     Point.Float startPoint;
     GeneralPath line;
-    BasicStroke borderStroke = new BasicStroke();
+    MyStroke borderStroke = new MyStroke();
     float alpha = 1f;
     Color color = Color.BLACK;
 
@@ -38,7 +38,7 @@ public class Path implements Drawable {
     }
 
     @Override
-    public void setBorder(Color c, BasicStroke s) {
+    public void setBorder(Color c, MyStroke s) {
         color = c;
         borderStroke = s;
     }
@@ -49,7 +49,7 @@ public class Path implements Drawable {
     }
 
     @Override
-    public BasicStroke getBasicStroke() {
+    public MyStroke getMyStroke() {
         return borderStroke;
     }
 

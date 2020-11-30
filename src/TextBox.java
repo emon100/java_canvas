@@ -34,7 +34,7 @@ public class TextBox implements Drawable{
             g.drawString(filled,startPoint.x,startPoint.y);
             g.setFont(oldFont);
         }else{
-            g.setStroke(new BasicStroke(1.5f));
+            g.setStroke(new MyStroke(1.5f));
             g.drawLine((int)startPoint.x,(int)startPoint.y,(int)startPoint.x,(int)startPoint.y-fontSize);
         }
     }
@@ -65,7 +65,7 @@ public class TextBox implements Drawable{
     }
 
     @Override
-    public void setBorder(Color c, BasicStroke s) {
+    public void setBorder(Color c, MyStroke s) {
 
     }
 
@@ -75,8 +75,8 @@ public class TextBox implements Drawable{
     }
 
     @Override
-    public BasicStroke getBasicStroke() {
-        return new BasicStroke();
+    public MyStroke getMyStroke() {
+        return new MyStroke();
     }
 
     @Override
