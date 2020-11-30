@@ -148,7 +148,7 @@ public class Triangle implements Drawable{
                 p.y - borderStrokeWidth,
                 2 * borderStrokeWidth,
                 2 * borderStrokeWidth);
-        return triangle.tri.contains(r);
+        return triangle.tri.intersects(r);
 
 //        Triangle2D t1 = getBound();
 //        return (triangle.contains(p) && (!t1.contains(p)));
@@ -194,7 +194,7 @@ public class Triangle implements Drawable{
                 y - borderStrokeWidth,
                 2 * borderStrokeWidth,
                 2 * borderStrokeWidth);
-        return triangle.tri.contains(r);
+        return triangle.tri.intersects(r);
     }
 
     @Override

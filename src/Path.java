@@ -89,7 +89,7 @@ public class Path implements Drawable {
                 p.y - borderStrokeWidth,
                 2 * borderStrokeWidth,
                 2 * borderStrokeWidth);
-        return line.contains(r);
+        return line.intersects(r);
     }
 
     @Override
@@ -132,7 +132,7 @@ public class Path implements Drawable {
                 y - borderStrokeWidth,
                 2 * borderStrokeWidth,
                 2 * borderStrokeWidth);
-        return line.contains(r);
+        return line.intersects(r);
     }
 
     @Override
