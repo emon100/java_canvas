@@ -28,8 +28,8 @@ public interface Drawable extends Serializable {
 
     Rectangle2D getOutBound(); //获得一个能够将图形包围的矩形
 
-    boolean pointOn(Point2D.Float p);  //返回点是否在可绘制对象上
-    boolean pointOn(float x,float y);  //返回点是否在可绘制对象上
+    boolean pointOn(Point2D.Float p);  //返回点是否在可绘制对象上的边框上
+    boolean pointOn(float x,float y);  //返回点是否在可绘制对象上的边框上
     boolean pointOnFill(Point2D.Float p);  //返回点是否在可绘制对象的填充上
     boolean pointOnFill(float x,float y);  //返回点是否在可绘制对象的填充上
 }
