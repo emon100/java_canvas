@@ -1,8 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -15,8 +13,6 @@ public class Chrome extends JFrame {
     //状态集合
     private States states;
 
-    //当前文件已经被保存
-    private boolean hasBeenSaved = false;
     /**
      * GBC
      */
@@ -89,10 +85,88 @@ public class Chrome extends JFrame {
         setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 
         //设置窗口大小
-        setSize(600,600);
+        setSize(426,426);
 
         //设置右上角退出操作
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                if (states.hasBeenSaved) {
+                    System.exit(0);
+                }
+                Object[] options = {"保存", "不保存", "取消"};
+                int res = JOptionPane.showOptionDialog(null,"文件未保存，是否保存","文件未保存",
+                        JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,options[0]);
+                switch (res) {
+                    case 0:
+                        //保存
+                        //设置默认打开目录为当前项目文件夹下
+                        JFileChooser jFileChooser = new JFileChooser( System.getProperty("user.dir") + "//src//serializedFiles" );
+                        jFileChooser.showSaveDialog(null);
+                        File savePath = jFileChooser.getSelectedFile();
+                        //如果没有选定文件或者文件不存在
+                        if (savePath == null)  {
+                            return;
+                        }
+                        if (!savePath.exists()){
+                            try {
+                                savePath.createNewFile();
+                            } catch (IOException ioException) {
+                                ioException.printStackTrace();
+                                return;
+                            }
+                        }
+                        try {
+                            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(savePath));
+                            out.writeObject( states.getAllDrawable() );
+                            System.exit(0);
+                        } catch (Exception exception) {
+                            exception.printStackTrace();
+                        }
+                        break;
+                    case 1:
+                        //不保存，退出程序
+                        System.exit(0);
+                    case 2:
+                        //取消
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+
+            }
+        });
 
 
         /*
@@ -108,7 +182,6 @@ public class Chrome extends JFrame {
          */
         //保存文件
 
-        //JLabel fileLabel = new JLabel("文件");
 
         //打开文件
         JButton openFileBtn = new JButton("打开");
@@ -125,7 +198,10 @@ public class Chrome extends JFrame {
                 try {
                     ObjectInputStream out = new ObjectInputStream(new FileInputStream(savePath));
                     states.setDrawable( (ArrayList<Drawable>) out.readObject());
+                    // TODO: Check the opened file
                     repaint();
+                    states.commandStack.clear();
+                    states.unDoneStack.clear();
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }
@@ -138,7 +214,10 @@ public class Chrome extends JFrame {
         newFileBtn.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                states.getAllDrawable().clear();
+                states.unDoneStack.clear();
+                states.commandStack.clear();
+                repaint();
             }
         });
 
@@ -166,6 +245,7 @@ public class Chrome extends JFrame {
                 try {
                     ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(savePath));
                     out.writeObject( states.getAllDrawable() );
+                    states.hasBeenSaved = true;
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }

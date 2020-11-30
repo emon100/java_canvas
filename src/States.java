@@ -13,6 +13,9 @@ public class States implements StatesModel {
     //当前选择类型
     protected TYPE cursorType = TYPE.RECTANGLE;
 
+    //当前文件已经被保存
+    public boolean hasBeenSaved = false;
+
     //操作栈
     Stack<Command> commandStack = new Stack<>();
     //撤销栈
@@ -32,6 +35,7 @@ public class States implements StatesModel {
 
         //执行command后清空撤销栈
         unDoneStack.clear();
+        hasBeenSaved = false;
     }
     
     @Override
@@ -50,7 +54,7 @@ public class States implements StatesModel {
         //操作栈弹出
         commandStack.pop();
     }
-    
+
     @Override
     public void redo() {
         //撤销栈空
