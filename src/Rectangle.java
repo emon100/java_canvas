@@ -9,7 +9,10 @@ public class Rectangle implements Drawable {
     Color color = Color.BLACK;      //画笔颜色
     Color fillColor = Color.BLUE;  //填充颜色
     boolean ifFillRec = false;      //是否填充
-    float borderStrokeWidth = this.borderStroke.getLineWidth();
+
+    int widthTimes = 2;
+    float basicBorderStrokeWidth = this.borderStroke.getLineWidth();
+    float borderStrokeWidth = this.widthTimes * this.borderStroke.getLineWidth();
 
     Rectangle(Point2D.Float point) {
         rectangle = new Rectangle2D.Float(point.x, point.y, 0, 0);
@@ -124,39 +127,53 @@ public class Rectangle implements Drawable {
 
     @Override
     public boolean pointOn(Point2D.Float p) {
-        Rectangle2D.Float r1 = new Rectangle2D.Float(rectangle.x - borderStrokeWidth,
+        Rectangle2D.Float r1 = new Rectangle2D.Float(rectangle.x + borderStrokeWidth,
                 rectangle.y - borderStrokeWidth,
-                rectangle.width - borderStrokeWidth,
-                rectangle.height - borderStrokeWidth);
-        return (rectangle.contains(p) && (!r1.contains(p)));
+                rectangle.width - 2 * borderStrokeWidth,
+                rectangle.height - 2 * borderStrokeWidth);
+
+
+        Rectangle2D.Float r2 = new Rectangle2D.Float(rectangle.x - borderStrokeWidth,
+                rectangle.y + borderStrokeWidth,
+                rectangle.width + 2 * borderStrokeWidth,
+                rectangle.height + 2 * borderStrokeWidth);
+
+        return (r2.contains(p) && (!r1.contains(p)));
     }
 
     @Override
     public boolean pointOn(float x, float y) {
-        Rectangle2D.Float r1 = new Rectangle2D.Float(rectangle.x - borderStrokeWidth,
+        Rectangle2D.Float r1 = new Rectangle2D.Float(rectangle.x + borderStrokeWidth,
                 rectangle.y - borderStrokeWidth,
-                rectangle.width - borderStrokeWidth,
-                rectangle.height - borderStrokeWidth);
-        return (rectangle.contains(x, y) && (!r1.contains(x, y)));
+                rectangle.width - 2 * borderStrokeWidth,
+                rectangle.height - 2 * borderStrokeWidth);
+
+
+        Rectangle2D.Float r2 = new Rectangle2D.Float(rectangle.x - borderStrokeWidth,
+                rectangle.y + borderStrokeWidth,
+                rectangle.width + 2 * borderStrokeWidth,
+                rectangle.height + 2 * borderStrokeWidth);
+
+        return (r2.contains(x, y) && (!r1.contains(x, y)));
 
     }
 
     @Override
     public boolean pointOnFill(Point2D.Float p) {
-        Rectangle2D.Float r1 = new Rectangle2D.Float(rectangle.x - borderStrokeWidth,
-                rectangle.y - borderStrokeWidth,
-                rectangle.width - borderStrokeWidth,
-                rectangle.height - borderStrokeWidth);
+        Rectangle2D.Float r1 = new Rectangle2D.Float(rectangle.x + basicBorderStrokeWidth,
+                rectangle.y - basicBorderStrokeWidth,
+                rectangle.width - 2 * basicBorderStrokeWidth,
+                rectangle.height - 2 * basicBorderStrokeWidth);
         return (r1.contains(p));
 
     }
 
     @Override
     public boolean pointOnFill(float x, float y) {
-        Rectangle2D.Float r1 = new Rectangle2D.Float(rectangle.x - borderStrokeWidth,
-                rectangle.y - borderStrokeWidth,
-                rectangle.width - borderStrokeWidth,
-                rectangle.height - borderStrokeWidth);
+        Rectangle2D.Float r1 = new Rectangle2D.Float(rectangle.x + basicBorderStrokeWidth,
+                rectangle.y - basicBorderStrokeWidth,
+                rectangle.width - 2 * basicBorderStrokeWidth,
+                rectangle.height - 2 * basicBorderStrokeWidth);
         return (r1.contains(x, y));
     }
 }

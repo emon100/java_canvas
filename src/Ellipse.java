@@ -9,7 +9,10 @@ public class Ellipse implements Drawable {
     float alpha = 1f;
     Color color = Color.BLACK;
     Color fillColor = Color.BLUE;
-    float borderStrokeWidth = this.borderStroke.getLineWidth();
+
+    int widthTimes = 2;
+    float basicBorderStrokeWidth = this.borderStroke.getLineWidth();
+    float borderStrokeWidth = this.widthTimes * this.borderStroke.getLineWidth();
 
     boolean iffFillEll = false;
 
@@ -123,37 +126,47 @@ public class Ellipse implements Drawable {
 
     @Override
     public boolean pointOn(Point2D.Float p) {
-        Ellipse2D.Float e1 = new Ellipse2D.Float(ellipse.x - borderStrokeWidth,
+        Ellipse2D.Float e1 = new Ellipse2D.Float(ellipse.x + borderStrokeWidth,
                 ellipse.y - borderStrokeWidth,
-                ellipse.width - borderStrokeWidth,
-                ellipse.height - borderStrokeWidth);
-        return (ellipse.contains(p) && (!e1.contains(p)));
+                ellipse.width - 2 * borderStrokeWidth,
+                ellipse.height - 2 * borderStrokeWidth);
+
+        Ellipse2D.Float e2 = new Ellipse2D.Float(ellipse.x - borderStrokeWidth,
+                ellipse.y + borderStrokeWidth,
+                ellipse.width + 2 * borderStrokeWidth,
+                ellipse.height + 2 * borderStrokeWidth);
+        return (e2.contains(p) && (!e1.contains(p)));
     }
 
     @Override
     public boolean pointOn(float x, float y) {
-        Ellipse2D.Float e1 = new Ellipse2D.Float(ellipse.x - borderStrokeWidth,
+        Ellipse2D.Float e1 = new Ellipse2D.Float(ellipse.x + borderStrokeWidth,
                 ellipse.y - borderStrokeWidth,
-                ellipse.width - borderStrokeWidth,
-                ellipse.height - borderStrokeWidth);
-        return (ellipse.contains(x, y) && (!e1.contains(x, y)));
+                ellipse.width - 2 * borderStrokeWidth,
+                ellipse.height - 2 * borderStrokeWidth);
+
+        Ellipse2D.Float e2 = new Ellipse2D.Float(ellipse.x - borderStrokeWidth,
+                ellipse.y + borderStrokeWidth,
+                ellipse.width + 2 * borderStrokeWidth,
+                ellipse.height + 2 * borderStrokeWidth);
+        return (e2.contains(x, y) && (!e1.contains(x, y)));
     }
 
     @Override
     public boolean pointOnFill(Point2D.Float p) {
-        Ellipse2D.Float e1 = new Ellipse2D.Float(ellipse.x - borderStrokeWidth,
-                ellipse.y - borderStrokeWidth,
-                ellipse.width - borderStrokeWidth,
-                ellipse.height - borderStrokeWidth);
+        Ellipse2D.Float e1 = new Ellipse2D.Float(ellipse.x + basicBorderStrokeWidth,
+                ellipse.y - basicBorderStrokeWidth,
+                ellipse.width - 2 * basicBorderStrokeWidth,
+                ellipse.height - 2 * basicBorderStrokeWidth);
         return (e1.contains(p));
     }
 
     @Override
     public boolean pointOnFill(float x, float y) {
-        Ellipse2D.Float e1 = new Ellipse2D.Float(ellipse.x - borderStrokeWidth,
-                ellipse.y - borderStrokeWidth,
-                ellipse.width - borderStrokeWidth,
-                ellipse.height - borderStrokeWidth);
+        Ellipse2D.Float e1 = new Ellipse2D.Float(ellipse.x + basicBorderStrokeWidth,
+                ellipse.y - basicBorderStrokeWidth,
+                ellipse.width - 2 * basicBorderStrokeWidth,
+                ellipse.height - 2 * basicBorderStrokeWidth);
         return (e1.contains(x, y));
     }
 }
