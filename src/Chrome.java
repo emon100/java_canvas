@@ -122,11 +122,10 @@ public class Chrome extends JFrame {
                 if (savePath == null || !savePath.exists()) {
                     return;
                 }
-
                 try {
                     ObjectInputStream out = new ObjectInputStream(new FileInputStream(savePath));
-                    //System.out.println( (ArrayList<Drawable>) out.readObject() );
-                    //TODO: Fix BasicStroke serialization
+                    states.setDrawable( (ArrayList<Drawable>) out.readObject());
+                    repaint();
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }
@@ -139,14 +138,6 @@ public class Chrome extends JFrame {
         newFileBtn.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                  //TODO:
-//                JFileChooser jFileChooser = new JFileChooser( System.getProperty("user.dir") + "//src//serializedFiles" );
-//                jFileChooser.showSaveDialog(null);
-//                File savePath = jFileChooser.getSelectedFile();
-//                //如果没有选定文件或者文件不存在
-//                if (savePath == null || !savePath.exists()) {
-//                    return;
-//                }
 
             }
         });
@@ -161,13 +152,20 @@ public class Chrome extends JFrame {
                 jFileChooser.showSaveDialog(null);
                 File savePath = jFileChooser.getSelectedFile();
                 //如果没有选定文件或者文件不存在
-                if (savePath == null || !savePath.exists()) {
+                if (savePath == null)  {
                     return;
+                }
+                if (!savePath.exists()){
+                    try {
+                        savePath.createNewFile();
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                        return;
+                    }
                 }
                 try {
                     ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(savePath));
                     out.writeObject( states.getAllDrawable() );
-                    //TODO: Fix BasicStroke serialization
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }
@@ -180,6 +178,7 @@ public class Chrome extends JFrame {
             @Override
             public void mouseReleased(MouseEvent e) {
                 states.undo();
+                repaint();
             }
         });
 
@@ -189,6 +188,7 @@ public class Chrome extends JFrame {
             @Override
             public void mouseReleased(MouseEvent e) {
                 states.redo();
+                repaint();
             }
         });
 

@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
+import java.io.Serializable;
 
 public class Triangle implements Drawable{
 
@@ -21,10 +22,10 @@ public class Triangle implements Drawable{
         g.setPaint(color);
         g.setStroke(borderStroke);
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,alpha));
-        g.draw(triangle);
+        g.draw(triangle.tri);
         if (isFilled()) {
             g.setColor(fillColor);
-            g.fill(triangle);
+            g.fill(triangle.tri);
         }
     }
 
@@ -194,18 +195,27 @@ public class Triangle implements Drawable{
 
     }
 
-    private static class Triangle2D extends Path2D.Float {
+    private static class Triangle2D implements Serializable{
+        Path2D.Float tri = new Path2D.Float();
         float x1,y1,x2,y2,x3,y3;
 
         float height, halfWidth;
-        Point2D.Float p1,p2,p3;
+        //Point2D.Float p1,p2,p3;
 
         Triangle2D(float x1, float y1, float x2, float y2) {
             setTri(x1, y1, x2, y2);
         }
 
+        public boolean contains(float x,float y){
+            return tri.contains(x,y);
+        }
+
+        public boolean contains(Point2D.Float p) {
+            return tri.contains(p);
+        }
+
         private void setTri(float x1, float y1, float x2, float y2) {
-            this.reset();
+            tri.reset();
             this.x1 = x1;
             this.x2 = x2;
             this.y1 = y1;
@@ -217,14 +227,14 @@ public class Triangle implements Drawable{
             height = y2 - y1;
             halfWidth = x2 - x1;
 
-            p1 = new Point2D.Float(x1, y1);
-            p2 = new Point2D.Float(x2, y2);         //终点
-            p3 = new Point2D.Float(x3, y3);        //对称点
+//            p1 = new Point2D.Float(x1, y1);
+//            p2 = new Point2D.Float(x2, y2);         //终点
+//            p3 = new Point2D.Float(x3, y3);        //对称点
 
-            moveTo(p1.x, p1.y);
-            lineTo(p2.x, p2.y);
-            lineTo(p3.x, p3.y);
-            closePath();
+            tri.moveTo(x1, y1);
+            tri.lineTo(x2, y2);
+            tri.lineTo(x3, y3);
+            tri.closePath();
         }
 
     }
