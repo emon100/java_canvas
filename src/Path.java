@@ -9,6 +9,9 @@ public class Path implements Drawable {
     float alpha = 1f;
     Color color = Color.BLACK;
 
+    int widthTimes = 5;
+    float borderStrokeWidth = this.widthTimes * this.borderStroke.getLineWidth();
+
     public Path(Point.Float p) {
         startPoint = p;
         line = new GeneralPath();
@@ -79,8 +82,18 @@ public class Path implements Drawable {
     }
 
     @Override
+    public Rectangle2D getOutBound() {
+        return line.getBounds2D();
+    }
+
+    @Override
     public boolean pointOn(Point2D.Float p) {
-        return (line.contains(p));
+//        扩大点至矩形，判断是否相交
+        Rectangle2D.Float r = new Rectangle2D.Float(p.x - borderStrokeWidth,
+                p.y - borderStrokeWidth,
+                2 * borderStrokeWidth,
+                2 * borderStrokeWidth);
+        return line.contains(r);
     }
 
     @Override
@@ -97,13 +110,28 @@ public class Path implements Drawable {
     }
 
     @Override
+    public void setStartPoint(Point2D.Float p) {
+        startPoint.setLocation(p);
+    }
+
+    @Override
+    public void setStartPoint(float x, float y) {
+        startPoint.setLocation(x, y);
+    }
+
+    @Override
     public void putEndPoint(float x, float y) {
         line.lineTo(x, y);
     }
 
     @Override
     public boolean pointOn(float x, float y) {
-        return (line.contains(x, y));
+        //        扩大点至矩形，判断是否相交
+        Rectangle2D.Float r = new Rectangle2D.Float(x - borderStrokeWidth,
+                y - borderStrokeWidth,
+                2 * borderStrokeWidth,
+                2 * borderStrokeWidth);
+        return line.contains(r);
     }
 
     @Override
