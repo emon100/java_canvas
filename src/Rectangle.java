@@ -96,17 +96,17 @@ public class Rectangle implements Drawable {
     }
 
     @Override
-    public void moveStartTo(Point2D.Float p) {
+    public void moveToInStart(Point2D.Float p) {
         rectangle.setRect(p.x, p.y, rectangle.width, rectangle.height);
     }
 
     @Override
-    public void moveStartTo(float x, float y) {
+    public void moveToInStart(float x, float y) {
         rectangle.setRect(x, y, rectangle.width, rectangle.height);
     }
 
     @Override
-    public Point2D.Float getStart() {
+    public Point2D.Float getStartPoint() {
         return new Point2D.Float(rectangle.x, rectangle.y);
     }
 

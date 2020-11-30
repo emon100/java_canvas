@@ -95,17 +95,17 @@ public class TextBox implements Drawable{
     }
 
     @Override
-    public void moveStartTo(Float p) {
+    public void moveToInStart(Float p) {
         startPoint = p ;
     }
 
     @Override
-    public void moveStartTo(float x, float y) {
+    public void moveToInStart(float x, float y) {
         startPoint.setLocation(x, y);
     }
 
     @Override
-    public Float getStart() {
+    public Float getStartPoint() {
         return startPoint;
     }
 

@@ -76,15 +76,15 @@ class PaintSurface extends JComponent {
                         
                         @Override
                         public void execute() {
-                            Point2D.Float selectedStart = selected.getStart();
-                            selected.moveStartTo((float)(selectedStart.getX()+deltax),(float)(selectedStart.getY()+deltay));
+                            Point2D.Float selectedStart = selected.getStartPoint();
+                            selected.moveToInStart((float)(selectedStart.getX()+deltax),(float)(selectedStart.getY()+deltay));
 
                         }
                         
                         @Override
                         public void unexecute() {
-                            Point2D.Float selectedStart = selected.getStart();
-                            selected.moveStartTo((float)(selectedStart.getX()-deltax),(float)(selectedStart.getY()-deltay));
+                            Point2D.Float selectedStart = selected.getStartPoint();
+                            selected.moveToInStart((float)(selectedStart.getX()-deltax),(float)(selectedStart.getY()-deltay));
 
                         }
                     });
@@ -112,8 +112,8 @@ class PaintSurface extends JComponent {
                     if(selectedTip!=null){
                         var deltax = e.getX() - endDrag.getX();
                         var deltay = e.getY() - endDrag.getY();
-                        var selectedStart = selectedTip.getStart();
-                        selectedTip.moveStartTo((float)(selectedStart.getX()+deltax),(float)(selectedStart.getY()+deltay));
+                        var selectedStart = selectedTip.getStartPoint();
+                        selectedTip.moveToInStart((float)(selectedStart.getX()+deltax),(float)(selectedStart.getY()+deltay));
                         repaint();
                     }
                     endDrag.move(x, y);
@@ -148,7 +148,7 @@ class PaintSurface extends JComponent {
             var shape = l.get(i);
             if(shape.pointOn(startDrag.x,startDrag.y)){
                 selectedDrawable = shape;
-                var s = shape.getStart();
+                var s = shape.getStartPoint();
                 var rec = BasicDrawableFactory.makeRec((int)s.x, (int)s.y, (int)s.x, (int)s.y);
                 rec.putEndPoint(shape.getEndPoint());
                 rec.setBorder(shape.getBorderColor(), new MyStroke(3.0f, MyStroke.CAP_BUTT, MyStroke.JOIN_MITER, 10.0f, dash1, 3.0f));

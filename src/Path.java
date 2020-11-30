@@ -64,7 +64,7 @@ public class Path implements Drawable {
     }
 
     @Override
-    public Point2D.Float getStart() {
+    public Point2D.Float getStartPoint() {
         return startPoint;
     }
 
@@ -84,14 +84,14 @@ public class Path implements Drawable {
     }
 
     @Override
-    public void moveStartTo(Point2D.Float p) {
+    public void moveToInStart(Point2D.Float p) {
         startPoint = p;
         line.moveTo(p.x, p.y);
         
     }
 
     @Override
-    public void moveStartTo(float x, float y) {
+    public void moveToInStart(float x, float y) {
         startPoint.setLocation(x, y);
         line.moveTo(x, y);
     }

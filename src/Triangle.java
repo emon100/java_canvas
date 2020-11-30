@@ -95,17 +95,17 @@ public class Triangle implements Drawable{
     }
 
     @Override
-    public void moveStartTo(Point2D.Float p) {
+    public void moveToInStart(Point2D.Float p) {
         triangle.setTri(p.x, p.y, triangle.x2, triangle.y2);
     }
 
     @Override
-    public void moveStartTo(float x, float y) {
+    public void moveToInStart(float x, float y) {
         triangle.setTri(x, y, triangle.x2, triangle.y2);
     }
 
     @Override
-    public Point2D.Float getStart() {
+    public Point2D.Float getStartPoint() {
         return new Point2D.Float(triangle.x1, triangle.y1);
     }
 
