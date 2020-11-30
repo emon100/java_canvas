@@ -139,8 +139,7 @@ public class Chrome extends JFrame {
         undoImgLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                System.out.println("undo");
-                // TODO: states.undo();
+                states.undo();
             }
         });
 
@@ -149,8 +148,7 @@ public class Chrome extends JFrame {
         redoImgLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                System.out.println("redo");
-                // TODO: states.redo();
+                states.redo();
             }
         });
 
@@ -204,7 +202,6 @@ public class Chrome extends JFrame {
             @Override
             public void mouseReleased(MouseEvent e) {
                 states.setType(StatesModel.TYPE.PATH);
-                System.out.println("pencil -- PATH");
             }
         });
 
@@ -214,7 +211,6 @@ public class Chrome extends JFrame {
             @Override
             public void mouseReleased(MouseEvent e) {
                 states.setType(StatesModel.TYPE.RECTANGLE);
-                System.out.println("rectangle");
             }
         });
 
@@ -224,7 +220,6 @@ public class Chrome extends JFrame {
             @Override
             public void mouseReleased(MouseEvent e) {
                 states.setType(StatesModel.TYPE.TRIANGLE);
-                System.out.println("triangle");
             }
         });
 
@@ -234,7 +229,6 @@ public class Chrome extends JFrame {
             @Override
             public void mouseReleased(MouseEvent e) {
                 states.setType(StatesModel.TYPE.LINE);
-                System.out.println("line");
             }
         });
 
@@ -244,7 +238,6 @@ public class Chrome extends JFrame {
             @Override
             public void mouseReleased(MouseEvent e) {
                 states.setType(StatesModel.TYPE.ELLIPSE);
-                System.out.println("ellipse");
             }
         });
 

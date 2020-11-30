@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Stack;
 
 public class States implements StatesModel {
 
@@ -12,31 +13,64 @@ public class States implements StatesModel {
     //当前选择类型
     protected TYPE cursorType = TYPE.RECTANGLE;
 
-    ArrayList<Drawable> a = new ArrayList<>();
+    //操作栈
+    Stack<Command> commandStack = new Stack<>();
+    //撤销栈
+    Stack<Command> unDoneStack = new Stack<>();
+
+    ArrayList<Drawable> drawables = new ArrayList<>();
 
     {
         var r  = new Random();
-        a.add(BasicDrawableFactory.makeLine(r.nextInt(200),r.nextInt(200),r.nextInt(200),r.nextInt(200)));
+        drawables.add(BasicDrawableFactory.makeLine(r.nextInt(200),r.nextInt(200),r.nextInt(200),r.nextInt(200)));
     }
 
     @Override
     public void execute(Command command) {
-        
+        command.execute();
+        commandStack.push(command);
+
+        //执行command后清空撤销栈
+        unDoneStack.clear();
     }
     
     @Override
     public void undo() {
-        
+        //操作栈空
+        if ( commandStack.empty() ) {
+            System.out.println("Nothing to be undone");
+            return;
+        }
+        //unexcute操作栈栈顶
+        commandStack.peek().unexecute();
+
+        //操作栈弹出至撤销栈
+        unDoneStack.push( commandStack.peek() );
+
+        //操作栈弹出
+        commandStack.pop();
     }
     
     @Override
     public void redo() {
-        
+        //撤销栈空
+        if ( unDoneStack.empty() ) {
+            System.out.println("Nothing to be redone");
+            return;
+        }
+        //execute当前操作
+        unDoneStack.peek().execute();
+
+        //将撤销栈弹回操作栈
+        commandStack.push( unDoneStack.peek() );
+
+        //撤销栈弹出
+        unDoneStack.pop();
     }
     
     @Override
     public ArrayList<Drawable> getAllDrawable() {
-        return a;
+        return drawables;
     }
     
     @Override
@@ -53,6 +87,7 @@ public class States implements StatesModel {
     public TYPE getType() {
         return cursorType;
     }
+
     @Override
     public void setType(TYPE t) {
         cursorType=t;
@@ -66,7 +101,7 @@ public class States implements StatesModel {
     
     @Override
     public void setDrawable(ArrayList<Drawable> d) {
-        a=d;
+        drawables = d;
     }
 
     @Override
