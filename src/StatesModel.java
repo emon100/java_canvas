@@ -2,19 +2,19 @@ import java.util.*;
 import java.awt.*;
 
 public interface StatesModel {
-    public static enum TYPE{
+    enum TYPE{
         SELECT,LINE,PATH,TRIANGLE,RECTANGLE,ELLIPSE,TEXTBOX,ERASER,FILL
     }
-    public void execute(Command command);
-    public void undo();
-    public void redo();
+    void execute(Command command);
+    void undo();
+    void redo();
 
-    public ArrayList<Drawable> getAllDrawable();
-    public void setDrawable(ArrayList<Drawable> d);
-    public StatesModel.TYPE getType();
-    public void setType(StatesModel.TYPE t);
-    public Color getColor();
-    public void setColor(Color cur);
-    public float getAlpha();
-    public void setAlpha(float f);
+    ArrayList<Drawable> getAllDrawable();
+    void setDrawable(ArrayList<Drawable> d);
+    StatesModel.TYPE getType();
+    void setType(StatesModel.TYPE t);
+    Color getColor();
+    void setColor(Color cur);
+    float getAlpha();
+    void setAlpha(float f);
 }

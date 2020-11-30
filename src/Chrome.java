@@ -3,6 +3,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.*;
+import java.util.ArrayList;
 
 /*
  * author: AlbertTan
@@ -10,7 +12,11 @@ import java.awt.event.MouseEvent;
  */
 public class Chrome extends JFrame {
 
+    //状态集合
     private States states;
+
+    //当前文件已经被保存
+    private boolean hasBeenSaved = false;
     /**
      * GBC
      */
@@ -109,9 +115,23 @@ public class Chrome extends JFrame {
         openFileBtn.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("openFileBtn clicked");
-                //TODO: Open file button listener
+                JFileChooser jFileChooser = new JFileChooser( System.getProperty("user.dir") + "//src//serializedFiles" );
+                jFileChooser.showSaveDialog(null);
+                File savePath = jFileChooser.getSelectedFile();
+                //如果没有选定文件或者文件不存在
+                if (savePath == null || !savePath.exists()) {
+                    return;
+                }
+
+                try {
+                    ObjectInputStream out = new ObjectInputStream(new FileInputStream(savePath));
+                    //System.out.println( (ArrayList<Drawable>) out.readObject() );
+                    //TODO: Fix BasicStroke serialization
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
             }
+
         });
 
         //新建文件
@@ -119,8 +139,15 @@ public class Chrome extends JFrame {
         newFileBtn.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("newFileBtn clicked");
-                //TODO: New file button listener
+                  //TODO:
+//                JFileChooser jFileChooser = new JFileChooser( System.getProperty("user.dir") + "//src//serializedFiles" );
+//                jFileChooser.showSaveDialog(null);
+//                File savePath = jFileChooser.getSelectedFile();
+//                //如果没有选定文件或者文件不存在
+//                if (savePath == null || !savePath.exists()) {
+//                    return;
+//                }
+
             }
         });
 
@@ -129,8 +156,21 @@ public class Chrome extends JFrame {
         saveFileBtn.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("saveFileBtn clicked");
-                //TODO: Save file button listener
+                //设置默认打开目录为当前项目文件夹下
+                JFileChooser jFileChooser = new JFileChooser( System.getProperty("user.dir") + "//src//serializedFiles" );
+                jFileChooser.showSaveDialog(null);
+                File savePath = jFileChooser.getSelectedFile();
+                //如果没有选定文件或者文件不存在
+                if (savePath == null || !savePath.exists()) {
+                    return;
+                }
+                try {
+                    ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(savePath));
+                    out.writeObject( states.getAllDrawable() );
+                    //TODO: Fix BasicStroke serialization
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
             }
         });
 
@@ -272,7 +312,6 @@ public class Chrome extends JFrame {
 
             }
         });
-        //TODO: Box too small: split into panels
         
         JPanel whiteColorPanel = new JPanel();
         whiteColorPanel.setBackground(Color.white);
