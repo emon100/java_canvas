@@ -11,7 +11,10 @@ public class Triangle implements Drawable{
     Color color = Color.BLACK;
     Color fillColor = Color.BLUE;
     boolean ifFillTri = false;
-    float borderStrokeWidth = this.borderStroke.getLineWidth();
+
+    int widthTimes = 2;
+    float basicBorderStrokeWidth = this.borderStroke.getLineWidth();
+    float borderStrokeWidth = this.widthTimes * this.borderStroke.getLineWidth();
 
     Triangle(Point2D.Float point) {
         triangle = new Triangle2D(point.x, point.y ,point.x ,point.y);
@@ -159,38 +162,59 @@ public class Triangle implements Drawable{
 
         }*/
 
-        Triangle2D t1 = new Triangle2D(triangle.x1 - borderStrokeWidth,
-                triangle.y1 - borderStrokeWidth,
-                triangle.x2 -borderStrokeWidth,
-                triangle.y2 + borderStrokeWidth);
+        Triangle2D t1 = getBound();
         return (triangle.contains(p) && (!t1.contains(p)));
 
     }
 
+    private Triangle2D getBound() {
+        Triangle2D t;
+        if (triangle.y1 >= triangle.y2) {
+            if (triangle.x1 >= triangle.x2) {
+                t = new Triangle2D(triangle.x1,
+                        triangle.y1 - borderStrokeWidth,
+                        triangle.x2 + borderStrokeWidth,
+                        triangle.y2 + borderStrokeWidth);
+            }
+            else {
+                t = new Triangle2D(triangle.x1,
+                        triangle.y1 - borderStrokeWidth,
+                        triangle.x2 - borderStrokeWidth,
+                        triangle.y2 + borderStrokeWidth);
+            }
+        }
+        else {
+            if (triangle.x1 >= triangle.x2) {
+                t = new Triangle2D(triangle.x1,
+                        triangle.y1 + borderStrokeWidth,
+                        triangle.x2 + borderStrokeWidth,
+                        triangle.y2 - borderStrokeWidth);
+            }
+            else {
+                t = new Triangle2D(triangle.x1,
+                        triangle.y1 + borderStrokeWidth,
+                        triangle.x2 - borderStrokeWidth,
+                        triangle.y2 - borderStrokeWidth);
+            }
+        }
+        return t;
+    }
+
     @Override
     public boolean pointOn(float x, float y) {
-        Triangle2D t1 = new Triangle2D(triangle.x1 - borderStrokeWidth,
-                triangle.y1 - borderStrokeWidth,
-                triangle.x2 -borderStrokeWidth,
-                triangle.y2 + borderStrokeWidth);
+        Triangle2D t1 = getBound();
         return (triangle.contains(x, y) && (!t1.contains(x, y)));
     }
 
     @Override
     public boolean pointOnFill(Point2D.Float p) {
-        Triangle2D t1 = new Triangle2D(triangle.x1 - borderStrokeWidth,
-                triangle.y1 - borderStrokeWidth,
-                triangle.x2 -borderStrokeWidth,
-                triangle.y2 + borderStrokeWidth);
+        Triangle2D t1 = getBound();
         return (t1.contains(p));
     }
 
     @Override
     public boolean pointOnFill(float x, float y) {
-        Triangle2D t1 = new Triangle2D(triangle.x1 - borderStrokeWidth,
-                triangle.y1 - borderStrokeWidth,
-                triangle.x2 -borderStrokeWidth,
-                triangle.y2 + borderStrokeWidth);
+        Triangle2D t1 = getBound();
         return (t1.contains(x, y));
 
     }
