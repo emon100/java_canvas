@@ -5,7 +5,7 @@ import java.awt.geom.Point2D;
 public class Triangle implements Drawable{
 
     Triangle2D triangle;
-    BasicStroke borderStroke = new BasicStroke();
+    MyStroke borderStroke = new MyStroke();
     float alpha = 1f;
     Color color = Color.BLACK;
     Color fillColor = Color.BLUE;
@@ -41,7 +41,7 @@ public class Triangle implements Drawable{
     }
 
     @Override
-    public void setBorder(Color c, BasicStroke s) {
+    public void setBorder(Color c, MyStroke s) {
         color = c;
         borderStroke = s;
     }
@@ -52,7 +52,7 @@ public class Triangle implements Drawable{
     }
 
     @Override
-    public BasicStroke getBasicStroke() {
+    public MyStroke getMyStroke() {
         return borderStroke;
     }
 

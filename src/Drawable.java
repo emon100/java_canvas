@@ -6,9 +6,9 @@ public interface Drawable extends Serializable {
     void drawOnGraphics2D(Graphics2D g);//实现往g上作画
     void setAlpha(float f);//设置整个图形透明度，from 0 to 1.0f
     void setColor(Color c);//同时设置fill和border的颜色
-    void setBorder(Color c,BasicStroke s); //设置边缘颜色
+    void setBorder(Color c,MyStroke s); //设置边缘颜色
     Color getBorderColor(); //获得边缘颜色
-    BasicStroke getBasicStroke();
+    MyStroke getMyStroke();
 
     boolean isFilled();  //是否开启填充
     void setFill();        //开启默认填充

@@ -50,7 +50,7 @@ class PaintSurface extends JComponent {
                         {
                             tmp.setColor(stm.getColor());
                             tmp.setAlpha(stm.getAlpha());
-                            tmp.setBorder(stm.getColor(), new BasicStroke()); //todo
+                            tmp.setBorder(stm.getColor(), new MyStroke()); //todo
                             tmp.disableFill();
                         }
                         @Override
@@ -151,7 +151,7 @@ class PaintSurface extends JComponent {
                 var s = shape.getStart();
                 var rec = BasicDrawableFactory.makeRec((int)s.x, (int)s.y, (int)s.x, (int)s.y);
                 rec.putEndPoint(shape.getEndPoint());
-                rec.setBorder(shape.getBorderColor(), new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
+                rec.setBorder(shape.getBorderColor(), new MyStroke(3.0f, MyStroke.CAP_BUTT, MyStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
                 return rec;
             }
         }
@@ -163,7 +163,7 @@ class PaintSurface extends JComponent {
             case LINE: {
                 tmpDrawable = BasicDrawableFactory.makeLine(startDrag.x, startDrag.y, startDrag.x, startDrag.y);
                 tmpDrawable.setBorder(tmpDrawable.getBorderColor(),
-                        new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
+                        new MyStroke(3.0f, MyStroke.CAP_BUTT, MyStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
                 tmpDrawable.setColor(stm.getColor());
                 tmpDrawable.setAlpha(stm.getAlpha());
             }
@@ -171,7 +171,7 @@ class PaintSurface extends JComponent {
             case PATH: {
                 tmpDrawable = BasicDrawableFactory.makePath(startDrag.x, startDrag.y, startDrag.x, startDrag.y);
                 tmpDrawable.setBorder(tmpDrawable.getBorderColor(),
-                        new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
+                        new MyStroke(3.0f, MyStroke.CAP_BUTT, MyStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
                 tmpDrawable.setColor(stm.getColor());
                 tmpDrawable.setAlpha(stm.getAlpha());
             }
@@ -185,7 +185,7 @@ class PaintSurface extends JComponent {
             case RECTANGLE: {
                 tmpDrawable = BasicDrawableFactory.makeRec(startDrag.x, startDrag.y, startDrag.x, startDrag.y);
                 tmpDrawable.setBorder(tmpDrawable.getBorderColor(),
-                        new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
+                        new MyStroke(3.0f, MyStroke.CAP_BUTT, MyStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
                 tmpDrawable.disableFill();
                 tmpDrawable.setColor(stm.getColor());
                 tmpDrawable.setAlpha(stm.getAlpha());
@@ -194,7 +194,7 @@ class PaintSurface extends JComponent {
             case ELLIPSE:{
                 tmpDrawable = BasicDrawableFactory.makeEllipse(startDrag.x, startDrag.y, startDrag.x, startDrag.y);
                 tmpDrawable.setBorder(tmpDrawable.getBorderColor(),
-                        new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
+                        new MyStroke(3.0f, MyStroke.CAP_BUTT, MyStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
                 tmpDrawable.disableFill();
                 tmpDrawable.setColor(stm.getColor());
                 tmpDrawable.setAlpha(stm.getAlpha());
@@ -203,7 +203,7 @@ class PaintSurface extends JComponent {
             case TRIANGLE:{
                 tmpDrawable = BasicDrawableFactory.makeTri(startDrag.x, startDrag.y, startDrag.x, startDrag.y);
                 tmpDrawable.setBorder(tmpDrawable.getBorderColor(),
-                        new BasicStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
+                        new MyStroke(3.0f, MyStroke.CAP_BUTT, MyStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
                 tmpDrawable.disableFill();
                 tmpDrawable.setColor(stm.getColor());
                 tmpDrawable.setAlpha(stm.getAlpha());
