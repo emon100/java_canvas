@@ -102,6 +102,7 @@ public class Rectangle implements Drawable {
         rectangle.setRect(x, y, rectangle.width, rectangle.height);
     }
 
+
     @Override
     public Point2D.Float getStartPoint() {
         return new Point2D.Float(rectangle.x, rectangle.y);
@@ -163,19 +164,20 @@ public class Rectangle implements Drawable {
 
     @Override
     public void setStartPoint(Float p) {
-        // TODO Auto-generated method stub
+        rectangle.x = p.x;
+        rectangle.y = p.y;
 
     }
 
     @Override
     public void setStartPoint(float x, float y) {
-        // TODO Auto-generated method stub
+        rectangle.x = x;
+        rectangle.y = y;
 
     }
 
     @Override
     public Rectangle2D getOutBound() {
-        // TODO Auto-generated method stub
-        return null;
+        return rectangle.getBounds2D();
     }
 }

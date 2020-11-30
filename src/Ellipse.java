@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 
 public class Ellipse implements Drawable {
 
@@ -105,6 +106,18 @@ public class Ellipse implements Drawable {
     }
 
     @Override
+    public void setStartPoint(Point2D.Float p) {
+        ellipse.x = p.x;
+        ellipse.y = p.y;
+    }
+
+    @Override
+    public void setStartPoint(float x, float y) {
+        ellipse.x = x;
+        ellipse.y = y;
+    }
+
+    @Override
     public Point2D.Float getStartPoint() {
         return new Point2D.Float(ellipse.x, ellipse.y);
     }
@@ -122,6 +135,11 @@ public class Ellipse implements Drawable {
     @Override
     public Point2D.Float getEndPoint() {
         return new Point2D.Float(ellipse.x + ellipse.width, ellipse.y + ellipse.height);
+    }
+
+    @Override
+    public Rectangle2D getOutBound() {
+        return ellipse.getBounds2D();
     }
 
     @Override

@@ -66,10 +66,6 @@ public class Path implements Drawable {
         line.transform(AffineTransform.getScaleInstance(times, times));
     }
 
-    @Override
-    public Point2D.Float getStart() {
-        return startPoint;
-    }
 
     @Override
     public void putEndPoint(Point2D.Float p) {
@@ -117,6 +113,11 @@ public class Path implements Drawable {
     @Override
     public void setStartPoint(float x, float y) {
         startPoint.setLocation(x, y);
+    }
+
+    @Override
+    public Point2D.Float getStartPoint() {
+        return startPoint;
     }
 
     @Override
