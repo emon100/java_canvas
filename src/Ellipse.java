@@ -124,12 +124,58 @@ public class Ellipse implements Drawable {
 
     @Override
     public void putEndPoint(Point2D.Float p) {
-        ellipse.setFrame(ellipse.x, ellipse.y, p.x - ellipse.x, p.y - ellipse.y);
+        if (p.getX() >= ellipse.x) {
+            if (p.getY() >= ellipse.y) {
+                ellipse.setFrame(ellipse.x, ellipse.y,
+                        p.getX() - ellipse.x, p.getY() - ellipse.y);
+            }
+            else {
+                ellipse.setFrame(ellipse.x, p.getY(),
+                        p.getX() - ellipse.x,
+                        ellipse.y - p.getY());  //TODO fix ellipse y
+            }
+        }
+        else {
+            if (p.getY() >= ellipse.y) {
+                ellipse.setFrame(p.getX(), ellipse.y,
+                        ellipse.x - p.getX(),
+                        p.getY() - ellipse.y);
+            }
+            else {
+                ellipse.setFrame(p.getX(), p.getY(),
+                        ellipse.x - p.getX(),
+                        ellipse.y - p.getY());
+            }
+        }
+
     }
 
     @Override
     public void putEndPoint(float x, float y) {
-        ellipse.setFrame(ellipse.x, ellipse.y, x - ellipse.x, y - ellipse.y);
+        if (x >= ellipse.x) {
+            if (y >= ellipse.y) {
+                ellipse.setFrame(ellipse.x, ellipse.y,
+                        x - ellipse.x, y - ellipse.y);
+            }
+            else {
+                ellipse.setFrame(ellipse.x, y,
+                        x - ellipse.x,
+                        ellipse.y - y);  //TODO fix ellipse y
+            }
+        }
+        else {
+            if (y >= ellipse.y) {
+                ellipse.setFrame(x, ellipse.y,
+                        ellipse.x - x,
+                        y - ellipse.y);
+            }
+            else {
+                ellipse.setFrame(x, y,
+                        ellipse.x - x,
+                        ellipse.y - y);
+            }
+        }
+
     }
 
     @Override

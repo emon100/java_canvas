@@ -109,13 +109,60 @@ public class Rectangle implements Drawable {
     }
 
     @Override
+    /*需要交换起始和终点坐标*/
     public void putEndPoint(Point2D.Float p) {
-        rectangle.setRect(rectangle.x, rectangle.y, p.x - rectangle.x, p.y - rectangle.y);
+        if (p.getX() >= rectangle.x) {
+            if (p.getY() >= rectangle.y) {
+                rectangle.setRect(rectangle.x, rectangle.y,
+                        p.getX() - rectangle.x, p.getY() - rectangle.y);
+            }
+            else {
+                rectangle.setRect(rectangle.x, p.getY(),
+                        p.getX() - rectangle.x,
+                        rectangle.y - p.getY());  //TODO fix rectangle y
+            }
+        }
+        else {
+            if (p.getY() >= rectangle.y) {
+                rectangle.setRect(p.getX(), rectangle.y,
+                        rectangle.x - p.getX(),
+                        p.getY() - rectangle.y);
+            }
+            else {
+                rectangle.setRect(p.getX(), p.getY(),
+                        rectangle.x - p.getX(),
+                        rectangle.y - p.getY());
+            }
+        }
+
     }
 
     @Override
     public void putEndPoint(float x, float y) {
-        rectangle.setRect(rectangle.x, rectangle.y, x - rectangle.x, y - rectangle.y);
+        if (x >= rectangle.x) {
+            if (y >= rectangle.y) {
+                rectangle.setRect(rectangle.x, rectangle.y,
+                        x - rectangle.x, y - rectangle.y);
+            }
+            else {
+                rectangle.setRect(rectangle.x, y,
+                        x - rectangle.x,
+                        rectangle.y - y);
+            }
+        }
+        else {
+            if (y >= rectangle.y) {
+                rectangle.setRect(x, rectangle.y,
+                        rectangle.x - x,
+                        y - rectangle.y);
+            }
+            else {
+                rectangle.setRect(x, y,
+                        rectangle.x - x,
+                        rectangle.y - y);
+            }
+        }
+
     }
 
     @Override

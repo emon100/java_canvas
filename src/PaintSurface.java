@@ -113,7 +113,7 @@ class PaintSurface extends JComponent {
                         var deltax = e.getX() - endDrag.getX();
                         var deltay = e.getY() - endDrag.getY();
                         var selectedStart = selectedTip.getStartPoint();
-                        selectedTip.moveToInStart((float)(selectedStart.getX()+deltax),(float)(selectedStart.getY()+deltay));
+                        selectedTip.moveToInStart((float)(selectedStart.getX() + deltax),(float)(selectedStart.getY() + deltay));
                     }
                     endDrag.move(x, y);
                     repaint();
