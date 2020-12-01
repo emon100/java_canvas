@@ -139,7 +139,38 @@ public class Triangle implements Drawable{
 
     @Override
     public Rectangle2D getOutBound() {
-        return triangle.tri.getBounds2D();
+        float x, y;
+        float width,height;
+
+        if (triangle.y1 >= triangle.y2) {
+            height = triangle.y1 - triangle.y2;
+            if (triangle.x1 >= triangle.x2) {
+                x = triangle.x2;
+                y = triangle.y2;
+                width = triangle.x3 - triangle.x2;
+            }
+            else {
+                x = triangle.x3;
+                y = triangle.y3;
+                width = triangle.x2 - triangle.x3;
+            }
+        }
+        else {
+            y = triangle.y1;
+            height = triangle.y2 - triangle.y1;
+            if (triangle.x1 >= triangle.x2) {
+                x = triangle.x2;
+                width = triangle.x3 - triangle.x2;
+            }
+            else {
+                x = triangle.x3;
+                width = triangle.x2 - triangle.x3;
+            }
+        }
+
+        return new Rectangle2D.Float(x, y, width, height);
+
+//        return triangle.tri.getBounds2D();
     }
 
     @Override
