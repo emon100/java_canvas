@@ -11,7 +11,10 @@ public class States implements StatesModel {
     protected float alpha = 1.0f;
 
     //当前选择类型
-    protected TYPE cursorType = TYPE.RECTANGLE;
+    protected TYPE cursorType = TYPE.PATH;
+
+    //当前文件已经被保存
+    public boolean hasBeenSaved = true;
 
     //操作栈
     Stack<Command> commandStack = new Stack<>();
@@ -25,6 +28,16 @@ public class States implements StatesModel {
         drawables.add(BasicDrawableFactory.makeLine(r.nextInt(200),r.nextInt(200),r.nextInt(200),r.nextInt(200)));
     }
 
+    /**
+     * 初始化States, 用于新建文件
+     */
+    public void iniStates() {
+        cursorType = TYPE.PATH;
+        currentColor = Color.black;
+        getAllDrawable().clear();
+        commandStack.clear();
+        unDoneStack.clear();
+    }
     @Override
     public void execute(Command command) {
         command.execute();
@@ -32,6 +45,7 @@ public class States implements StatesModel {
 
         //执行command后清空撤销栈
         unDoneStack.clear();
+        hasBeenSaved = false;
     }
     
     @Override
@@ -49,8 +63,9 @@ public class States implements StatesModel {
 
         //操作栈弹出
         commandStack.pop();
+        hasBeenSaved = false;
     }
-    
+
     @Override
     public void redo() {
         //撤销栈空
@@ -66,6 +81,7 @@ public class States implements StatesModel {
 
         //撤销栈弹出
         unDoneStack.pop();
+        hasBeenSaved = false;
     }
     
     @Override
