@@ -1,3 +1,4 @@
+import java.util.Optional;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
@@ -21,7 +22,7 @@ class PaintSurface extends JComponent {
     Drawable selectedTip = null; // 用于显示被选择对象外边框的临时Drawable对象
     Drawable selectedDrawable = null; //被选择的对象
 
-    public PaintSurface(StatesModel stmo) {
+    public PaintSurface(StatesModel stmo) { //构造函数，接受一个StatesModel对象
         stm = stmo;
 
         JPopupMenu popup = new JPopupMenu();// setPopUpMenu()
@@ -76,15 +77,15 @@ class PaintSurface extends JComponent {
                         
                         @Override
                         public void execute() {
-                            Point2D.Float selectedStart = selected.getStart();
-                            selected.moveStartTo((float)(selectedStart.getX()+deltax),(float)(selectedStart.getY()+deltay));
+                            Point2D.Float selectedStart = selected.getStartPoint();
+                            selected.moveToInStart((float)(selectedStart.getX()+deltax),(float)(selectedStart.getY()+deltay));
 
                         }
                         
                         @Override
                         public void unexecute() {
-                            Point2D.Float selectedStart = selected.getStart();
-                            selected.moveStartTo((float)(selectedStart.getX()-deltax),(float)(selectedStart.getY()-deltay));
+                            Point2D.Float selectedStart = selected.getStartPoint();
+                            selected.moveToInStart((float)(selectedStart.getX()-deltax),(float)(selectedStart.getY()-deltay));
 
                         }
                     });
@@ -107,18 +108,16 @@ class PaintSurface extends JComponent {
                     int y = e.getY();
                     if(tmpDrawable!=null){
                         tmpDrawable.putEndPoint(x,y);
-                        repaint();
                     }
                     if(selectedTip!=null){
                         var deltax = e.getX() - endDrag.getX();
                         var deltay = e.getY() - endDrag.getY();
-                        var selectedStart = selectedTip.getStart();
-                        selectedTip.moveStartTo((float)(selectedStart.getX()+deltax),(float)(selectedStart.getY()+deltay));
-                        repaint();
+                        var selectedStart = selectedTip.getStartPoint();
+                        selectedTip.moveToInStart((float)(selectedStart.getX()+deltax),(float)(selectedStart.getY()+deltay));
                     }
                     endDrag.move(x, y);
+                    repaint();
                 }
-
             }
         });
     }
@@ -130,9 +129,18 @@ class PaintSurface extends JComponent {
         }catch(Exception ex){
             switch(stm.getType()){
                 case SELECT:{
-                    selectedTip = getSelectedDrawable();
-                    if(selectedTip!=null) System.out.println("selected");
-                    repaint();
+                    selectedTip = getSelectDrawable();
+                    if(selectedTip!=null){
+                        System.out.println("selected");
+                        repaint();
+                    }
+                }
+                case FILL:{
+                    Optional.ofNullable(getFillDrawable())
+                            .ifPresent(s->{
+                                s.setFill(stm.getColor());
+                                repaint();
+                            });
                 }
                      break;
                 default: 
@@ -142,17 +150,30 @@ class PaintSurface extends JComponent {
     }
 
 
-    private Drawable getSelectedDrawable(){
+    private Drawable getSelectDrawable(){
         var l = stm.getAllDrawable();
         for (int i = l.size(); i-- > 0; ) {
             var shape = l.get(i);
-            if(shape.pointOn(startDrag.x,startDrag.y)){
+            //如果填充了，在图形上即为真，或者没填充且只在边框上
+            if((shape.isFilled()&&shape.pointOnFill(startDrag.x,startDrag.y))||shape.pointOn(startDrag.x,startDrag.y)){
                 selectedDrawable = shape;
-                var s = shape.getStart();
-                var rec = BasicDrawableFactory.makeRec((int)s.x, (int)s.y, (int)s.x, (int)s.y);
+                var s = shape.getStartPoint();
+                var rec = BasicDrawableFactory.makeRec((int)s.x, (int)s.y, (int)s.x, (int)s.y); //TODO: 改成outBound
                 rec.putEndPoint(shape.getEndPoint());
                 rec.setBorder(shape.getBorderColor(), new MyStroke(3.0f, MyStroke.CAP_BUTT, MyStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
                 return rec;
+            }
+        }
+        return null;
+    }
+
+    private Drawable getFillDrawable(){
+        var l = stm.getAllDrawable();
+        for (int i = l.size(); i-- > 0; ) {
+            var shape = l.get(i);
+            //如果填充了，在图形上即为真，或者没填充且只在边框上
+            if(shape.pointOnFill(startDrag.x,startDrag.y)){
+                return shape;
             }
         }
         return null;

@@ -9,6 +9,9 @@ public class Path implements Drawable {
     float alpha = 1f;
     Color color = Color.BLACK;
 
+    int widthTimes = 5;
+    float borderStrokeWidth = this.widthTimes * this.borderStroke.getLineWidth();
+
     public Path(Point.Float p) {
         startPoint = p;
         line = new GeneralPath();
@@ -63,10 +66,6 @@ public class Path implements Drawable {
         line.transform(AffineTransform.getScaleInstance(times, times));
     }
 
-    @Override
-    public Point2D.Float getStart() {
-        return startPoint;
-    }
 
     @Override
     public void putEndPoint(Point2D.Float p) {
@@ -79,21 +78,46 @@ public class Path implements Drawable {
     }
 
     @Override
-    public boolean pointOn(Point2D.Float p) {
-        return (line.contains(p));
+    public Rectangle2D getOutBound() {
+        return line.getBounds2D();
     }
 
     @Override
-    public void moveStartTo(Point2D.Float p) {
+    public boolean pointOn(Point2D.Float p) {
+//        扩大点至矩形，判断是否相交
+        Rectangle2D.Float r = new Rectangle2D.Float(p.x - borderStrokeWidth,
+                p.y - borderStrokeWidth,
+                2 * borderStrokeWidth,
+                2 * borderStrokeWidth);
+        return line.intersects(r);
+    }
+
+    @Override
+    public void moveToInStart(Point2D.Float p) {
         startPoint = p;
         line.moveTo(p.x, p.y);
         
     }
 
     @Override
-    public void moveStartTo(float x, float y) {
+    public void moveToInStart(float x, float y) {
         startPoint.setLocation(x, y);
         line.moveTo(x, y);
+    }
+
+    @Override
+    public void setStartPoint(Point2D.Float p) {
+        startPoint.setLocation(p);
+    }
+
+    @Override
+    public void setStartPoint(float x, float y) {
+        startPoint.setLocation(x, y);
+    }
+
+    @Override
+    public Point2D.Float getStartPoint() {
+        return startPoint;
     }
 
     @Override
@@ -103,7 +127,12 @@ public class Path implements Drawable {
 
     @Override
     public boolean pointOn(float x, float y) {
-        return (line.contains(x, y));
+        //        扩大点至矩形，判断是否相交
+        Rectangle2D.Float r = new Rectangle2D.Float(x - borderStrokeWidth,
+                y - borderStrokeWidth,
+                2 * borderStrokeWidth,
+                2 * borderStrokeWidth);
+        return line.intersects(r);
     }
 
     @Override

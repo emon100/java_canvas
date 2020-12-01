@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 
 public class Triangle implements Drawable{
@@ -95,17 +96,29 @@ public class Triangle implements Drawable{
     }
 
     @Override
-    public void moveStartTo(Point2D.Float p) {
+    public void moveToInStart(Point2D.Float p) {
         triangle.setTri(p.x, p.y, triangle.x2, triangle.y2);
     }
 
     @Override
-    public void moveStartTo(float x, float y) {
+    public void moveToInStart(float x, float y) {
         triangle.setTri(x, y, triangle.x2, triangle.y2);
     }
 
     @Override
-    public Point2D.Float getStart() {
+    public void setStartPoint(Point2D.Float p) {
+        triangle.x1 = p.x;
+        triangle.y1 = p.y;
+    }
+
+    @Override
+    public void setStartPoint(float x, float y) {
+        triangle.x1 = x;
+        triangle.y1 = y;
+    }
+
+    @Override
+    public Point2D.Float getStartPoint() {
         return new Point2D.Float(triangle.x1, triangle.y1);
     }
 
@@ -125,45 +138,20 @@ public class Triangle implements Drawable{
     }
 
     @Override
+    public Rectangle2D getOutBound() {
+        return triangle.tri.getBounds2D();
+    }
+
+    @Override
     public boolean pointOn(Point2D.Float p) {
-    /*    if (p.y == triangle.y2) {
-            if (triangle.x2 >= triangle.x1) {
-                return (p.x <= triangle.x2 && p.x >= triangle.x3);
-            }
-            else
-                return (p.x >= triangle.x2 && p.x <= triangle.x3);
-        }
-        else {
-            float k1 = triangle.getK(triangle.x1, triangle.y1, triangle.x2, triangle.y2);
-            float k2 = triangle.getK(triangle.x1, triangle.y1, triangle.x3, triangle.y3);
-            float b1 = triangle.getB(triangle.x1, triangle.y1, k1);
-            float b2 = triangle.getB(triangle.x1, triangle.y1, k2);
+        Rectangle2D.Float r = new Rectangle2D.Float(p.x - borderStrokeWidth,
+                p.y - borderStrokeWidth,
+                2 * borderStrokeWidth,
+                2 * borderStrokeWidth);
+        return triangle.tri.intersects(r);
 
-            if (triangle.x2 >= triangle.x3) {
-                if (p.x >= triangle.x3 && p.x <= triangle.x1) {
-                    return (p.y == triangle.func(k2, b2 , p.x));
-                }
-                else if (p.x >= triangle.x1 && p.x <= triangle.x2) {
-                    return (p.y == triangle.func(k1, b1, p.x));
-                }
-                else return false;
-            }
-
-            else {
-                if (p.x >= triangle.x2 && p.x <= triangle.x1) {
-                    return (p.y == triangle.func(k1, b1, p.x));
-                }
-                else if (p.x >= triangle.x1 && p.x <= triangle.x3) {
-                    return (p.y == triangle.func(k1, b1, p.x));
-                }
-                else return false;
-
-            }
-
-        }*/
-
-        Triangle2D t1 = getBound();
-        return (triangle.contains(p) && (!t1.contains(p)));
+//        Triangle2D t1 = getBound();
+//        return (triangle.contains(p) && (!t1.contains(p)));
 
     }
 
@@ -202,8 +190,11 @@ public class Triangle implements Drawable{
 
     @Override
     public boolean pointOn(float x, float y) {
-        Triangle2D t1 = getBound();
-        return (triangle.contains(x, y) && (!t1.contains(x, y)));
+        Rectangle2D.Float r = new Rectangle2D.Float(x - borderStrokeWidth,
+                y - borderStrokeWidth,
+                2 * borderStrokeWidth,
+                2 * borderStrokeWidth);
+        return triangle.tri.intersects(r);
     }
 
     @Override

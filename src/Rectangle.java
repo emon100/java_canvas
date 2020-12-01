@@ -1,14 +1,15 @@
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Float;
 import java.awt.geom.Rectangle2D;
 
 public class Rectangle implements Drawable {
     Rectangle2D.Float rectangle;
-    MyStroke borderStroke = new MyStroke();       //画笔轮廓
-    float alpha = 1f;               //透明度
-    Color color = Color.BLACK;      //画笔颜色
-    Color fillColor = Color.BLUE;  //填充颜色
-    boolean ifFillRec = false;      //是否填充
+    MyStroke borderStroke = new MyStroke(); // 画笔轮廓
+    float alpha = 1f; // 透明度
+    Color color = Color.BLACK; // 画笔颜色
+    Color fillColor = Color.BLUE; // 填充颜色
+    boolean ifFillRec = false; // 是否填充
 
     int widthTimes = 5;
     float basicBorderStrokeWidth = this.borderStroke.getLineWidth();
@@ -24,14 +25,12 @@ public class Rectangle implements Drawable {
         g.setStroke(borderStroke);
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
         g.draw(rectangle);
-        if (isFilled()) {            //填充
+        if (isFilled()) { // 填充
             g.setColor(fillColor);
             g.fill(rectangle);
         }
 
-
     }
-
 
     @Override
     public void setAlpha(float f) {
@@ -90,23 +89,22 @@ public class Rectangle implements Drawable {
 
     @Override
     public void scale(float times) {
-        rectangle.setRect(rectangle.x, rectangle.y,
-                rectangle.width * times,
-                rectangle.height * times);
+        rectangle.setRect(rectangle.x, rectangle.y, rectangle.width * times, rectangle.height * times);
     }
 
     @Override
-    public void moveStartTo(Point2D.Float p) {
+    public void moveToInStart(Point2D.Float p) {
         rectangle.setRect(p.x, p.y, rectangle.width, rectangle.height);
     }
 
     @Override
-    public void moveStartTo(float x, float y) {
+    public void moveToInStart(float x, float y) {
         rectangle.setRect(x, y, rectangle.width, rectangle.height);
     }
 
+
     @Override
-    public Point2D.Float getStart() {
+    public Point2D.Float getStartPoint() {
         return new Point2D.Float(rectangle.x, rectangle.y);
     }
 
@@ -155,16 +153,31 @@ public class Rectangle implements Drawable {
     }
 
     private Rectangle2D.Float getSmallerRec() {
-        return new Rectangle2D.Float(rectangle.x + basicBorderStrokeWidth,
-                rectangle.y + basicBorderStrokeWidth,
-                rectangle.width - 2 * basicBorderStrokeWidth,
-                rectangle.height - 2 * basicBorderStrokeWidth);
+        return new Rectangle2D.Float(rectangle.x + basicBorderStrokeWidth, rectangle.y + basicBorderStrokeWidth,
+                rectangle.width - 2 * basicBorderStrokeWidth, rectangle.height - 2 * basicBorderStrokeWidth);
     }
 
     private Rectangle2D.Float getBiggerRec() {
-        return new Rectangle2D.Float(rectangle.x - borderStrokeWidth,
-                rectangle.y - borderStrokeWidth,
-                rectangle.width + 2 * borderStrokeWidth,
-                rectangle.height + 2 * borderStrokeWidth);
+        return new Rectangle2D.Float(rectangle.x - borderStrokeWidth, rectangle.y - borderStrokeWidth,
+                rectangle.width + 2 * borderStrokeWidth, rectangle.height + 2 * borderStrokeWidth);
+    }
+
+    @Override
+    public void setStartPoint(Float p) {
+        rectangle.x = p.x;
+        rectangle.y = p.y;
+
+    }
+
+    @Override
+    public void setStartPoint(float x, float y) {
+        rectangle.x = x;
+        rectangle.y = y;
+
+    }
+
+    @Override
+    public Rectangle2D getOutBound() {
+        return rectangle.getBounds2D();
     }
 }

@@ -5,8 +5,12 @@ import javax.swing.JOptionPane;
 
 public class TextBox implements Drawable{
 
-    private class TextBoxDialog { //TODO: 字体对话框
+    private void TextBoxDialog() { 
+        var oPane = new JOptionPane();
+        //oPane.add()TODO: 字体，字号选择对话框
+        filled = oPane.showInputDialog(null, "设置文本","Input Here");
     }
+    String filled = null; //填充的文字
 
     String fontName = "SansSerif"; //字体名
     int fontstyle = Font.BOLD; //字形
@@ -22,7 +26,6 @@ public class TextBox implements Drawable{
     
     //几乎所有的计算都可以借用矩形
     //filled代表是否填充文字
-    String filled = null;
     
     
     @Override
@@ -46,7 +49,7 @@ public class TextBox implements Drawable{
 
     @Override
     public void setFill(){ //弹出一个选框，设置文字，影响字体，字号等
-        filled = JOptionPane.showInputDialog(null, "设置文本","Input Here");
+
     }
 
     @Override
@@ -95,17 +98,17 @@ public class TextBox implements Drawable{
     }
 
     @Override
-    public void moveStartTo(Float p) {
+    public void moveToInStart(Float p) {
         startPoint = p ;
     }
 
     @Override
-    public void moveStartTo(float x, float y) {
+    public void moveToInStart(float x, float y) {
         startPoint.setLocation(x, y);
     }
 
     @Override
-    public Float getStart() {
+    public Float getStartPoint() {
         return startPoint;
     }
 
@@ -146,6 +149,24 @@ public class TextBox implements Drawable{
     public boolean pointOnFill(float x, float y) {
         // TODO Auto-generated method stub
         return false;
+    }
+
+    @Override
+    public void setStartPoint(Float p) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void setStartPoint(float x, float y) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public Rectangle2D getOutBound() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }
