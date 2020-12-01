@@ -4,7 +4,10 @@ import java.awt.geom.Point2D.Float;
 import java.awt.geom.Rectangle2D;
 
 public class Rectangle implements Drawable {
+    
+    Point2D.Float startPoint;
     Rectangle2D.Float rectangle;
+ 
     MyStroke borderStroke = new MyStroke(); // 画笔轮廓
     float alpha = 1f; // 透明度
     Color color = Color.BLACK; // 画笔颜色
@@ -16,6 +19,7 @@ public class Rectangle implements Drawable {
     float borderStrokeWidth = this.widthTimes * this.borderStroke.getLineWidth();
 
     Rectangle(Point2D.Float point) {
+        startPoint = point;
         rectangle = new Rectangle2D.Float(point.x, point.y, 0, 0);
     }
 
@@ -105,61 +109,58 @@ public class Rectangle implements Drawable {
 
     @Override
     public Point2D.Float getStartPoint() {
-        return new Point2D.Float(rectangle.x, rectangle.y);
+        return (Float) startPoint.clone();
     }
 
     @Override
     /*需要交换起始和终点坐标*/
     public void putEndPoint(Point2D.Float p) {
-        if (p.getX() >= rectangle.x) {
-            if (p.getY() >= rectangle.y) {
-                rectangle.setRect(rectangle.x, rectangle.y,
-                        p.getX() - rectangle.x, p.getY() - rectangle.y);
-            }
-            else {
-                rectangle.setRect(rectangle.x, p.getY(),
-                        p.getX() - rectangle.x,
-                        rectangle.y - p.getY());  //TODO fix rectangle y
+        if (p.getX() >= startPoint.x) {
+            if (p.getY() >= startPoint.y) { //第四象限
+                rectangle.setRect(startPoint.x, startPoint.y,
+                        p.getX() - startPoint.x, p.getY() - rectangle.y);
+            }else { //第一象限
+                rectangle.setRect(startPoint.x, p.getY(),
+                        p.getX() - startPoint.x,
+                        startPoint.y - p.getY());  //TODO fix rectangle y
             }
         }
         else {
-            if (p.getY() >= rectangle.y) {
-                rectangle.setRect(p.getX(), rectangle.y,
-                        rectangle.x - p.getX(),
-                        p.getY() - rectangle.y);
+            if (p.getY() >= startPoint.y) {
+                rectangle.setRect(p.getX(), startPoint.y,
+                startPoint.x - p.getX(),
+                        p.getY() - startPoint.y);
             }
             else {
                 rectangle.setRect(p.getX(), p.getY(),
-                        rectangle.x - p.getX(),
-                        rectangle.y - p.getY());
+                startPoint.x - p.getX(),
+                startPoint.y - p.getY());
             }
         }
-
     }
 
     @Override
     public void putEndPoint(float x, float y) {
-        if (x >= rectangle.x) {
-            if (y >= rectangle.y) {
-                rectangle.setRect(rectangle.x, rectangle.y,
-                        x - rectangle.x, y - rectangle.y);
-            }
-            else {
-                rectangle.setRect(rectangle.x, y,
-                        x - rectangle.x,
-                        rectangle.y - y);
+        if (x >= startPoint.x) {
+            if (y >= startPoint.y) { //第四象限
+                rectangle.setRect(startPoint.x, startPoint.y,
+                        x - startPoint.x, y - rectangle.y);
+            }else { //第一象限
+                rectangle.setRect(startPoint.x, y,
+                        x - startPoint.x,
+                        startPoint.y - y);  //TODO fix rectangle y
             }
         }
         else {
-            if (y >= rectangle.y) {
-                rectangle.setRect(x, rectangle.y,
-                        rectangle.x - x,
-                        y - rectangle.y);
+            if (y >= startPoint.y) {
+                rectangle.setRect(x, startPoint.y,
+                startPoint.x - x,
+                        y - startPoint.y);
             }
             else {
                 rectangle.setRect(x, y,
-                        rectangle.x - x,
-                        rectangle.y - y);
+                startPoint.x - x,
+                startPoint.y - y);
             }
         }
 
