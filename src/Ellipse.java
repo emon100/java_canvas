@@ -75,7 +75,7 @@ public class Ellipse implements Drawable {
     @Override
     public void setFill(Color c) {
         iffFillEll = true;
-
+        fillColor = c;
     }
 
     @Override

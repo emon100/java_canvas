@@ -98,12 +98,16 @@ public class Line implements Drawable {
 
     @Override
     public void moveToInStart(Point2D.Float p) {
-        line.setLine(p.x, p.y, line.x2, line.y2);
+        line.setLine(p.x, p.y,
+                line.x2 + p.x - line.x1,
+                line.y2 + p.y - line.y1);
     }
 
     @Override
     public void moveToInStart(float x, float y) {
-        line.setLine(x, y, line.x2, line.y2);
+        line.setLine(x, y,
+                line.x2 + x - line.x1,
+                line.y2 + y - line.y1);
     }
 
     @Override

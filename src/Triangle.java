@@ -69,7 +69,7 @@ public class Triangle implements Drawable{
     @Override
     public void setFill() {
         ifFillTri = true;
-        fillColor = Color.BLUE;
+        fillColor = color;
     }
 
     @Override
@@ -97,12 +97,16 @@ public class Triangle implements Drawable{
 
     @Override
     public void moveToInStart(Point2D.Float p) {
-        triangle.setTri(p.x, p.y, triangle.x2, triangle.y2);
+        triangle.setTri(p.x, p.y,
+                p.x + triangle.halfWidth,
+                p.y + triangle.height );
     }
 
     @Override
     public void moveToInStart(float x, float y) {
-        triangle.setTri(x, y, triangle.x2, triangle.y2);
+        triangle.setTri(x, y,
+                x + triangle.halfWidth,
+                y + triangle.height );
     }
 
     @Override

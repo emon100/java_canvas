@@ -94,15 +94,17 @@ public class Path implements Drawable {
 
     @Override
     public void moveToInStart(Point2D.Float p) {
+        line.transform(AffineTransform.getTranslateInstance(p.getX() - startPoint.getX(),
+                p.getY() - startPoint.getY()));
+
         startPoint = p;
-        line.moveTo(p.x, p.y);
-        
     }
 
     @Override
     public void moveToInStart(float x, float y) {
+        line.transform(AffineTransform.getTranslateInstance(x - startPoint.getX(),
+                y - startPoint.getY()));
         startPoint.setLocation(x, y);
-        line.moveTo(x, y);
     }
 
     @Override
@@ -137,37 +139,27 @@ public class Path implements Drawable {
 
     @Override
     public boolean isFilled() {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
-    public void setFill() {
-        // TODO Auto-generated method stub
-
-    }
+    public void setFill() { }
 
     @Override
     public void setFill(Color c) {
-        // TODO Auto-generated method stub
-
+        color = c;
     }
 
     @Override
-    public void disableFill() {
-        // TODO Auto-generated method stub
-
-    }
+    public void disableFill() { }
 
     @Override
     public boolean pointOnFill(Point2D.Float p) {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public boolean pointOnFill(float x, float y) {
-        // TODO Auto-generated method stub
         return false;
     }
 

@@ -135,6 +135,7 @@ class PaintSurface extends JComponent {
                         repaint();
                     }
                 }
+                break;
                 case FILL:{
                     Optional.ofNullable(getFillDrawable())
                             .ifPresent(s->{
@@ -158,10 +159,11 @@ class PaintSurface extends JComponent {
             if((shape.isFilled()&&shape.pointOnFill(startDrag.x,startDrag.y))||shape.pointOn(startDrag.x,startDrag.y)){
                 selectedDrawable = shape;
                 var s = shape.getStartPoint();
-                var rec = BasicDrawableFactory.makeRec((int)s.x, (int)s.y, (int)s.x, (int)s.y); //TODO: 改成outBound
-                rec.putEndPoint(shape.getEndPoint());
-                rec.setBorder(shape.getBorderColor(), new MyStroke(3.0f, MyStroke.CAP_BUTT, MyStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
-                return rec;
+                //var rec = BasicDrawableFactory.makeRec((int)s.x, (int)s.y, (int)s.x, (int)s.y); //TODO: 改成outBound
+                var rec = shape.getOutBound();
+                var res = BasicDrawableFactory.makeRec((int)rec.getX(),(int)rec.getY(),(int)(rec.getX()+rec.getWidth()),(int)(rec.getY()+rec.getHeight()));
+                res.setBorder(shape.getBorderColor(), new MyStroke(3.0f, MyStroke.CAP_BUTT, MyStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
+                return res;
             }
         }
         return null;
