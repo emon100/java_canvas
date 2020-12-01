@@ -188,20 +188,60 @@ public class Chrome extends JFrame {
         openFileBtn.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (!states.hasBeenSaved) {
+                    Object[] options = {"保存", "不保存", "取消"};
+                    int res = JOptionPane.showOptionDialog(null,"文件未保存，是否保存","文件未保存",
+                            JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,options[0]);
+                    switch (res) {
+                        case 0:
+                            //保存
+                            //设置默认打开目录为当前项目文件夹下
+                            JFileChooser jFileChooser = new JFileChooser( System.getProperty("user.dir") + "//src//serializedFiles" );
+                            jFileChooser.showSaveDialog(null);
+                            File savePath = jFileChooser.getSelectedFile();
+                            //如果没有选定文件或者文件不存在
+                            if (savePath == null)  {
+                                return;
+                            }
+                            if (!savePath.exists()){
+                                try {
+                                    savePath.createNewFile();
+                                } catch (IOException ioException) {
+                                    ioException.printStackTrace();
+                                    return;
+                                }
+                            }
+                            try {
+                                ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(savePath));
+                                out.writeObject( states.getAllDrawable() );
+                                states.hasBeenSaved = true;
+                            } catch (Exception exception) {
+                                exception.printStackTrace();
+                            }
+                            break;
+                        case 1:
+                            //不保存，退出程序
+                            break;
+                        case 2:
+                            //取消
+                            break;
+                        default:
+                            break;
+                    }
+                }
                 JFileChooser jFileChooser = new JFileChooser( System.getProperty("user.dir") + "//src//serializedFiles" );
-                jFileChooser.showSaveDialog(null);
-                File savePath = jFileChooser.getSelectedFile();
+                jFileChooser.showDialog(null, "打开");
+                File targetFile = jFileChooser.getSelectedFile();
                 //如果没有选定文件或者文件不存在
-                if (savePath == null || !savePath.exists()) {
+                if (targetFile == null || !targetFile.exists()) {
+                    JOptionPane.showMessageDialog(null, "文件未打开！", "错误",JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 try {
-                    ObjectInputStream out = new ObjectInputStream(new FileInputStream(savePath));
+                    ObjectInputStream out = new ObjectInputStream(new FileInputStream(targetFile));
+                    states.iniStates();
                     states.setDrawable( (ArrayList<Drawable>) out.readObject());
-                    // TODO: Check the opened file
                     repaint();
-                    states.commandStack.clear();
-                    states.unDoneStack.clear();
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }
@@ -214,9 +254,47 @@ public class Chrome extends JFrame {
         newFileBtn.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                states.getAllDrawable().clear();
-                states.unDoneStack.clear();
-                states.commandStack.clear();
+                if (!states.hasBeenSaved) {
+                    Object[] options = {"保存", "不保存", "取消"};
+                    int res = JOptionPane.showOptionDialog(null,"文件未保存，是否保存","文件未保存",
+                            JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,options[0]);
+                    switch (res) {
+                        case 0:
+                            //保存
+                            //设置默认打开目录为当前项目文件夹下
+                            JFileChooser jFileChooser = new JFileChooser( System.getProperty("user.dir") + "//src//serializedFiles" );
+                            jFileChooser.showSaveDialog(null);
+                            File savePath = jFileChooser.getSelectedFile();
+                            //如果没有选定文件或者文件不存在
+                            if (savePath == null)  {
+                                return;
+                            }
+                            if (!savePath.exists()){
+                                try {
+                                    savePath.createNewFile();
+                                } catch (IOException ioException) {
+                                    ioException.printStackTrace();
+                                    return;
+                                }
+                            }
+                            try {
+                                ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(savePath));
+                                out.writeObject( states.getAllDrawable() );
+                            } catch (Exception exception) {
+                                exception.printStackTrace();
+                            }
+                            break;
+                        case 1:
+                            //不保存，退出程序
+                            break;
+                        case 2:
+                            //取消
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                states.iniStates();
                 repaint();
             }
         });
