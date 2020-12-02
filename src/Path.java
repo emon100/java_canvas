@@ -4,6 +4,7 @@ import java.awt.geom.AffineTransform;
 
 public class Path implements Drawable {
     Point.Float startPoint;
+    Point2D.Float endPoint;
     GeneralPath line;
     MyStroke borderStroke = new MyStroke();
     float alpha = 1f;
@@ -69,17 +70,31 @@ public class Path implements Drawable {
 
     @Override
     public void putEndPoint(Point2D.Float p) {
+        endPoint = p;
         line.lineTo(p.x, p.y);
     }
 
     @Override
     public Point2D.Float getEndPoint() {
-        return  (Point2D.Float) line.getCurrentPoint();
+        return  endPoint;
     }
 
     @Override
     public Rectangle2D getOutBound() {
         return line.getBounds2D();
+    }
+
+    @Override
+    public Point2D.Float getTopLeft() {
+        return new Point2D.Float(line.getBounds().x, line.getBounds().y);
+    }
+
+    @Override
+    public Point2D.Float getBottomRight() {
+        return new Point2D.Float(
+                line.getBounds().x + line.getBounds().width,
+                line.getBounds().y + line.getBounds().height
+        );
     }
 
     @Override
@@ -108,22 +123,13 @@ public class Path implements Drawable {
     }
 
     @Override
-    public void setStartPoint(Point2D.Float p) {
-        startPoint.setLocation(p);
-    }
-
-    @Override
-    public void setStartPoint(float x, float y) {
-        startPoint.setLocation(x, y);
-    }
-
-    @Override
     public Point2D.Float getStartPoint() {
         return startPoint;
     }
 
     @Override
     public void putEndPoint(float x, float y) {
+        endPoint = new Point2D.Float(x, y);
         line.lineTo(x, y);
     }
 
