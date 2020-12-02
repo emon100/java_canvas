@@ -6,7 +6,7 @@ import java.util.Stack;
 public class States implements StatesModel {
 
     //当前选择颜色
-    protected Color currentColor;
+    protected Color currentColor = Color.black;
 
     protected float alpha = 1.0f;
 
@@ -22,11 +22,6 @@ public class States implements StatesModel {
     Stack<Command> unDoneStack = new Stack<>();
 
     ArrayList<Drawable> drawables = new ArrayList<>();
-
-    {
-        var r  = new Random();
-        drawables.add(BasicDrawableFactory.makeLine(r.nextInt(200),r.nextInt(200),r.nextInt(200),r.nextInt(200)));
-    }
 
     /**
      * 初始化States, 用于新建文件
@@ -125,4 +120,5 @@ public class States implements StatesModel {
         currentColor = cur;
         System.out.println(cur);
     }
+
 }

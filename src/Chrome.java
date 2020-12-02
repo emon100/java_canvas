@@ -70,7 +70,6 @@ public class Chrome extends JFrame {
         }
     }
 
-
     /**
      * 构造函数 生成一个完成的Chrome
      */
@@ -117,7 +116,10 @@ public class Chrome extends JFrame {
                         }
                         if (!savePath.exists()){
                             try {
-                                savePath.createNewFile();
+                                if (!savePath.createNewFile() ) {
+                                    JOptionPane.showMessageDialog(null, "新建文件失败", "错误",JOptionPane.ERROR_MESSAGE);
+                                    return;
+                                }
                             } catch (IOException ioException) {
                                 ioException.printStackTrace();
                                 return;
@@ -180,8 +182,6 @@ public class Chrome extends JFrame {
         /*
          * 文件保存、撤销与重做图片对象
          */
-        //保存文件
-
 
         //打开文件
         JButton openFileBtn = new JButton("打开");
@@ -205,7 +205,10 @@ public class Chrome extends JFrame {
                             }
                             if (!savePath.exists()){
                                 try {
-                                    savePath.createNewFile();
+                                    if (!savePath.createNewFile() ) {
+                                        JOptionPane.showMessageDialog(null, "新建文件失败", "错误",JOptionPane.ERROR_MESSAGE);
+                                        return;
+                                    }
                                 } catch (IOException ioException) {
                                     ioException.printStackTrace();
                                     return;
@@ -271,7 +274,10 @@ public class Chrome extends JFrame {
                             }
                             if (!savePath.exists()){
                                 try {
-                                    savePath.createNewFile();
+                                    if (!savePath.createNewFile() ) {
+                                        JOptionPane.showMessageDialog(null, "新建文件失败", "错误",JOptionPane.ERROR_MESSAGE);
+                                        return;
+                                    }
                                 } catch (IOException ioException) {
                                     ioException.printStackTrace();
                                     return;
@@ -314,7 +320,10 @@ public class Chrome extends JFrame {
                 }
                 if (!savePath.exists()){
                     try {
-                        savePath.createNewFile();
+                        if (!savePath.createNewFile() ) {
+                            JOptionPane.showMessageDialog(null, "新建文件失败", "错误",JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
                     } catch (IOException ioException) {
                         ioException.printStackTrace();
                         return;
@@ -331,8 +340,8 @@ public class Chrome extends JFrame {
         });
 
         //撤销
-        JLabel undoImgLabel = new JLabel(new ImageIcon(this.getClass().getResource("images/undo.png")));
-        undoImgLabel.addMouseListener(new MouseAdapter() {
+        JLabel undoLabel = new JLabel(new ImageIcon(this.getClass().getResource("images/undo.png")));
+        undoLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
                 states.undo();
@@ -341,8 +350,8 @@ public class Chrome extends JFrame {
         });
 
         //重做
-        JLabel redoImgLabel = new JLabel(new ImageIcon(this.getClass().getResource("images/redo.png")));
-        redoImgLabel.addMouseListener(new MouseAdapter() {
+        JLabel redoLabel = new JLabel(new ImageIcon(this.getClass().getResource("images/redo.png")));
+        redoLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
                 states.redo();
@@ -355,27 +364,32 @@ public class Chrome extends JFrame {
          */
         JLabel toolsLabel = new JLabel("工具");
 
+        Dimension optionButtonDimension = new Dimension(26,26);
         //选择
-        JLabel chooseImgLabel = new JLabel(new ImageIcon(this.getClass().getResource("images/arrow.png")));
-        chooseImgLabel.addMouseListener(new MouseAdapter() {
+        JButton chooseButton = new JButton(new ImageIcon(this.getClass().getResource("images/arrow.png")));
+        chooseButton.setPreferredSize(optionButtonDimension);
+        chooseButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
                 states.setType(States.TYPE.SELECT);
             }
         });
-
         //文本
-        JLabel textImgLabel = new JLabel(new ImageIcon(this.getClass().getResource("images/text.png")));
-        textImgLabel.addMouseListener(new MouseAdapter() {
+        JButton textButton = new JButton(new ImageIcon(this.getClass().getResource("images/text.png")));
+        textButton.setPreferredSize(optionButtonDimension);
+        textButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
                 states.setType(StatesModel.TYPE.TEXTBOX);
             }
         });
 
+
+
         //擦除
-        JLabel eraserImgLabel = new JLabel(new ImageIcon(this.getClass().getResource("images/eraser.png")));
-        eraserImgLabel.addMouseListener(new MouseAdapter() {
+        JButton eraserButton = new JButton(new ImageIcon(this.getClass().getResource("images/eraser.png")));
+        eraserButton.setPreferredSize(optionButtonDimension);
+        eraserButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
                 states.setType(StatesModel.TYPE.ERASER);
@@ -383,8 +397,9 @@ public class Chrome extends JFrame {
         });
 
         //填充
-        JLabel fillColorImgLabel = new JLabel(new ImageIcon(this.getClass().getResource("images/fillColor.png")));
-        fillColorImgLabel.addMouseListener(new MouseAdapter() {
+        JButton fillColorButton = new JButton(new ImageIcon(this.getClass().getResource("images/fillColor.png")));
+        fillColorButton.setPreferredSize(optionButtonDimension);
+        fillColorButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
                 states.setType(States.TYPE.FILL);
@@ -395,8 +410,9 @@ public class Chrome extends JFrame {
         JLabel graphicLabel = new JLabel("图形");
 
         //笔
-        JLabel pencilImgLabel = new JLabel(new ImageIcon(this.getClass().getResource("images/pencil.png")));
-        pencilImgLabel.addMouseListener(new MouseAdapter() {
+        JButton pencilButton = new JButton(new ImageIcon(this.getClass().getResource("images/pencil.png")));
+        pencilButton.setPreferredSize(optionButtonDimension);
+        pencilButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
                 states.setType(StatesModel.TYPE.PATH);
@@ -404,8 +420,9 @@ public class Chrome extends JFrame {
         });
 
         //矩形
-        JLabel rectangleImgLabel = new JLabel(new ImageIcon(this.getClass().getResource("images/rectangle.png")));
-        rectangleImgLabel.addMouseListener(new MouseAdapter() {
+        JButton rectangleButton = new JButton(new ImageIcon(this.getClass().getResource("images/rectangle.png")));
+        rectangleButton.setPreferredSize(optionButtonDimension);
+        rectangleButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
                 states.setType(StatesModel.TYPE.RECTANGLE);
@@ -413,8 +430,9 @@ public class Chrome extends JFrame {
         });
 
         //三角形
-        JLabel triangleImgLabel = new JLabel(new ImageIcon(this.getClass().getResource("images/triangle.png")));
-        triangleImgLabel.addMouseListener(new MouseAdapter() {
+        JButton triangleButton = new JButton(new ImageIcon(this.getClass().getResource("images/triangle.png")));
+        triangleButton.setPreferredSize(optionButtonDimension);
+        triangleButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
                 states.setType(StatesModel.TYPE.TRIANGLE);
@@ -422,8 +440,9 @@ public class Chrome extends JFrame {
         });
 
         //直线
-        JLabel lineImgLabel = new JLabel(new ImageIcon(this.getClass().getResource("images/line.png")));
-        lineImgLabel.addMouseListener(new MouseAdapter() {
+        JButton lineButton = new JButton(new ImageIcon(this.getClass().getResource("images/line.png")));
+        lineButton.setPreferredSize(optionButtonDimension);
+        lineButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
                 states.setType(StatesModel.TYPE.LINE);
@@ -431,8 +450,9 @@ public class Chrome extends JFrame {
         });
 
         //椭圆
-        JLabel ellipseImgLabel = new JLabel(new ImageIcon(this.getClass().getResource("images/ellipse.png")));
-        ellipseImgLabel.addMouseListener(new MouseAdapter() {
+        JButton ellipseButton = new JButton(new ImageIcon(this.getClass().getResource("images/ellipse.png")));
+        ellipseButton.setPreferredSize(optionButtonDimension);
+        ellipseButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
                 states.setType(StatesModel.TYPE.ELLIPSE);
@@ -442,15 +462,21 @@ public class Chrome extends JFrame {
         //颜色
         JLabel colorLabel = new JLabel("颜色");
         JPanel colorPanel = new JPanel();
-        colorPanel.setLayout(new GridLayout(2,4));
+        GridLayout colorGridLayout = new GridLayout(2,6);
+
+        //设置行列间距
+        colorGridLayout.setHgap(5);
+        colorGridLayout.setVgap(3);
+        colorPanel.setLayout(colorGridLayout);
+
         //显示当前颜色
         JLabel currentColorTextLabel = new JLabel("当前");
         JPanel currentColorPanel = new JPanel();
-        currentColorPanel.setBackground(Color.black);
+        currentColorPanel.setBackground( states.getColor() );
+
         //颜色选择器
         JLabel chooseColorTextLabel = new JLabel("任意");
         JPanel chooseColorPanel = new JPanel();
-        chooseColorPanel.setBackground(Color.black);
         chooseColorPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
@@ -544,16 +570,19 @@ public class Chrome extends JFrame {
             }
         });
 
+        colorPanel.add(currentColorTextLabel);
         colorPanel.add(whiteColorPanel);
         colorPanel.add(blackColorPanel);
         colorPanel.add(redColorPanel);
         colorPanel.add(yellowColorPanel);
+        colorPanel.add(chooseColorTextLabel);
+
+        colorPanel.add(currentColorPanel);
         colorPanel.add(greenColorPanel);
         colorPanel.add(blueColorPanel);
         colorPanel.add(grayColorPanel);
         colorPanel.add(pinkColorPanel);
-        //从左上角开始分布
-        //gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        colorPanel.add(chooseColorPanel);
 
         /*
          * 设置constraints
@@ -573,11 +602,11 @@ public class Chrome extends JFrame {
 
         //撤销
         setConstrainSizeAndPos(gridBagConstraints,6,0,1,1);
-        gridBagLayout.setConstraints(undoImgLabel, gridBagConstraints);
+        gridBagLayout.setConstraints(undoLabel, gridBagConstraints);
 
         //重做
         setConstrainSizeAndPos(gridBagConstraints,7,0,1,1);
-        gridBagLayout.setConstraints(redoImgLabel, gridBagConstraints);
+        gridBagLayout.setConstraints(redoLabel, gridBagConstraints);
 
         //工具Label
         setConstrainSizeAndPos(gridBagConstraints,0,1,1,2);
@@ -585,19 +614,19 @@ public class Chrome extends JFrame {
 
         //选择
         setConstrainSizeAndPos(gridBagConstraints,1,1,1,1);
-        gridBagLayout.setConstraints(chooseImgLabel, gridBagConstraints);
+        gridBagLayout.setConstraints(chooseButton, gridBagConstraints);
 
         //文本
         setConstrainSizeAndPos(gridBagConstraints,2,1,1,1);
-        gridBagLayout.setConstraints(textImgLabel, gridBagConstraints);
+        gridBagLayout.setConstraints(textButton, gridBagConstraints);
 
         //擦除
         setConstrainSizeAndPos(gridBagConstraints,1,2,1,1);
-        gridBagLayout.setConstraints(eraserImgLabel, gridBagConstraints);
+        gridBagLayout.setConstraints(eraserButton, gridBagConstraints);
 
         //填充
         setConstrainSizeAndPos(gridBagConstraints,2,2,1,1);
-        gridBagLayout.setConstraints(fillColorImgLabel, gridBagConstraints);
+        gridBagLayout.setConstraints(fillColorButton, gridBagConstraints);
 
         //图形Label
         setConstrainSizeAndPos(gridBagConstraints,3,1,1,2);
@@ -605,43 +634,31 @@ public class Chrome extends JFrame {
 
         //笔
         setConstrainSizeAndPos(gridBagConstraints,4,1,1,1);
-        gridBagLayout.setConstraints(pencilImgLabel, gridBagConstraints);
+        gridBagLayout.setConstraints(pencilButton, gridBagConstraints);
 
         //矩形
         setConstrainSizeAndPos(gridBagConstraints,5,1,1,1);
-        gridBagLayout.setConstraints(rectangleImgLabel, gridBagConstraints);
+        gridBagLayout.setConstraints(rectangleButton, gridBagConstraints);
 
         //三角形
         setConstrainSizeAndPos(gridBagConstraints,6,1,1,1);
-        gridBagLayout.setConstraints(triangleImgLabel, gridBagConstraints);
+        gridBagLayout.setConstraints(triangleButton, gridBagConstraints);
 
         //直线
         setConstrainSizeAndPos(gridBagConstraints,4,2,1,1);
-        gridBagLayout.setConstraints(lineImgLabel, gridBagConstraints);
+        gridBagLayout.setConstraints(lineButton, gridBagConstraints);
 
         //椭圆
         setConstrainSizeAndPos(gridBagConstraints,5,2,1,1);
-        gridBagLayout.setConstraints(ellipseImgLabel, gridBagConstraints);
+        gridBagLayout.setConstraints(ellipseButton, gridBagConstraints);
 
         //颜色label
         setConstrainSizeAndPos(gridBagConstraints,7,1,1,2);
         gridBagLayout.setConstraints(colorLabel, gridBagConstraints);
 
         //颜色Panel
-        setConstrainSizeAndPos(gridBagConstraints,9,1,4,2);
+        setConstrainSizeAndPos(gridBagConstraints,8,1,6,2);
         gridBagLayout.setConstraints(colorPanel, gridBagConstraints);
-
-        //当前颜色Label
-        setConstrainSizeAndPos(gridBagConstraints,8,1,1,1);
-        gridBagLayout.setConstraints(currentColorTextLabel, gridBagConstraints);
-        setConstrainSizeAndPos(gridBagConstraints,8,2,1,1);
-        gridBagLayout.setConstraints(currentColorPanel, gridBagConstraints);
-
-        //选择颜色Label
-        setConstrainSizeAndPos(gridBagConstraints,13,1,1,1);
-        gridBagLayout.setConstraints(chooseColorTextLabel, gridBagConstraints);
-        setConstrainSizeAndPos(gridBagConstraints,13,2,1,1);
-        gridBagLayout.setConstraints(chooseColorPanel, gridBagConstraints);
 
         /*
          * 添加组件至Chrome
@@ -652,27 +669,23 @@ public class Chrome extends JFrame {
         add(openFileBtn);
         add(newFileBtn);
         add(saveFileBtn);
-        add(undoImgLabel);
-        add(redoImgLabel);
+        add(undoLabel);
+        add(redoLabel);
 
         // 第二、三行
         add(toolsLabel);
-        add(chooseImgLabel);
-        add(textImgLabel);
-        add(eraserImgLabel);
-        add(fillColorImgLabel);
+        add(chooseButton);
+        add(textButton);
+        add(eraserButton);
+        add(fillColorButton);
         add(graphicLabel);
-        add(pencilImgLabel);
-        add(rectangleImgLabel);
-        add(triangleImgLabel);
-        add(lineImgLabel);
-        add(ellipseImgLabel);
-        add(currentColorTextLabel);
-        add(currentColorPanel);
+        add(pencilButton);
+        add(rectangleButton);
+        add(triangleButton);
+        add(lineButton);
+        add(ellipseButton);
         add(colorLabel);
         add(colorPanel);
-        add(chooseColorTextLabel);
-        add(chooseColorPanel);
 
         //填充颜色后方的空白
         add(new JPanel(), new GBC(14,1).setWeight(1, 0));
