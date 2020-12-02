@@ -1,10 +1,13 @@
 import java.awt.*;
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Float;
 import java.awt.geom.Rectangle2D;
 
 public class Rectangle implements Drawable {
+    
+    Point2D.Float startPoint;
+    Point2D.Float endPoint = null;
     Rectangle2D.Float rectangle;
+ 
     MyStroke borderStroke = new MyStroke(); // 画笔轮廓
     float alpha = 1f; // 透明度
     Color color = Color.BLACK; // 画笔颜色
@@ -16,6 +19,7 @@ public class Rectangle implements Drawable {
     float borderStrokeWidth = this.widthTimes * this.borderStroke.getLineWidth();
 
     Rectangle(Point2D.Float point) {
+        startPoint = point;
         rectangle = new Rectangle2D.Float(point.x, point.y, 0, 0);
     }
 
@@ -89,38 +93,121 @@ public class Rectangle implements Drawable {
 
     @Override
     public void scale(float times) {
-        rectangle.setRect(rectangle.x, rectangle.y, rectangle.width * times, rectangle.height * times);
+        rectangle.setRect(
+                rectangle.x, rectangle.y,
+                rectangle.width * times,
+                rectangle.height * times
+        );
     }
 
     @Override
     public void moveToInStart(Point2D.Float p) {
-        rectangle.setRect(p.x, p.y, rectangle.width, rectangle.height);
+        float deltaX = p.x - startPoint.x;
+        float deltaY = p.y - startPoint.y;
+
+        rectangle.setRect(
+                rectangle.x + deltaX, rectangle.y + deltaY,
+                rectangle.width, rectangle.height
+        );
     }
 
     @Override
     public void moveToInStart(float x, float y) {
-        rectangle.setRect(x, y, rectangle.width, rectangle.height);
+        float deltaX = x - startPoint.x;
+        float deltaY = y - startPoint.y;
+
+        rectangle.setRect(
+                rectangle.x + deltaX,rectangle.y + deltaY,
+                rectangle.width,rectangle.height
+        );
+
     }
 
 
     @Override
     public Point2D.Float getStartPoint() {
-        return new Point2D.Float(rectangle.x, rectangle.y);
+        return (Point2D.Float) startPoint.clone();
     }
 
     @Override
+    /*需要交换起始和终点坐标*/
     public void putEndPoint(Point2D.Float p) {
-        rectangle.setRect(rectangle.x, rectangle.y, p.x - rectangle.x, p.y - rectangle.y);
+        endPoint = p;
+
+        if (p.getX() >= startPoint.x) {
+            if (p.getY() >= startPoint.y) { //第四象限
+                rectangle.setRect(
+                        startPoint.x, startPoint.y,
+                        p.getX() - startPoint.x,
+                        p.getY() - rectangle.y
+                );
+            }else { //第一象限
+                rectangle.setRect(
+                        startPoint.x, p.getY(),
+                        p.getX() - startPoint.x,
+                        startPoint.y - p.getY()
+                );
+            }
+        }
+        else {
+            if (p.getY() >= startPoint.y) {
+                rectangle.setRect(
+                        p.getX(), startPoint.y,
+                        startPoint.x - p.getX(),
+                        p.getY() - startPoint.y
+                );
+            }
+            else {
+                rectangle.setRect(
+                        p.getX(), p.getY(),
+                        startPoint.x - p.getX(),
+                        startPoint.y - p.getY()
+                );
+            }
+        }
     }
 
     @Override
     public void putEndPoint(float x, float y) {
-        rectangle.setRect(rectangle.x, rectangle.y, x - rectangle.x, y - rectangle.y);
+        endPoint = new Point2D.Float(x, y);
+
+        if (x >= startPoint.x) {
+            if (y >= startPoint.y) { //第四象限
+                rectangle.setRect(
+                        startPoint.x, startPoint.y,
+                        x - startPoint.x,
+                        y - rectangle.y
+                );
+            }else { //第一象限
+                rectangle.setRect(
+                        startPoint.x, y,
+                        x - startPoint.x,
+                        startPoint.y - y
+                );
+            }
+        }
+        else {
+            if (y >= startPoint.y) {
+                rectangle.setRect(
+                        x, startPoint.y,
+                        startPoint.x - x,
+                        y - startPoint.y
+                );
+            }
+            else {
+                rectangle.setRect(
+                        x, y,
+                        startPoint.x - x,
+                        startPoint.y - y
+                );
+            }
+        }
+
     }
 
     @Override
     public Point2D.Float getEndPoint() {
-        return new Point2D.Float(rectangle.x + rectangle.width, rectangle.y + rectangle.height);
+        return (Point2D.Float) endPoint.clone();
     }
 
     @Override
@@ -153,31 +240,39 @@ public class Rectangle implements Drawable {
     }
 
     private Rectangle2D.Float getSmallerRec() {
-        return new Rectangle2D.Float(rectangle.x + basicBorderStrokeWidth, rectangle.y + basicBorderStrokeWidth,
-                rectangle.width - 2 * basicBorderStrokeWidth, rectangle.height - 2 * basicBorderStrokeWidth);
+        return new Rectangle2D.Float(
+                rectangle.x + basicBorderStrokeWidth,
+                rectangle.y + basicBorderStrokeWidth,
+                rectangle.width - 2 * basicBorderStrokeWidth,
+                rectangle.height - 2 * basicBorderStrokeWidth
+        );
     }
 
     private Rectangle2D.Float getBiggerRec() {
-        return new Rectangle2D.Float(rectangle.x - borderStrokeWidth, rectangle.y - borderStrokeWidth,
-                rectangle.width + 2 * borderStrokeWidth, rectangle.height + 2 * borderStrokeWidth);
+        return new Rectangle2D.Float(
+                rectangle.x - borderStrokeWidth,
+                rectangle.y - borderStrokeWidth,
+                rectangle.width + 2 * borderStrokeWidth,
+                rectangle.height + 2 * borderStrokeWidth
+        );
     }
 
-    @Override
-    public void setStartPoint(Float p) {
-        rectangle.x = p.x;
-        rectangle.y = p.y;
-
-    }
-
-    @Override
-    public void setStartPoint(float x, float y) {
-        rectangle.x = x;
-        rectangle.y = y;
-
-    }
 
     @Override
     public Rectangle2D getOutBound() {
         return rectangle.getBounds2D();
+    }
+
+    @Override
+    public Point2D.Float getTopLeft() {
+        return new Point2D.Float(rectangle.getBounds().x, rectangle.getBounds().y);
+    }
+
+    @Override
+    public Point2D.Float getBottomRight() {
+        return new Point2D.Float(
+                rectangle.getBounds().x + rectangle.getBounds().width,
+                rectangle.getBounds().y + rectangle.getBounds().height
+        );
     }
 }

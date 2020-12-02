@@ -151,21 +151,21 @@ public class TextBox implements Drawable{
         return false;
     }
 
-    @Override
-    public void setStartPoint(Float p) {
-        // TODO Auto-generated method stub
 
-    }
-
-    @Override
-    public void setStartPoint(float x, float y) {
-        // TODO Auto-generated method stub
-
-    }
 
     @Override
     public Rectangle2D getOutBound() {
         // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Float getTopLeft() {
+        return null;
+    }
+
+    @Override
+    public Float getBottomRight() {
         return null;
     }
 

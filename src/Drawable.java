@@ -19,14 +19,17 @@ public interface Drawable extends Serializable {
     void scale(float times); //设置缩放倍数
     void moveToInStart(Point2D.Float p); //以起始点为基准移动整个图形
     void moveToInStart(float x,float y); //以起始点为基准移动整个图形
-    void setStartPoint(Point2D.Float p); //设置起始点
-    void setStartPoint(float x,float y); //设置起始点
-    Point2D.Float getStartPoint();  //得到起始点
-    void putEndPoint(Point2D.Float p); //设置结束点
-    void putEndPoint(float x,float y); //设置结束点
-    Point2D.Float getEndPoint(); //获得结束点
+    Point2D.Float getStartPoint();       //得到创建图形时拖动起始点
+    void putEndPoint(Point2D.Float p);   //设置创建图形时拖动结束点
+    void putEndPoint(float x,float y);   //设置创建图形时拖动结束点
+    Point2D.Float getEndPoint();         //获得创建图形时拖动结束点
 
     Rectangle2D getOutBound(); //获得一个能够将图形包围的矩形
+    Point2D.Float getTopLeft();       //得到矩形外边框左上角
+    Point2D.Float getBottomRight();   //得到矩形外边框右下角
+
+
+
 
     boolean pointOn(Point2D.Float p);  //返回点是否在可绘制对象上的边框上
     boolean pointOn(float x,float y);  //返回点是否在可绘制对象上的边框上

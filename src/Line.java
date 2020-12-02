@@ -6,6 +6,9 @@ import java.awt.geom.Point2D.Float;
  * 直线类
  */
 public class Line implements Drawable {
+    Point2D.Float startPoint;
+    Point2D.Float endPoint = null;
+
     Line2D.Float line;
     MyStroke borderStroke = new MyStroke();
     float alpha = 1f;
@@ -14,7 +17,8 @@ public class Line implements Drawable {
     float basicBorderStrokeWidth = this.borderStroke.getLineWidth();
     float borderStrokeWidth = widthTimes * basicBorderStrokeWidth;
 
-    public Line(Point point) {
+    public Line(Point2D.Float point) {
+        startPoint = point;
         line = new Line2D.Float(point.x, point.y, point.x, point.y);
     }
 
@@ -73,22 +77,36 @@ public class Line implements Drawable {
 
     @Override
     public Point2D.Float getStartPoint() {
-        return (Float) line.getP1();
+        return (Point2D.Float) startPoint.clone();
     }
 
     @Override
     public void putEndPoint(Point2D.Float p) {
-        line.setLine(line.x1, line.y1, p.x, p.y);
+        endPoint = p;
+        line.setLine(startPoint.x, startPoint.y, p.x, p.y);
     }
 
     @Override
     public Point2D.Float getEndPoint() {
-        return (Float) line.getP2();
+        return (Point2D.Float) endPoint.clone();
     }
 
     @Override
     public Rectangle2D getOutBound() {
         return line.getBounds2D();
+    }
+
+    @Override
+    public Float getTopLeft() {
+        return new Point2D.Float(line.getBounds().x, line.getBounds().y);
+    }
+
+    @Override
+    public Float getBottomRight() {
+        return new Point2D.Float(
+                line.getBounds().x + line.getBounds().width,
+                line.getBounds().y + line.getBounds().height
+        );
     }
 
     @Override
@@ -98,28 +116,25 @@ public class Line implements Drawable {
 
     @Override
     public void moveToInStart(Point2D.Float p) {
-        line.setLine(p.x, p.y, line.x2, line.y2);
+        float deltaX = p.x - startPoint.x;
+        float deltaY = p.y - startPoint.y;
+
+        line.setLine(line.x1 + deltaX, line.y1 + deltaY,
+                line.x2 + deltaX, line.y2 + deltaY);
     }
 
     @Override
     public void moveToInStart(float x, float y) {
-        line.setLine(x, y, line.x2, line.y2);
-    }
+        float deltaX = x - startPoint.x;
+        float deltaY = y - startPoint.y;
 
-    @Override
-    public void setStartPoint(Float p) {
-        line.x1 = p.x;
-        line.y1 = p.y;
-    }
-
-    @Override
-    public void setStartPoint(float x, float y) {
-        line.x1 = x;
-        line.y1 = y;
+        line.setLine(line.x1 + deltaX, line.y1 + deltaY,
+                line.x2 + deltaX, line.y2 + deltaY);
     }
 
     @Override
     public void putEndPoint(float x, float y) {
+        endPoint = new Point2D.Float(x, y);
         line.setLine(line.x1, line.y1, x, y);
     }
 

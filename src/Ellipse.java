@@ -5,7 +5,10 @@ import java.awt.geom.Rectangle2D;
 
 public class Ellipse implements Drawable {
 
+    Point2D.Float startPoint;
+    Point2D.Float endPoint = null;
     Ellipse2D.Float ellipse;
+
     MyStroke borderStroke = new MyStroke();
     float alpha = 1f;
     Color color = Color.BLACK;
@@ -18,6 +21,7 @@ public class Ellipse implements Drawable {
     boolean iffFillEll = false;
 
     Ellipse(Point2D.Float point) {
+        startPoint = point;
         ellipse = new Ellipse2D.Float(point.x, point.y, 0, 0);
     }
 
@@ -75,7 +79,7 @@ public class Ellipse implements Drawable {
     @Override
     public void setFill(Color c) {
         iffFillEll = true;
-
+        fillColor = c;
     }
 
     @Override
@@ -90,56 +94,140 @@ public class Ellipse implements Drawable {
 
     @Override
     public void scale(float times) {
-        ellipse.setFrame(ellipse.x, ellipse.y,
+        ellipse.setFrame(
+                ellipse.x, ellipse.y,
                 ellipse.width * times,
-                ellipse.height * times);
+                ellipse.height * times
+        );
     }
 
     @Override
     public void moveToInStart(Point2D.Float p) {
-        ellipse.setFrame(p.x, p.y, ellipse.width, ellipse.height);
+        float deltaX = p.x - startPoint.x;
+        float deltaY = p.y - startPoint.y;
+
+        ellipse.setFrame(
+                ellipse.x + deltaX, ellipse.y + deltaY,
+                ellipse.width, ellipse.height
+        );
     }
 
     @Override
     public void moveToInStart(float x, float y) {
-        ellipse.setFrame(x, y, ellipse.width, ellipse.height);
-    }
+        float deltaX = x - startPoint.x;
+        float deltaY = y - startPoint.y;
 
-    @Override
-    public void setStartPoint(Point2D.Float p) {
-        ellipse.x = p.x;
-        ellipse.y = p.y;
-    }
-
-    @Override
-    public void setStartPoint(float x, float y) {
-        ellipse.x = x;
-        ellipse.y = y;
+        ellipse.setFrame(
+                ellipse.x + deltaX, ellipse.y + deltaY,
+                ellipse.width, ellipse.height
+        );
     }
 
     @Override
     public Point2D.Float getStartPoint() {
-        return new Point2D.Float(ellipse.x, ellipse.y);
+        return (Point2D.Float) startPoint.clone();
     }
 
     @Override
     public void putEndPoint(Point2D.Float p) {
-        ellipse.setFrame(ellipse.x, ellipse.y, p.x - ellipse.x, p.y - ellipse.y);
+        endPoint = p;
+
+        if (p.getX() >= startPoint.x) {
+            if (p.getY() >= startPoint.y) {
+                ellipse.setFrame(
+                        startPoint.x, startPoint.y,
+                        p.getX() - startPoint.x,
+                        p.getY() - startPoint.y
+                );
+            }
+            else {
+                ellipse.setFrame(
+                        startPoint.x, p.getY(),
+                        p.getX() - startPoint.x,
+                        startPoint.y - p.getY()
+                );
+            }
+        }
+        else {
+            if (p.getY() >= startPoint.y) {
+                ellipse.setFrame(
+                        p.getX(), startPoint.y,
+                        startPoint.x - p.getX(),
+                        p.getY() - startPoint.y
+                );
+            }
+            else {
+                ellipse.setFrame(
+                        p.getX(), p.getY(),
+                        startPoint.x - p.getX(),
+                        startPoint.y - p.getY()
+                );
+            }
+        }
+
     }
 
     @Override
     public void putEndPoint(float x, float y) {
-        ellipse.setFrame(ellipse.x, ellipse.y, x - ellipse.x, y - ellipse.y);
+        endPoint = new Point2D.Float(x, y);
+
+        if (x >= startPoint.x) {
+            if (y >= startPoint.y) {
+                ellipse.setFrame(
+                        startPoint.x, startPoint.y,
+                        x - startPoint.x,
+                        y - startPoint.y
+                );
+            }
+            else {
+                ellipse.setFrame(
+                        startPoint.x, y,
+                        x - startPoint.x,
+                        startPoint.y - y
+                );
+            }
+        }
+        else {
+            if (y >= startPoint.y) {
+                ellipse.setFrame(
+                        x, startPoint.y,
+                        startPoint.x - x,
+                        y - startPoint.y
+                );
+            }
+            else {
+                ellipse.setFrame(
+                        x, y,
+                        startPoint.x - x,
+                        startPoint.y - y
+                );
+            }
+        }
+
     }
 
     @Override
     public Point2D.Float getEndPoint() {
-        return new Point2D.Float(ellipse.x + ellipse.width, ellipse.y + ellipse.height);
+        return (Point2D.Float) endPoint.clone();
     }
 
     @Override
     public Rectangle2D getOutBound() {
         return ellipse.getBounds2D();
+    }
+
+    @Override
+    public Point2D.Float getTopLeft() {
+        return new Point2D.Float(ellipse.getBounds().x, ellipse.getBounds().y);
+
+    }
+
+    @Override
+    public Point2D.Float getBottomRight() {
+        return new Point2D.Float(
+                ellipse.getBounds().x + ellipse.getBounds().width,
+                ellipse.getBounds().y + ellipse.getBounds().height
+        );
     }
 
     @Override
@@ -171,16 +259,20 @@ public class Ellipse implements Drawable {
     }
 
     private Ellipse2D.Float getSmallerEll() {
-        return new Ellipse2D.Float(ellipse.x + basicBorderStrokeWidth,
+        return new Ellipse2D.Float(
+                ellipse.x + basicBorderStrokeWidth,
                 ellipse.y + basicBorderStrokeWidth,
                 ellipse.width - 2 * basicBorderStrokeWidth,
-                ellipse.height - 2 * basicBorderStrokeWidth);
+                ellipse.height - 2 * basicBorderStrokeWidth
+        );
     }
 
     private Ellipse2D.Float getBiggerEll() {
-        return new Ellipse2D.Float(ellipse.x - borderStrokeWidth,
+        return new Ellipse2D.Float(
+                ellipse.x - borderStrokeWidth,
                 ellipse.y - borderStrokeWidth,
                 ellipse.width + 2 * borderStrokeWidth,
-                ellipse.height + 2 * borderStrokeWidth);
+                ellipse.height + 2 * borderStrokeWidth
+        );
     }
 }

@@ -69,7 +69,7 @@ public class Triangle implements Drawable{
     @Override
     public void setFill() {
         ifFillTri = true;
-        fillColor = Color.BLUE;
+        fillColor = color;
     }
 
     @Override
@@ -90,32 +90,31 @@ public class Triangle implements Drawable{
 
     @Override
     public void scale(float times) {
-        triangle.setTri(triangle.x1, triangle.y1,
+        triangle.setTri(
+                triangle.x1, triangle.y1,
                 triangle.x1 + triangle.halfWidth * times,
-                triangle.y1 + triangle.height * times);
+                triangle.y1 + triangle.height * times
+        );
     }
 
     @Override
     public void moveToInStart(Point2D.Float p) {
-        triangle.setTri(p.x, p.y, triangle.x2, triangle.y2);
+        triangle.setTri(
+                p.x, p.y,
+                p.x + triangle.halfWidth,
+                p.y + triangle.height
+        );
     }
 
     @Override
     public void moveToInStart(float x, float y) {
-        triangle.setTri(x, y, triangle.x2, triangle.y2);
+        triangle.setTri(
+                x, y,
+                x + triangle.halfWidth,
+                y + triangle.height
+        );
     }
 
-    @Override
-    public void setStartPoint(Point2D.Float p) {
-        triangle.x1 = p.x;
-        triangle.y1 = p.y;
-    }
-
-    @Override
-    public void setStartPoint(float x, float y) {
-        triangle.x1 = x;
-        triangle.y1 = y;
-    }
 
     @Override
     public Point2D.Float getStartPoint() {
@@ -139,15 +138,62 @@ public class Triangle implements Drawable{
 
     @Override
     public Rectangle2D getOutBound() {
-        return triangle.tri.getBounds2D();
+        float x, y;
+        float width,height;
+
+        if (triangle.y1 >= triangle.y2) {
+            height = triangle.y1 - triangle.y2;
+            if (triangle.x1 >= triangle.x2) {
+                x = triangle.x2;
+                y = triangle.y2;
+                width = triangle.x3 - triangle.x2;
+            }
+            else {
+                x = triangle.x3;
+                y = triangle.y3;
+                width = triangle.x2 - triangle.x3;
+            }
+        }
+        else {
+            y = triangle.y1;
+            height = triangle.y2 - triangle.y1;
+            if (triangle.x1 >= triangle.x2) {
+                x = triangle.x2;
+                width = triangle.x3 - triangle.x2;
+            }
+            else {
+                x = triangle.x3;
+                width = triangle.x2 - triangle.x3;
+            }
+        }
+
+        return new Rectangle2D.Float(x, y, width, height);
+
+//        return triangle.tri.getBounds2D();
+    }
+
+    @Override
+    public Point2D.Float getTopLeft() {
+        return new Point2D.Float(triangle.tri.getBounds().x,
+                triangle.tri.getBounds().y);
+    }
+
+    @Override
+    public Point2D.Float getBottomRight() {
+        return new Point2D.Float(
+                triangle.tri.getBounds().x + triangle.tri.getBounds().width,
+                triangle.tri.getBounds().y + triangle.tri.getBounds().height
+        );
     }
 
     @Override
     public boolean pointOn(Point2D.Float p) {
-        Rectangle2D.Float r = new Rectangle2D.Float(p.x - borderStrokeWidth,
+        Rectangle2D.Float r = new Rectangle2D.Float(
+                p.x - borderStrokeWidth,
                 p.y - borderStrokeWidth,
                 2 * borderStrokeWidth,
-                2 * borderStrokeWidth);
+                2 * borderStrokeWidth
+        );
         return triangle.tri.intersects(r);
 
 //        Triangle2D t1 = getBound();
@@ -159,30 +205,38 @@ public class Triangle implements Drawable{
         Triangle2D t;
         if (triangle.y1 >= triangle.y2) {
             if (triangle.x1 >= triangle.x2) {
-                t = new Triangle2D(triangle.x1,
+                t = new Triangle2D(
+                        triangle.x1,
                         triangle.y1 - borderStrokeWidth,
                         triangle.x2 + borderStrokeWidth,
-                        triangle.y2 + borderStrokeWidth);
+                        triangle.y2 + borderStrokeWidth
+                );
             }
             else {
-                t = new Triangle2D(triangle.x1,
+                t = new Triangle2D(
+                        triangle.x1,
                         triangle.y1 - borderStrokeWidth,
                         triangle.x2 - borderStrokeWidth,
-                        triangle.y2 + borderStrokeWidth);
+                        triangle.y2 + borderStrokeWidth
+                );
             }
         }
         else {
             if (triangle.x1 >= triangle.x2) {
-                t = new Triangle2D(triangle.x1,
+                t = new Triangle2D(
+                        triangle.x1,
                         triangle.y1 + borderStrokeWidth,
                         triangle.x2 + borderStrokeWidth,
-                        triangle.y2 - borderStrokeWidth);
+                        triangle.y2 - borderStrokeWidth
+                );
             }
             else {
-                t = new Triangle2D(triangle.x1,
+                t = new Triangle2D(
+                        triangle.x1,
                         triangle.y1 + borderStrokeWidth,
                         triangle.x2 - borderStrokeWidth,
-                        triangle.y2 - borderStrokeWidth);
+                        triangle.y2 - borderStrokeWidth
+                );
             }
         }
         return t;
@@ -190,10 +244,12 @@ public class Triangle implements Drawable{
 
     @Override
     public boolean pointOn(float x, float y) {
-        Rectangle2D.Float r = new Rectangle2D.Float(x - borderStrokeWidth,
+        Rectangle2D.Float r = new Rectangle2D.Float(
+                x - borderStrokeWidth,
                 y - borderStrokeWidth,
                 2 * borderStrokeWidth,
-                2 * borderStrokeWidth);
+                2 * borderStrokeWidth
+        );
         return triangle.tri.intersects(r);
     }
 
