@@ -139,7 +139,21 @@ class PaintSurface extends JComponent {
                 case FILL:{
                     Optional.ofNullable(getFillDrawable())
                             .ifPresent(s->{
-                                s.setFill(stm.getColor());
+                                stm.execute(new Command(){
+                                   boolean isFilledBefore = s.isFilled();
+                                   Color filledColorBefore = isFilledBefore?s.getFillColor():Color.white;
+                                   Color filledColorNow = stm.getColor();
+                                   public void execute(){
+                                        s.setFill(filledColorNow);
+                                   }
+                                   public void unexecute(){
+                                        if(isFilledBefore){
+                                            s.setFill(filledColorBefore);
+                                        }else{
+                                            s.disableFill();
+                                        }
+                                   }
+                                });
                                 repaint();
                             });
                 }
