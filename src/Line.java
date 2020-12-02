@@ -111,7 +111,7 @@ public class Line implements Drawable {
 
     @Override
     public boolean pointOn(Point2D.Float p) {
-        return (line.ptLineDist(p) <= borderStrokeWidth);
+        return (line.ptSegDist(p) <= borderStrokeWidth);
     }
 
     @Override
@@ -140,7 +140,7 @@ public class Line implements Drawable {
 
     @Override
     public boolean pointOn(float x, float y) {
-        return (line.ptLineDist(x, y) <= borderStrokeWidth);
+        return (line.ptSegDist(x, y) <= borderStrokeWidth);
     }
 
     @Override
