@@ -2,7 +2,6 @@ import java.util.Optional;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
-
 import javax.swing.*;
 
 class PaintSurface extends JComponent {
@@ -22,6 +21,7 @@ class PaintSurface extends JComponent {
                 // ignore
 
             }
+
         }
 
         /**
@@ -79,7 +79,7 @@ class PaintSurface extends JComponent {
                 selectedDrawable = null;
             }
 
-            if(eraserDrawable!=null){
+            if (eraserDrawable != null) {
                 eraserDrawable = null;
             }
 
@@ -94,39 +94,29 @@ class PaintSurface extends JComponent {
         public void mouseDragged(MouseEvent e) {
             // System.out.println(e.getX()+" "+e.getY());
             if (endDrag != null) {
+                var deltax = e.getX() - endDrag.getX();
+                var deltay = e.getY() - endDrag.getY();
                 int x = e.getX();
                 int y = e.getY();
                 if (tmpDrawable != null) {
                     tmpDrawable.putEndPoint(x, y);
                 }
                 if (selectedTip != null) {
-                    var deltax = e.getX() - endDrag.getX();
-                    var deltay = e.getY() - endDrag.getY();
                     var selectedStart = selectedTip.getStartPoint();
                     selectedTip.moveToInStart((float) (selectedStart.getX() + deltax),
                             (float) (selectedStart.getY() + deltay));
                 }
-                endDrag.move(x, y);
                 if (eraserDrawable != null) {
-                    eraserDrawable.moveToInStart((float)endDrag.getX()-3,(float)endDrag.getY()-3);
+                    var eraserDrawableStart = eraserDrawable.getStartPoint();
+                    eraserDrawable.moveToInStart((float) (eraserDrawableStart.getX() + deltax),
+                            (float) (eraserDrawableStart.getY() + deltay));
                     Drawable s = getIntersectDrawable(endDrag);
-                    if (s!=null){
-                        stm.execute(new Command(){
-                            Drawable removedDrawable = s;
-                            int removedDrawableIndex = stm.getAllDrawable().indexOf(s);
-                            public void execute(){
-                                stm.getAllDrawable().remove(removedDrawableIndex);
-                                System.out.println(stm.getColor());
-                            }
-
-                            @Override
-                            public void unexecute() {
-                                stm.getAllDrawable().add(removedDrawableIndex, removedDrawable);
-                            }
-                        });
-                    }
+                    eraseDrawable(s);
                 }
+                endDrag.move(x, y);
                 repaint();
+            } else {
+                endDrag = e.getPoint();
             }
         }
 
@@ -139,7 +129,6 @@ class PaintSurface extends JComponent {
             repaint();
         }
 
-        
     }
 
     /**
@@ -159,7 +148,7 @@ class PaintSurface extends JComponent {
     Drawable tmpDrawable = null; // 用于显示提示的临时Drawable对象
     Drawable selectedTip = null; // 用于显示被选择对象外边框的临时Drawable对象
     Drawable selectedDrawable = null; // 被选择的对象
-    Drawable eraserDrawable = null; //橡皮擦显示对象
+    Drawable eraserDrawable = null; // 橡皮擦显示对象
 
     public PaintSurface(StatesModel stmo) { // 构造函数，接受一个StatesModel对象
         stm = stmo;
@@ -180,13 +169,31 @@ class PaintSurface extends JComponent {
         for (int i = l.size(); i-- > 0;) {
             var shape = l.get(i);
             // 如果填充了，在图形上即为真，或者没填充且只在边框上
-            boolean onDrawable = (shape.isFilled() && shape.pointOnFill(p.x, p.y))
-                                || shape.pointOn(p.x, p.y);
+            boolean onDrawable = (shape.isFilled() && shape.pointOnFill(p.x, p.y)) || shape.pointOn(p.x, p.y);
             if (onDrawable) {
                 return shape;
             }
         }
         return null;
+    }
+
+    private void eraseDrawable(Drawable s) {
+        if (s != null) {
+            stm.execute(new Command() {
+                Drawable removedDrawable = s;
+                int removedDrawableIndex = stm.getAllDrawable().indexOf(s);
+
+                public void execute() {
+                    stm.getAllDrawable().remove(removedDrawableIndex);
+                    System.out.println(stm.getColor());
+                }
+
+                @Override
+                public void unexecute() {
+                    stm.getAllDrawable().add(removedDrawableIndex, removedDrawable);
+                }
+            });
+        }
     }
 
     private Drawable getFillDrawable() {
@@ -292,8 +299,10 @@ class PaintSurface extends JComponent {
                 });
             }
                 break;
-            case ERASER:{
+            case ERASER: {
                 eraserDrawable = createEraserDrawble();
+                Drawable s = getIntersectDrawable(endDrag);
+                eraseDrawable(s);
                 repaint();
             }
                 break;
@@ -304,15 +313,15 @@ class PaintSurface extends JComponent {
 
     private Drawable getSelectedTip(Drawable shape) {
         var rec = shape.getOutBound();
-        var res = BasicDrawableFactory.makeRec((int) rec.getX(), (int) rec.getY(),
-                (int) (rec.getX() + rec.getWidth()), (int) (rec.getY() + rec.getHeight()));
+        var res = BasicDrawableFactory.makeRec((int) rec.getX(), (int) rec.getY(), (int) (rec.getX() + rec.getWidth()),
+                (int) (rec.getY() + rec.getHeight()));
         res.setBorder(shape.getBorderColor(),
                 new MyStroke(3.0f, MyStroke.CAP_BUTT, MyStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
         return res;
     }
 
-    private Drawable createEraserDrawble(){
-        var rec = BasicDrawableFactory.makeRec(startDrag.x-3, startDrag.y-3, startDrag.x+3, startDrag.y+3);
+    private Drawable createEraserDrawble() {
+        var rec = BasicDrawableFactory.makeRec(startDrag.x - 3, startDrag.y - 3, startDrag.x + 3, startDrag.y + 3);
         return rec;
     }
 
@@ -361,7 +370,7 @@ class PaintSurface extends JComponent {
         if (selectedTip != null) { // 移动对象的绘制
             selectedTip.drawOnGraphics2D(g2);
         }
-        if (eraserDrawable !=null) { //橡皮擦对象绘制
+        if (eraserDrawable != null) { // 橡皮擦对象绘制
             eraserDrawable.drawOnGraphics2D(g2);
         }
     }
