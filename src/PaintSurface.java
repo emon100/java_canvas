@@ -28,31 +28,6 @@ class PaintSurface extends JComponent {
          * 监听鼠标释放
          */
         public void mouseReleased(MouseEvent e) {
-            if (tmpDrawable != null) {
-                stm.execute(new Command() {
-                    Drawable tmp = tmpDrawable;
-                    {
-                        tmp.setColor(stm.getColor());
-                        tmp.setAlpha(stm.getAlpha());
-                        tmp.setBorder(stm.getColor(), new MyStroke()); // todo
-                        tmp.disableFill();
-                    }
-
-                    @Override
-                    public void execute() {
-                        stm.getAllDrawable().add(tmp);
-
-                    }
-
-                    @Override
-                    public void unexecute() {
-                        stm.getAllDrawable().remove(tmp);
-
-                    }
-                });
-                tmpDrawable = null;
-            }
-
             if (selectedTip != null) {
                 stm.execute(new Command() {
                     Drawable selected = selectedDrawable;
@@ -61,10 +36,6 @@ class PaintSurface extends JComponent {
 
                     @Override
                     public void execute() {
-                        Point2D.Float selectedStart = selected.getStartPoint();
-                        selected.moveToInStart((float) (selectedStart.getX() + deltax),
-                                (float) (selectedStart.getY() + deltay));
-
                     }
 
                     @Override
@@ -83,6 +54,31 @@ class PaintSurface extends JComponent {
                 eraserDrawable = null;
             }
 
+            if (tmpDrawable != null) {
+                startDrag = null;
+                endDrag = null;
+                stm.execute(new Command() {
+                    Drawable tmp = tmpDrawable;
+                    {
+                        tmp.setColor(stm.getColor());
+                        tmp.setAlpha(stm.getAlpha());
+                        tmp.setBorder(stm.getColor(), new MyStroke()); // todo
+                        tmp.disableFill();
+                    }
+
+                    @Override
+                    public void execute() {
+                        stm.getAllDrawable().add(tmp);
+                    }
+
+                    @Override
+                    public void unexecute() {
+                        stm.getAllDrawable().remove(tmp);
+
+                    }
+                });
+                tmpDrawable = null;
+            }
             startDrag = null;
             endDrag = null;
             repaint();
@@ -105,6 +101,9 @@ class PaintSurface extends JComponent {
                     var selectedStart = selectedTip.getStartPoint();
                     selectedTip.moveToInStart((float) (selectedStart.getX() + deltax),
                             (float) (selectedStart.getY() + deltay));
+                    var selectedDrawableStart = selectedDrawable.getStartPoint();
+                    selectedDrawable.moveToInStart((float) (selectedDrawableStart.getX() + deltax),
+                    (float) (selectedDrawableStart.getY() + deltay));
                 }
                 if (eraserDrawable != null) {
                     var eraserDrawableStart = eraserDrawable.getStartPoint();
@@ -227,7 +226,7 @@ class PaintSurface extends JComponent {
             }
                 break;
             case TEXTBOX: {
-                tmpDrawable = BasicDrawableFactory.makeTextBox(startDrag.x, startDrag.y, startDrag.x, startDrag.y);
+                tmpDrawable = BasicDrawableFactory.makeTextBox(startDrag.x, startDrag.y, this);
                 tmpDrawable.setColor(stm.getColor());
                 tmpDrawable.setAlpha(stm.getAlpha());
             }

@@ -8,29 +8,14 @@ import javax.swing.event.*;
 
 public class TextBox implements Drawable {
     private class TextTestPanel extends JComponent {
-
         public Dimension getPreferredSize() {
             return new Dimension(200, 200);
         }
 
         public void setFont(Font font) {
-            super.setFont(font);
-            repaint();
+            outerComponent.repaint();
         }
 
-        public void paintComponent(Graphics g) {
-            super.paintComponent(g);
-
-            g.setColor(Color.white);
-            g.fillRect(0, 0, getWidth(), getHeight());
-            g.setColor(Color.black);
-            g.setFont(getFont());
-            FontMetrics metrics = g.getFontMetrics();
-            String text = filled == null ? "Input Here" : filled;
-            int x = getWidth() / 2 - metrics.stringWidth(text) / 2;
-            int y = getHeight() - 20;
-            g.drawString(text, x, y);
-        }
 
         public void showTextBoxDialog() {
             JPanel fontSelectorPanel = new JPanel();
@@ -54,14 +39,10 @@ public class TextBox implements Drawable {
             JSpinner sizes = new JSpinner(new SpinnerNumberModel(fontSize, 6, 60, 1));
             fontSelectorPanel.add(sizes);
 
-            TextTestPanel textTestPanel = this;
-            textTestPanel.setBackground(Color.white);
-
             fonts.addItemListener(i -> {
                 try {
                     fontName = (String) fonts.getSelectedItem();
-
-                    textTestPanel.setFont(new Font(fontName, fontstyle, fontSize));
+                    outerComponent.repaint();
                 } catch (NumberFormatException nfe) {
                 }
             });
@@ -69,7 +50,7 @@ public class TextBox implements Drawable {
             styles.addItemListener(i -> {
                 try {
                     fontstyle = styles.getSelectedIndex();
-                    textTestPanel.setFont(new Font(fontName, fontstyle, fontSize));
+                    outerComponent.repaint();
                 } catch (NumberFormatException nfe) {
                 }
             });
@@ -78,8 +59,9 @@ public class TextBox implements Drawable {
                 try {
                     String size = sizes.getModel().getValue().toString();
                     fontSize = Integer.parseInt(size);
-                    textTestPanel.setFont(new Font(fontName, fontstyle, fontSize));
+                    outerComponent.repaint();
                 } catch (NumberFormatException nfe) {
+                    fontSize=14;
                 }
             });
 
@@ -103,7 +85,7 @@ public class TextBox implements Drawable {
                 
                 public void input() {
                     filled = input.getText();
-                    repaint();
+                    outerComponent.repaint();
                 }
             });
             inputpanel.setLayout(new FlowLayout());
@@ -129,7 +111,7 @@ public class TextBox implements Drawable {
     }
     
     TextTestPanel textTestPanel = new TextTestPanel();
-    
+    JComponent outerComponent; 
     // filled代表是否填充文字
     String filled = null; // 填充的文字
 
@@ -142,8 +124,9 @@ public class TextBox implements Drawable {
 
     Point2D.Float startPoint;
 
-    TextBox(Point2D.Float p) {
+    TextBox(Point2D.Float p,JComponent outer) {
         startPoint = p;
+        outerComponent = outer;
     }
 
     @Override
@@ -249,7 +232,7 @@ public class TextBox implements Drawable {
     public boolean pointOn(Float p) {
         // TODO Auto-generated method stub
         return false;
-    }
+    }   
 
     @Override
     public boolean pointOn(float x, float y) {
@@ -259,22 +242,26 @@ public class TextBox implements Drawable {
 
     @Override
     public boolean pointOnFill(Float p) {
-        // TODO Auto-generated method stub
-        return false;
+        return getOutBound().contains(p);
+
     }
 
     @Override
     public boolean pointOnFill(float x, float y) {
-        // TODO Auto-generated method stub
-        return false;
+        return getOutBound().contains(x, y);
     }
 
 
 
     @Override
     public Rectangle2D getOutBound() {
-        // TODO Auto-generated method stub
-        return null;
+        if(isFilled()){
+            Font f = new Font(fontName, fontstyle, fontSize);
+            var context = outerComponent.getFontMetrics(f).getFontRenderContext();
+            return f.getStringBounds(filled, context);
+        }else{
+            return new Rectangle2D.Float((int) startPoint.x, (int) startPoint.y, (int) startPoint.x+1,fontSize);
+        }
     }
 
     @Override
