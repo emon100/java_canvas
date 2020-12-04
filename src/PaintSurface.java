@@ -103,7 +103,7 @@ class PaintSurface extends JComponent {
                             (float) (selectedStart.getY() + deltay));
                     var selectedDrawableStart = selectedDrawable.getStartPoint();
                     selectedDrawable.moveToInStart((float) (selectedDrawableStart.getX() + deltax),
-                    (float) (selectedDrawableStart.getY() + deltay));
+                            (float) (selectedDrawableStart.getY() + deltay));
                 }
                 if (eraserDrawable != null) {
                     var eraserDrawableStart = eraserDrawable.getStartPoint();
@@ -152,15 +152,20 @@ class PaintSurface extends JComponent {
     public PaintSurface(StatesModel stmo) { // 构造函数，接受一个StatesModel对象
         stm = stmo;
 
-        JPopupMenu popup = new JPopupMenu();// setPopUpMenu()
-        popup.add(new JMenuItem("Cut"));
-        setComponentPopupMenu(popup);
+        setPopupMenu();
 
         // 监听鼠标点击，释放
         this.addMouseListener(listener);
 
         // 监听鼠标拖动
         this.addMouseMotionListener(listener);
+    }
+
+    private void setPopupMenu() {
+        JPopupMenu popup = new JPopupMenu();
+        var a = new JMenuItem("暂无功能");
+        popup.add(a);
+        setComponentPopupMenu(popup);
     }
 
     private Drawable getIntersectDrawable(Point p) {
