@@ -227,7 +227,7 @@ public class Rectangle implements Drawable {
     public void putEndPoint(Point2D.Float p) {
         endPoint = p;       //将传进去的新终点位置传给该矩形类的终点坐标属性
         /**
-         * 需要判断四种情况，因为Rectang2D类的设置只能是左上角的坐标到右下角的坐标，
+         * 需要判断四种情况，因为Rectangle2D类的设置只能是左上角的坐标到右下角的坐标，
          * 新终点位置相对于起始点的位置，并重新设置rectangle对象
          *
          */
@@ -275,7 +275,7 @@ public class Rectangle implements Drawable {
         endPoint = new Point2D.Float(x, y); //将传进去的新终点位置传给该矩形类的终点坐标属性
 
         /**
-         * 需要判断四种情况，因为Rectang2D类的设置只能是左上角的坐标到右下角的坐标，
+         * 需要判断四种情况，因为Rectangle2D类的设置只能是左上角的坐标到右下角的坐标，
          * 新终点位置相对于起始点的位置，并重新设置rectangle对象
          *
          */
