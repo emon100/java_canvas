@@ -125,8 +125,9 @@ public class Chrome extends JFrame {
                                 return;
                             }
                         }
-                        try {
+                        try (
                             ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(savePath));
+                        ){
                             out.writeObject( states.getAllDrawable() );
                             System.exit(0);
                         } catch (Exception exception) {
@@ -214,8 +215,10 @@ public class Chrome extends JFrame {
                                     return;
                                 }
                             }
-                            try {
-                                ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(savePath));
+                            try (
+                                var outputStream = new FileOutputStream(savePath);
+                                ObjectOutputStream out = new ObjectOutputStream(outputStream);
+                            ){
                                 out.writeObject( states.getAllDrawable() );
                                 states.hasBeenSaved = true;
                             } catch (Exception exception) {
@@ -240,10 +243,12 @@ public class Chrome extends JFrame {
                     JOptionPane.showMessageDialog(null, "文件未打开！", "错误",JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                try {
+                try (
                     ObjectInputStream out = new ObjectInputStream(new FileInputStream(targetFile));
+                ) {
+                    var readedObject = (ArrayList<Drawable>) out.readObject();
                     states.iniStates();
-                    states.setDrawable( (ArrayList<Drawable>) out.readObject());
+                    states.setDrawable(readedObject);
                     repaint();
                 } catch (Exception exception) {
                     exception.printStackTrace();
@@ -283,8 +288,9 @@ public class Chrome extends JFrame {
                                     return;
                                 }
                             }
-                            try {
+                            try (
                                 ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(savePath));
+                            ){
                                 out.writeObject( states.getAllDrawable() );
                             } catch (Exception exception) {
                                 exception.printStackTrace();
@@ -329,8 +335,9 @@ public class Chrome extends JFrame {
                         return;
                     }
                 }
-                try {
+                try (
                     ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(savePath));
+                ) {
                     out.writeObject( states.getAllDrawable() );
                     states.hasBeenSaved = true;
                 } catch (Exception exception) {
@@ -477,6 +484,7 @@ public class Chrome extends JFrame {
         //颜色选择器
         JLabel chooseColorTextLabel = new JLabel("任意");
         JPanel chooseColorPanel = new JPanel();
+        chooseColorPanel.setBackground(Color.BLACK);
         chooseColorPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {

@@ -1,37 +1,30 @@
 import java.awt.*;
-import java.awt.Dialog.ModalityType;
 import java.awt.geom.*;
 import java.awt.geom.Point2D.Float;
 import javax.swing.*;
 import javax.swing.event.*;
 
-
+/** 
+ * 这个类是文本对象类，这个类可以实现绘制文本和呼出编辑对话框。
+ * @author 王一蒙
+ * 
+ */
 public class TextBox implements Drawable {
+
+    private static final long serialVersionUID = 979367086863174749L;//自动生成的序列化对象
+
     private class TextTestPanel extends JComponent {
+        /**
+         *
+         */
+        private static final long serialVersionUID = 7484077858050896589L;
 
         public Dimension getPreferredSize() {
             return new Dimension(200, 200);
         }
-
-        public void setFont(Font font) {
-            super.setFont(font);
-            repaint();
-        }
-
-        public void paintComponent(Graphics g) {
-            super.paintComponent(g);
-
-            g.setColor(Color.white);
-            g.fillRect(0, 0, getWidth(), getHeight());
-            g.setColor(Color.black);
-            g.setFont(getFont());
-            FontMetrics metrics = g.getFontMetrics();
-            String text = filled == null ? "Input Here" : filled;
-            int x = getWidth() / 2 - metrics.stringWidth(text) / 2;
-            int y = getHeight() - 20;
-            g.drawString(text, x, y);
-        }
-
+        /**
+         * 编辑对话框弹出的函数
+         */
         public void showTextBoxDialog() {
             JPanel fontSelectorPanel = new JPanel();
             fontSelectorPanel.setLayout(new BoxLayout(fontSelectorPanel, BoxLayout.Y_AXIS));
@@ -54,14 +47,10 @@ public class TextBox implements Drawable {
             JSpinner sizes = new JSpinner(new SpinnerNumberModel(fontSize, 6, 60, 1));
             fontSelectorPanel.add(sizes);
 
-            TextTestPanel textTestPanel = this;
-            textTestPanel.setBackground(Color.white);
-
             fonts.addItemListener(i -> {
                 try {
                     fontName = (String) fonts.getSelectedItem();
-
-                    textTestPanel.setFont(new Font(fontName, fontstyle, fontSize));
+                    outerComponent.repaint();
                 } catch (NumberFormatException nfe) {
                 }
             });
@@ -69,7 +58,7 @@ public class TextBox implements Drawable {
             styles.addItemListener(i -> {
                 try {
                     fontstyle = styles.getSelectedIndex();
-                    textTestPanel.setFont(new Font(fontName, fontstyle, fontSize));
+                    outerComponent.repaint();
                 } catch (NumberFormatException nfe) {
                 }
             });
@@ -78,16 +67,18 @@ public class TextBox implements Drawable {
                 try {
                     String size = sizes.getModel().getValue().toString();
                     fontSize = Integer.parseInt(size);
-                    textTestPanel.setFont(new Font(fontName, fontstyle, fontSize));
+                    outerComponent.repaint();
                 } catch (NumberFormatException nfe) {
+                    fontSize=14;
                 }
             });
 
-            JDialog dialog = new JDialog(null, "input", ModalityType.APPLICATION_MODAL);
+
+            JDialog dialog = new JDialog();
+            dialog.setSize(300, 250);
+            dialog.setTitle("input");
+
             JPanel root = new JPanel();
-
-
-
             JPanel inputpanel = new JPanel();
             JTextField input = new JTextField(20);
             input.getDocument().addDocumentListener(new DocumentListener() {
@@ -103,9 +94,10 @@ public class TextBox implements Drawable {
                 
                 public void input() {
                     filled = input.getText();
-                    repaint();
+                    outerComponent.repaint();
                 }
             });
+
             inputpanel.setLayout(new FlowLayout());
             JButton enterButton = new JButton("Enter");
             enterButton.addActionListener(e->{
@@ -118,18 +110,16 @@ public class TextBox implements Drawable {
             root.setLayout( new BoxLayout(root, BoxLayout.Y_AXIS));
             root.add(fontSelectorPanel);
             root.add(inputpanel);
-            root.add(textTestPanel);
-            
+            root.add(textTestPanel); 
             
             dialog.add(root);
-            dialog.setSize(300, 300);
             dialog.setVisible(true);
         }
 
     }
     
     TextTestPanel textTestPanel = new TextTestPanel();
-    
+    JComponent outerComponent; 
     // filled代表是否填充文字
     String filled = null; // 填充的文字
 
@@ -140,26 +130,37 @@ public class TextBox implements Drawable {
     Color color = Color.BLACK; // 画笔颜色
     float alpha = 1f; // 透明度
 
-    Point2D.Float startPoint;
+    Point2D.Float startPoint=null;
 
-    TextBox(Point2D.Float p) {
+    Rectangle2D outBound=null;
+
+    TextBox(Point2D.Float p,JComponent outer) {
         startPoint = p;
+        outerComponent = outer;
+        getOutBound();
     }
 
+    /**
+     * 将文本对象绘制到Graphics2D对象上
+     * @param g 绘制到的Graphics2D对象
+     */
     @Override
     public void drawOnGraphics2D(Graphics2D g) {
-        g.setColor(color);
+        g.setColor(color); //设置绘制颜色
         if (isFilled()) {
-            var oldFont = g.getFont();
-            g.setFont(new Font(fontName, fontstyle, fontSize));
-            g.drawString(filled, startPoint.x, startPoint.y);
-            g.setFont(oldFont);
-        } else {
-            g.setStroke(new MyStroke(1.5f));
+            var oldFont = g.getFont(); //保存g之前的字体
+            g.setFont(new Font(fontName, fontstyle, fontSize)); //设置字体
+            g.drawString(filled, startPoint.x, startPoint.y);  //绘制文字
+            g.setFont(oldFont); //恢复g之前的字体
+        } else { //绘制光标
+            g.setStroke(new MyStroke(1.5f)); 
             g.drawLine((int) startPoint.x, (int) startPoint.y, (int) startPoint.x, (int) startPoint.y - fontSize);
         }
     }
 
+    /**
+     * 返回此对象是否已经有文本填充
+     */
     @Override
     public boolean isFilled() {
         return filled != null;
@@ -218,11 +219,13 @@ public class TextBox implements Drawable {
     @Override
     public void moveToInStart(Float p) {
         startPoint = p;
+        outBound=null;
     }
 
     @Override
     public void moveToInStart(float x, float y) {
         startPoint.setLocation(x, y);
+        outBound=null;
     }
 
     @Override
@@ -233,11 +236,13 @@ public class TextBox implements Drawable {
     @Override
     public void putEndPoint(Float p) {
         startPoint = p;
+        outBound=null;
     }
 
     @Override
     public void putEndPoint(float x, float y) {
         startPoint.setLocation(x, y);
+        outBound=null;
     }
 
     @Override
@@ -247,44 +252,50 @@ public class TextBox implements Drawable {
 
     @Override
     public boolean pointOn(Float p) {
-        // TODO Auto-generated method stub
         return false;
-    }
+    }   
 
     @Override
     public boolean pointOn(float x, float y) {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public boolean pointOnFill(Float p) {
-        // TODO Auto-generated method stub
-        return false;
+        return getOutBound().contains(p);
     }
 
     @Override
     public boolean pointOnFill(float x, float y) {
-        // TODO Auto-generated method stub
-        return false;
+        return getOutBound().contains(x,y);
     }
-
 
 
     @Override
     public Rectangle2D getOutBound() {
-        // TODO Auto-generated method stub
-        return null;
+        if(isFilled()){
+            if(outBound!=null){
+                return outBound;
+            }
+            Font f = new Font(fontName, fontstyle, fontSize);
+            var context = outerComponent.getFontMetrics(f).getFontRenderContext();
+            outBound =  f.getStringBounds(filled, context);
+            outBound.setRect(startPoint.x,startPoint.y-fontSize,outBound.getWidth(),outBound.getHeight());
+            return outBound;
+        }else{
+            return new Rectangle2D.Float((int) startPoint.x, (int) startPoint.y, (int) startPoint.x+1,fontSize);
+        }
     }
 
     @Override
     public Float getTopLeft() {
-        return null;
+        return new Point2D.Float(startPoint.x,startPoint.y-fontSize);
     }
 
     @Override
     public Float getBottomRight() {
-        return null;
+        var outBound = getOutBound();
+        return new Point2D.Float((float) outBound.getMaxX(), (float) outBound.getMaxY());
     }
 
 }
