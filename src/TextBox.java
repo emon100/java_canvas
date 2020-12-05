@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.geom.*;
 import java.awt.geom.Point2D.Float;
+import java.beans.Transient;
+import java.io.Serializable;
 import javax.swing.*;
 import javax.swing.event.*;
 
@@ -9,7 +11,7 @@ import javax.swing.event.*;
  * @author 王一蒙
  * 
  */
-public class TextBox implements Drawable {
+public class TextBox implements Drawable, Serializable {
 
     private static final long serialVersionUID = 979367086863174749L;//自动生成的序列化对象
 
@@ -118,8 +120,8 @@ public class TextBox implements Drawable {
 
     }
     
-    TextTestPanel textTestPanel = new TextTestPanel();
-    JComponent outerComponent; 
+    TextTestPanel textTestPanel;
+    transient JComponent outerComponent = null;
     // filled代表是否填充文字
     String filled = null; // 填充的文字
 
@@ -132,11 +134,13 @@ public class TextBox implements Drawable {
 
     Point2D.Float startPoint=null;
 
-    Rectangle2D outBound=null;
+    Rectangle2D.Float outBound=null;
 
     TextBox(Point2D.Float p,JComponent outer) {
         startPoint = p;
         outerComponent = outer;
+        outBound=null;
+        textTestPanel = new TextTestPanel();
         getOutBound();
     }
 
@@ -146,6 +150,9 @@ public class TextBox implements Drawable {
      */
     @Override
     public void drawOnGraphics2D(Graphics2D g) {
+        if(outerComponent==null){
+            System.out.println("fuck");
+        }
         g.setColor(color); //设置绘制颜色
         if (isFilled()) {
             var oldFont = g.getFont(); //保存g之前的字体
@@ -279,7 +286,7 @@ public class TextBox implements Drawable {
             }
             Font f = new Font(fontName, fontstyle, fontSize);
             var context = outerComponent.getFontMetrics(f).getFontRenderContext();
-            outBound =  f.getStringBounds(filled, context);
+            outBound = (Rectangle2D.Float) f.getStringBounds(filled, context);
             outBound.setRect(startPoint.x,startPoint.y-fontSize,outBound.getWidth(),outBound.getHeight());
             return outBound;
         }else{

@@ -1,76 +1,18 @@
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.ArrayList;
 
-/*
- * author: AlbertTan
- * date: 2020-11-25
+/**
+ * Chrome是整个画板对象，在整个程序运行到程序关闭的过程中
+ * 有且仅有一个Chrome对象。
+ * @author AlbertTan
  */
 public class Chrome extends JFrame {
 
-    //状态集合
+    /**状态集合*/
     private States states;
-
-    /**
-     * GBC
-     */
-    public static class GBC extends GridBagConstraints {
-        //初始化左上角位置
-        public GBC(int gridx, int gridy) {
-            this.gridx = gridx;
-            this.gridy = gridy;
-        }
-
-        //初始化左上角位置和所占行数和列数
-        public GBC(int gridx, int gridy, int gridwidth, int gridheight) {
-            this.gridx = gridx;
-            this.gridy = gridy;
-            this.gridwidth = gridwidth;
-            this.gridheight = gridheight;
-        }
-
-        //对齐方式
-        public GBC setAnchor(int anchor) {
-            this.anchor = anchor;
-            return this;
-        }
-
-        //是否拉伸及拉伸方向
-        public GBC setFill(int fill) {
-            this.fill = fill;
-            return this;
-        }
-
-        //x和y方向上的增量
-        public GBC setWeight(double weightx, double weighty) {
-            this.weightx = weightx;
-            this.weighty = weighty;
-            return this;
-        }
-
-        //外部填充
-        public GBC setInsets(int distance) {
-            this.insets = new Insets(distance, distance, distance, distance);
-            return this;
-        }
-
-        //外填充
-        public GBC setInsets(int top, int left, int bottom, int right) {
-            this.insets = new Insets(top, left, bottom, right);
-            return this;
-        }
-
-        //内填充
-        public GBC setIpad(int ipadx, int ipady) {
-            this.ipadx = ipadx;
-            this.ipady = ipady;
-            return this;
-        }
-    }
 
     /**
      * 构造函数 生成一个完成的Chrome
@@ -129,7 +71,7 @@ public class Chrome extends JFrame {
                             }
                         }
                         try (
-                            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(savePath));
+                            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(savePath))
                         ){
                             out.writeObject( states.getAllDrawable() );
                             System.exit(0);
@@ -186,7 +128,6 @@ public class Chrome extends JFrame {
         /*
          * 文件保存、撤销与重做图片对象
          */
-
         //打开文件
         JButton openFileBtn = new JButton("打开");
         openFileBtn.addActionListener(new AbstractAction() {
@@ -220,7 +161,7 @@ public class Chrome extends JFrame {
                             }
                             try (
                                 var outputStream = new FileOutputStream(savePath);
-                                ObjectOutputStream out = new ObjectOutputStream(outputStream);
+                                ObjectOutputStream out = new ObjectOutputStream(outputStream)
                             ){
                                 out.writeObject( states.getAllDrawable() );
                                 states.hasBeenSaved = true;
@@ -247,7 +188,7 @@ public class Chrome extends JFrame {
                     return;
                 }
                 try (
-                    ObjectInputStream out = new ObjectInputStream(new FileInputStream(targetFile));
+                    ObjectInputStream out = new ObjectInputStream(new FileInputStream(targetFile))
                 ) {
                     var readedObject = (ArrayList<Drawable>) out.readObject();
                     states.iniStates();
@@ -292,7 +233,7 @@ public class Chrome extends JFrame {
                                 }
                             }
                             try (
-                                ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(savePath));
+                                ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(savePath))
                             ){
                                 out.writeObject( states.getAllDrawable() );
                             } catch (Exception exception) {
@@ -339,7 +280,7 @@ public class Chrome extends JFrame {
                     }
                 }
                 try (
-                    ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(savePath));
+                    ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(savePath))
                 ) {
                     out.writeObject( states.getAllDrawable() );
                     states.hasBeenSaved = true;
@@ -378,12 +319,7 @@ public class Chrome extends JFrame {
         // 绘制 刻度 和 标签
         strokeSlider.setPaintTicks(true);
         strokeSlider.setPaintLabels(true);
-        strokeSlider.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                states.setMyStroke(new MyStroke(strokeSlider.getValue()) );
-            }
-        });
+        strokeSlider.addChangeListener(e -> states.setMyStroke(new MyStroke(strokeSlider.getValue()) ));
 
         /*
          * 工具栏图片对象
@@ -409,8 +345,6 @@ public class Chrome extends JFrame {
                 states.setType(StatesModel.TYPE.TEXTBOX);
             }
         });
-
-
 
         //擦除
         JButton eraserButton = new JButton(new ImageIcon(this.getClass().getResource("images/eraser.png")));
@@ -643,8 +577,6 @@ public class Chrome extends JFrame {
         setConstrainSizeAndPos(gridBagConstraints,9,0,3,1);
         gridBagLayout.setConstraints(strokeSlider, gridBagConstraints);
 
-
-
         //工具Label
         setConstrainSizeAndPos(gridBagConstraints,0,1,1,2);
         gridBagLayout.setConstraints(toolsLabel, gridBagConstraints);
@@ -710,8 +642,6 @@ public class Chrome extends JFrame {
         add(redoLabel);
         add(strokeLabel);
         add(strokeSlider);
-//        //填充颜色后方的空白
-//        add(new JPanel(), new GBC(12,0).setWeight(1, 0));
 
         // 第二、三行
         add(toolsLabel);
@@ -732,7 +662,9 @@ public class Chrome extends JFrame {
         add(new JPanel(), new GBC(14,1).setWeight(1, 0));
     }
 
-    //gridx,gridy:组件的左上角坐标;gridWidth，gridHeight：组件占用的网格行数和列数
+    /** gridx,gridy:组件的左上角坐标;
+     * gridWidth，gridHeight：组件占用的网格行数和列数\
+     */
     public void setConstrainSizeAndPos (GridBagConstraints gridBagConstraints,int gridx, int gridy, int gridWidth, int gridHeight) {
         gridBagConstraints.gridx=gridx;
         gridBagConstraints.gridy=gridy;
@@ -740,12 +672,55 @@ public class Chrome extends JFrame {
         gridBagConstraints.gridheight=gridHeight;
     }
 
-    //设置主题
+    /**
+     * 设置主题
+     */
     public void setLookAndFeel(String lookAndFeel) {
         try {
             UIManager.setLookAndFeel(lookAndFeel);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * 重写GridBagConstraints类
+     */
+    public static class GBC extends GridBagConstraints {
+
+        /**
+         * 初始化左上角位置
+         */
+        public GBC(int gridx, int gridy) {
+            this.gridx = gridx;
+            this.gridy = gridy;
+        }
+
+        /**
+         * 初始化左上角位置和所占行数和列数
+         */
+        public GBC(int gridx, int gridy, int gridwidth, int gridheight) {
+            this.gridx = gridx;
+            this.gridy = gridy;
+            this.gridwidth = gridwidth;
+            this.gridheight = gridheight;
+        }
+
+        /**
+         * 是否拉伸及拉伸方向
+         */
+        public GBC setFill(int fill) {
+            this.fill = fill;
+            return this;
+        }
+
+        /**
+         * x和y方向上的增量
+         */
+        public GBC setWeight(double weightx, double weighty) {
+            this.weightx = weightx;
+            this.weighty = weighty;
+            return this;
         }
     }
 
