@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.geom.*;
 
+import javax.swing.JComponent;
+
 
 
 public class BasicDrawableFactory {
@@ -35,9 +37,8 @@ public class BasicDrawableFactory {
         return a;
     }
 
-	public static Drawable makeTextBox(int startx, int starty ,int endx, int endy) {
-		var a = new TextBox(new Point2D.Float(startx, starty));
-        a.putEndPoint(new Point2D.Float(endx, endy));
+	public static Drawable makeTextBox(int startx, int starty,JComponent outer) {
+		var a = new TextBox(new Point2D.Float(startx, starty),outer);
         return a;
 	}
 
