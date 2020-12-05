@@ -11,7 +11,7 @@ public class Path implements Drawable {
     Color color = Color.BLACK;
 
     int widthTimes = 5;
-    float borderStrokeWidth = this.widthTimes * this.borderStroke.getLineWidth();
+    float borderStrokeWidth = this.widthTimes * this.borderStroke.getBasicStroke().getLineWidth();
 
     public Path(Point.Float p) {
         startPoint = p;
@@ -23,7 +23,7 @@ public class Path implements Drawable {
     public void drawOnGraphics2D(Graphics2D g) {
         // initial g settings
         g.setPaint(color); // 设置画笔颜色
-        g.setStroke(borderStroke); // 设置画笔
+        g.setStroke(borderStroke.getBasicStroke()); // 设置画笔
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha)); // 设置透明度
         //
         g.draw(line);

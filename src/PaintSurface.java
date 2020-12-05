@@ -33,9 +33,16 @@ class PaintSurface extends JComponent {
                     Drawable selected = selectedDrawable;
                     double deltax = endDrag.getX() - startDrag.getX();
                     double deltay = endDrag.getY() - startDrag.getY();
+                    boolean moved=false;
 
                     @Override
                     public void execute() {
+                        if(!moved) moved=true;
+                        else{
+                            Point2D.Float selectedStart = selected.getStartPoint();
+                            selected.moveToInStart((float) (selectedStart.getX() + deltax),
+                                    (float) (selectedStart.getY() + deltay));
+                        }
                     }
 
                     @Override
@@ -43,7 +50,6 @@ class PaintSurface extends JComponent {
                         Point2D.Float selectedStart = selected.getStartPoint();
                         selected.moveToInStart((float) (selectedStart.getX() - deltax),
                                 (float) (selectedStart.getY() - deltay));
-
                     }
                 });
                 selectedTip = null;
@@ -62,7 +68,7 @@ class PaintSurface extends JComponent {
                     {
                         tmp.setColor(stm.getColor());
                         tmp.setAlpha(stm.getAlpha());
-                        tmp.setBorder(stm.getColor(), new MyStroke()); // todo
+                        tmp.setBorder(stm.getColor(), stm.getMyStroke());
                         tmp.disableFill();
                     }
 
@@ -217,7 +223,7 @@ class PaintSurface extends JComponent {
             case LINE: {
                 tmpDrawable = BasicDrawableFactory.makeLine(startDrag.x, startDrag.y, startDrag.x, startDrag.y);
                 tmpDrawable.setBorder(tmpDrawable.getBorderColor(),
-                        new MyStroke(3.0f, MyStroke.CAP_BUTT, MyStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
+                        new MyStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
                 tmpDrawable.setColor(stm.getColor());
                 tmpDrawable.setAlpha(stm.getAlpha());
             }
@@ -225,7 +231,7 @@ class PaintSurface extends JComponent {
             case PATH: {
                 tmpDrawable = BasicDrawableFactory.makePath(startDrag.x, startDrag.y, startDrag.x, startDrag.y);
                 tmpDrawable.setBorder(tmpDrawable.getBorderColor(),
-                        new MyStroke(3.0f, MyStroke.CAP_BUTT, MyStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
+                        new MyStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
                 tmpDrawable.setColor(stm.getColor());
                 tmpDrawable.setAlpha(stm.getAlpha());
             }
@@ -239,7 +245,7 @@ class PaintSurface extends JComponent {
             case RECTANGLE: {
                 tmpDrawable = BasicDrawableFactory.makeRec(startDrag.x, startDrag.y, startDrag.x, startDrag.y);
                 tmpDrawable.setBorder(tmpDrawable.getBorderColor(),
-                        new MyStroke(3.0f, MyStroke.CAP_BUTT, MyStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
+                        new MyStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
                 tmpDrawable.disableFill();
                 tmpDrawable.setColor(stm.getColor());
                 tmpDrawable.setAlpha(stm.getAlpha());
@@ -248,7 +254,7 @@ class PaintSurface extends JComponent {
             case ELLIPSE: {
                 tmpDrawable = BasicDrawableFactory.makeEllipse(startDrag.x, startDrag.y, startDrag.x, startDrag.y);
                 tmpDrawable.setBorder(tmpDrawable.getBorderColor(),
-                        new MyStroke(3.0f, MyStroke.CAP_BUTT, MyStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
+                        new MyStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
                 tmpDrawable.disableFill();
                 tmpDrawable.setColor(stm.getColor());
                 tmpDrawable.setAlpha(stm.getAlpha());
@@ -257,7 +263,7 @@ class PaintSurface extends JComponent {
             case TRIANGLE: {
                 tmpDrawable = BasicDrawableFactory.makeTri(startDrag.x, startDrag.y, startDrag.x, startDrag.y);
                 tmpDrawable.setBorder(tmpDrawable.getBorderColor(),
-                        new MyStroke(3.0f, MyStroke.CAP_BUTT, MyStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
+                        new MyStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
                 tmpDrawable.disableFill();
                 tmpDrawable.setColor(stm.getColor());
                 tmpDrawable.setAlpha(stm.getAlpha());
@@ -320,7 +326,7 @@ class PaintSurface extends JComponent {
         var res = BasicDrawableFactory.makeRec((int) rec.getX(), (int) rec.getY(), (int) (rec.getX() + rec.getWidth()),
                 (int) (rec.getY() + rec.getHeight()));
         res.setBorder(shape.getBorderColor(),
-                new MyStroke(3.0f, MyStroke.CAP_BUTT, MyStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
+                new MyStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
         return res;
     }
 

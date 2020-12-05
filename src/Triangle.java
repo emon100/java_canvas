@@ -4,6 +4,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 
+
 public class Triangle implements Drawable{
 
     Triangle2D triangle;
@@ -14,8 +15,8 @@ public class Triangle implements Drawable{
     boolean ifFillTri = false;
 
     int widthTimes = 2;
-    float basicBorderStrokeWidth = this.borderStroke.getLineWidth();
-    float borderStrokeWidth = this.widthTimes * this.borderStroke.getLineWidth();
+    float basicBorderStrokeWidth = this.borderStroke.getBasicStroke().getLineWidth();
+    float borderStrokeWidth = this.widthTimes * this.borderStroke.getBasicStroke().getLineWidth();
 
     Triangle(Point2D.Float point) {
         triangle = new Triangle2D(point.x, point.y ,point.x ,point.y);
@@ -24,7 +25,7 @@ public class Triangle implements Drawable{
     @Override
     public void drawOnGraphics2D(Graphics2D g) {
         g.setPaint(color);
-        g.setStroke(borderStroke);
+        g.setStroke(borderStroke.getBasicStroke());
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,alpha));
         g.draw(triangle.tri);
         if (isFilled()) {

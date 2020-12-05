@@ -31,7 +31,7 @@ public class States implements StatesModel {
     /**
      * 画笔样式
      */
-    protected MyStroke myStroke;
+    protected MyStroke myStroke = new MyStroke();
 
     /**
      * 操作栈，包含所有execute过的command

@@ -5,6 +5,10 @@ import java.awt.geom.Rectangle2D;
 
 public class Ellipse implements Drawable {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = -4871999594383122024L;
     Point2D.Float startPoint;
     Point2D.Float endPoint = null;
     Ellipse2D.Float ellipse;
@@ -15,8 +19,8 @@ public class Ellipse implements Drawable {
     Color fillColor = Color.BLUE;
 
     int widthTimes = 2;
-    float basicBorderStrokeWidth = this.borderStroke.getLineWidth();
-    float borderStrokeWidth = this.widthTimes * this.borderStroke.getLineWidth();
+    float basicBorderStrokeWidth = this.borderStroke.getBasicStroke().getLineWidth();
+    float borderStrokeWidth = this.widthTimes * this.borderStroke.getBasicStroke().getLineWidth();
 
     boolean iffFillEll = false;
 
@@ -29,7 +33,7 @@ public class Ellipse implements Drawable {
     @Override
     public void drawOnGraphics2D(Graphics2D g) {
         g.setPaint(color);
-        g.setStroke(borderStroke);
+        g.setStroke(borderStroke.getBasicStroke());
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,alpha));
         g.draw(ellipse);
         if (isFilled()) {
@@ -54,6 +58,7 @@ public class Ellipse implements Drawable {
     public void setBorder(Color c, MyStroke s) {
         color = c;
         borderStroke = s;
+        basicBorderStrokeWidth = this.borderStroke.getBasicStroke().getLineWidth();
     }
 
     @Override

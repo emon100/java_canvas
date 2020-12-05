@@ -14,7 +14,7 @@ public class Line implements Drawable {
     float alpha = 1f;
     Color color = Color.BLACK;
     int widthTimes = 5;
-    float basicBorderStrokeWidth = this.borderStroke.getLineWidth();
+    float basicBorderStrokeWidth = this.borderStroke.getBasicStroke().getLineWidth();
     float borderStrokeWidth = widthTimes * basicBorderStrokeWidth;
 
     public Line(Point2D.Float point) {
@@ -27,7 +27,7 @@ public class Line implements Drawable {
     public void drawOnGraphics2D(Graphics2D g) {
         // initial g settings
         g.setPaint(color); // 设置画笔颜色
-        g.setStroke(borderStroke); // 设置画笔
+        g.setStroke(borderStroke.getBasicStroke()); // 设置画笔
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha)); // 设置透明度
         //
         g.draw(line);

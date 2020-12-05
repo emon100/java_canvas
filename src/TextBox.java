@@ -52,7 +52,7 @@ public class TextBox implements Drawable {
             g.drawString(filled, startPoint.x, startPoint.y);  //绘制文字
             g.setFont(oldFont); //恢复g之前的字体
         } else { //绘制光标
-            g.setStroke(new MyStroke(1.5f)); 
+            g.setStroke(new MyStroke(1.5f).getBasicStroke()); 
             g.drawLine((int) startPoint.x, (int) startPoint.y, (int) startPoint.x, (int) startPoint.y - font.getSize());
         }
     }

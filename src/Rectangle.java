@@ -21,8 +21,8 @@ public class Rectangle implements Drawable {
     boolean ifFillRec = false; // 是否填充，默认未被填充
 
     int widthTimes = 5;                 //边界扩大的倍数，用于对画笔宽度进行扩大
-    float basicBorderStrokeWidth = this.borderStroke.getLineWidth();    //basic的画笔宽度
-    float borderStrokeWidth = this.widthTimes * this.borderStroke.getLineWidth();   //设置的扩大好的画笔宽度，用于扩大矩形轮廓边界
+    float basicBorderStrokeWidth = this.borderStroke.getBasicStroke().getLineWidth();    //basic的画笔宽度
+    float borderStrokeWidth = this.widthTimes * this.borderStroke.getBasicStroke().getLineWidth();   //设置的扩大好的画笔宽度，用于扩大矩形轮廓边界
 
     /**
      * 该矩形类的构造函数，包括设置起始点，构造分装好的矩形类
@@ -43,7 +43,7 @@ public class Rectangle implements Drawable {
     @Override
     public void drawOnGraphics2D(Graphics2D g) {
         g.setPaint(color);              //设置颜色
-        g.setStroke(borderStroke);      //设置画笔
+        g.setStroke(borderStroke.getBasicStroke());      //设置画笔
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha)); //设置透明度
         g.draw(rectangle);              //绘制该矩形
         if (isFilled()) {               //判断是否填充
@@ -84,6 +84,7 @@ public class Rectangle implements Drawable {
     public void setBorder(Color c, MyStroke s) {
         color = c;
         borderStroke = s;
+        basicBorderStrokeWidth = this.borderStroke.getBasicStroke().getLineWidth();
     }
 
     /**
