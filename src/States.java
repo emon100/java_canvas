@@ -16,6 +16,9 @@ public class States implements StatesModel {
     //当前文件已经被保存
     public boolean hasBeenSaved = true;
 
+    //画笔样式
+    protected MyStroke myStroke;
+
     //操作栈
     Stack<Command> commandStack = new Stack<>();
     //撤销栈
@@ -87,6 +90,16 @@ public class States implements StatesModel {
     @Override
     public void setAlpha(float f) {
         f = alpha;
+    }
+
+    @Override
+    public MyStroke getMyStroke() {
+        return myStroke;
+    }
+
+    @Override
+    public void setMyStroke(MyStroke my) {
+        myStroke = my;
     }
 
     @Override

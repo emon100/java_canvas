@@ -17,4 +17,6 @@ public interface StatesModel {
     void setColor(Color cur);
     float getAlpha();
     void setAlpha(float f);
+    MyStroke getMyStroke();
+    void setMyStroke(MyStroke my);
 }

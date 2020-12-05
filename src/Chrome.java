@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -84,7 +86,8 @@ public class Chrome extends JFrame {
         setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 
         //设置窗口大小
-        setSize(426,426);
+        setSize(500,500);
+        setMinimumSize( new Dimension(650,650) );
 
         //设置右上角退出操作
         //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -359,6 +362,22 @@ public class Chrome extends JFrame {
             }
         });
 
+        //字体粗细滑动条
+        JLabel strokeLabel = new JLabel("画笔粗细");
+        JSlider strokeSlider = new JSlider(1,5,1);
+        // 设置主刻度间隔
+        strokeSlider.setMajorTickSpacing(1);
+
+        // 绘制 刻度 和 标签
+        strokeSlider.setPaintTicks(true);
+        strokeSlider.setPaintLabels(true);
+        strokeSlider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                states.setMyStroke(new MyStroke(strokeSlider.getValue()) );
+            }
+        });
+
         /*
          * 工具栏图片对象
          */
@@ -475,8 +494,9 @@ public class Chrome extends JFrame {
         currentColorPanel.setBackground( states.getColor() );
 
         //颜色选择器
-        JLabel chooseColorTextLabel = new JLabel("任意");
+        JLabel chooseColorTextLabel = new JLabel("其他");
         JPanel chooseColorPanel = new JPanel();
+        chooseColorPanel.setBackground(Color.black);
         chooseColorPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
@@ -608,6 +628,16 @@ public class Chrome extends JFrame {
         setConstrainSizeAndPos(gridBagConstraints,7,0,1,1);
         gridBagLayout.setConstraints(redoLabel, gridBagConstraints);
 
+        //滑动条Panel
+        setConstrainSizeAndPos(gridBagConstraints,8,0,1,1);
+        gridBagLayout.setConstraints(strokeLabel, gridBagConstraints);
+
+        //滑动条Slider
+        setConstrainSizeAndPos(gridBagConstraints,9,0,3,1);
+        gridBagLayout.setConstraints(strokeSlider, gridBagConstraints);
+
+
+
         //工具Label
         setConstrainSizeAndPos(gridBagConstraints,0,1,1,2);
         gridBagLayout.setConstraints(toolsLabel, gridBagConstraints);
@@ -671,6 +701,10 @@ public class Chrome extends JFrame {
         add(saveFileBtn);
         add(undoLabel);
         add(redoLabel);
+        add(strokeLabel);
+        add(strokeSlider);
+//        //填充颜色后方的空白
+//        add(new JPanel(), new GBC(12,0).setWeight(1, 0));
 
         // 第二、三行
         add(toolsLabel);
