@@ -1,12 +1,11 @@
 import java.awt.*;
 import java.awt.geom.*;
 
-import javax.swing.JComponent;
-
-
-
+/**
+ * 提供生成各种Drawble对象方法的工厂类
+ * @author 王一蒙
+ */
 public class BasicDrawableFactory {
-   
     public static Drawable makeLine(int startx, int starty, int endx, int endy) {
         var a = new Line(new Point2D.Float(startx, starty));
         a.putEndPoint(new Point2D.Float(endx, endy));
@@ -25,7 +24,7 @@ public class BasicDrawableFactory {
         return a;
     }
 
-    public static Drawable makeTri(int startx, int starty ,int endx, int endy) {
+    public static Drawable makeTri(int startx, int starty, int endx, int endy) {
         var a = new Triangle(new Point2D.Float(startx, starty));
         a.putEndPoint(new Point2D.Float(endx, endy));
         return a;
@@ -37,9 +36,11 @@ public class BasicDrawableFactory {
         return a;
     }
 
-	public static Drawable makeTextBox(int startx, int starty,JComponent outer) {
-		var a = new TextBox(new Point2D.Float(startx, starty),outer);
+    public static Drawable makeTextBox(int startx, int starty, PaintSurface outer) {
+        var a = new TextBox(new Point2D.Float(startx, starty));
+        var b = new TextSettingPanel(outer, a);
+        b.showTextBoxDialog();
         return a;
-	}
+    }
 
 }
