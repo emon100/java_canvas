@@ -24,7 +24,7 @@ public class TextBox implements Drawable {
 
     Point2D.Float startPoint=null;
 
-    Rectangle2D outBound=null;
+    Rectangle2D outBound = null;
 
     TextBox(Point2D.Float p) {
         startPoint = p;
@@ -45,7 +45,6 @@ public class TextBox implements Drawable {
      */
     @Override
     public void drawOnGraphics2D(Graphics2D g) {
-
         g.setColor(color); //设置绘制颜色
         if (isFilled()) {
             var oldFont = g.getFont(); //保存g之前的字体
