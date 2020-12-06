@@ -1,6 +1,6 @@
 import javax.swing.*;
 
-public class Canvas extends JFrame {
+public class Canvas{
 
     /**
      * 测试用主窗口

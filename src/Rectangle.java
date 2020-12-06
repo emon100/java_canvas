@@ -3,16 +3,15 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 /**
- *这个类是举行类，用于所有举行的相关操作
+ *这个类是矩形类，用于所有矩形的相关操作
  * @author 郑晨升
  *
  */
-
 public class Rectangle implements Drawable {
     
     Point2D.Float startPoint;           //该矩形的起始点
-    Point2D.Float endPoint = null;      //该举行的终点
-    Rectangle2D.Float rectangle;        //封装好的矩形类
+    Point2D.Float endPoint = null;      //该矩形的终点
+    Rectangle2D.Float rectangle;        //封装好的矩形对象
  
     MyStroke borderStroke = new MyStroke(); // 画笔轮廓
     float alpha = 1f; // 透明度
@@ -36,7 +35,7 @@ public class Rectangle implements Drawable {
     }
 
     /**
-     * 将文矩形对象绘制到Graphic2D对象上
+     * 将该矩形对象绘制到Graphic2D对象上
      * @param g 绘制到的Graphic2D对象
      *
      */
@@ -75,7 +74,7 @@ public class Rectangle implements Drawable {
     }
 
     /**
-     * 设置画笔方法，用于将颜色和画笔值传到该矩形类撒上
+     * 设置画笔方法，用于将颜色和画笔值传到该矩形类上
      * @param c 传进去的颜色值
      * @param s 传进去的画笔值
      *
@@ -227,7 +226,7 @@ public class Rectangle implements Drawable {
     @Override
     public void putEndPoint(Point2D.Float p) {
         endPoint = p;       //将传进去的新终点位置传给该矩形类的终点坐标属性
-        /**
+        /*
          * 需要判断四种情况，因为Rectangle2D类的设置只能是左上角的坐标到右下角的坐标，
          * 新终点位置相对于起始点的位置，并重新设置rectangle对象
          *
@@ -275,7 +274,7 @@ public class Rectangle implements Drawable {
     public void putEndPoint(float x, float y) {
         endPoint = new Point2D.Float(x, y); //将传进去的新终点位置传给该矩形类的终点坐标属性
 
-        /**
+        /*
          * 需要判断四种情况，因为Rectangle2D类的设置只能是左上角的坐标到右下角的坐标，
          * 新终点位置相对于起始点的位置，并重新设置rectangle对象
          *
