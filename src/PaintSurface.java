@@ -4,10 +4,15 @@ import java.awt.event.*;
 import java.awt.geom.*;
 import javax.swing.*;
 
+/**
+ * 画板类
+ * @author 王一蒙
+ */
 class PaintSurface extends JComponent {
     private class SurfaceMouseEventListener extends MouseAdapter {
         /**
          * 监听鼠标点击
+         * @param e 鼠标事件
          */
         public void mousePressed(MouseEvent e) {
             if ((e.getModifiersEx() & InputEvent.BUTTON1_DOWN_MASK) != 0) {// left click
@@ -26,6 +31,7 @@ class PaintSurface extends JComponent {
 
         /**
          * 监听鼠标释放
+         * @param e 鼠标事件
          */
         public void mouseReleased(MouseEvent e) {
             if (selectedTip != null) {
@@ -92,6 +98,7 @@ class PaintSurface extends JComponent {
 
         /**
          * 监听鼠标拖动
+         * @param e 鼠标事件
          */
         public void mouseDragged(MouseEvent e) {
             // System.out.println(e.getX()+" "+e.getY());
@@ -100,10 +107,10 @@ class PaintSurface extends JComponent {
                 var deltay = e.getY() - endDrag.getY();
                 int x = e.getX();
                 int y = e.getY();
-                if (tmpDrawable != null) {
+                if (tmpDrawable != null) { //如果有临时绘制对象，给这个对象设置新的结束绘制点
                     tmpDrawable.putEndPoint(x, y);
                 }
-                if (selectedTip != null) {
+                if (selectedTip != null) { //如果有临时绘制对象，给这个对象设置新的结束绘制点
                     var selectedStart = selectedTip.getStartPoint();
                     selectedTip.moveToInStart((float) (selectedStart.getX() + deltax),
                             (float) (selectedStart.getY() + deltay));
@@ -125,11 +132,15 @@ class PaintSurface extends JComponent {
             }
         }
 
+        /**
+         * 处理鼠标左键点击事件
+         * @param e 鼠标事件
+         */
         private void leftClickListener(MouseEvent e) {
-            tmpDrawable = null;
-            tryCreateTmpDrawable();
-            if (tmpDrawable == null) {
-                tryUseTools();
+            tmpDrawable = null; //清空临时绘制对象
+            tryCreateTmpDrawable(); //检测是否应该创建新的临时绘制对象
+            if (tmpDrawable == null) {  
+                tryUseTools(); //未创建新的临时绘制对象，代表应当使用工具
             }
             repaint();
         }
@@ -141,7 +152,7 @@ class PaintSurface extends JComponent {
      */
     private static final long serialVersionUID = 1L;
 
-    SurfaceMouseEventListener listener = new SurfaceMouseEventListener();
+    SurfaceMouseEventListener listener = new SurfaceMouseEventListener(); //鼠标监听器
 
     final float[] dash1 = { 3.0f, 3.0f }; // 虚线的实心空心设置
 
@@ -155,10 +166,14 @@ class PaintSurface extends JComponent {
     Drawable selectedDrawable = null; // 被选择的对象
     Drawable eraserDrawable = null; // 橡皮擦显示对象
 
-    public PaintSurface(StatesModel stmo) { // 构造函数，接受一个StatesModel对象
+    /**
+     * PaintSurface构造函数
+     * @param stmo 接受一个非空的StatesModel对象
+     */
+    public PaintSurface(StatesModel stmo) { 
         stm = stmo;
 
-        setPopupMenu();
+        setPopupMenu(); //设置右键菜单
 
         // 监听鼠标点击，释放
         this.addMouseListener(listener);
@@ -167,6 +182,10 @@ class PaintSurface extends JComponent {
         this.addMouseMotionListener(listener);
     }
 
+
+    /**
+     * 设置右键菜单
+     */
     private void setPopupMenu() {
         JPopupMenu popup = new JPopupMenu();
         var a = new JMenuItem("暂无功能");
@@ -174,6 +193,11 @@ class PaintSurface extends JComponent {
         setComponentPopupMenu(popup);
     }
 
+    /**
+     * 查找与点p相交的Drawble对象
+     * @param p Point类点
+     * @return 如有相交的则返回Drawble对象，否则返回null
+     */
     private Drawable getIntersectDrawable(Point p) {
         var l = stm.getAllDrawable();
         for (int i = l.size(); i-- > 0;) {
@@ -186,7 +210,11 @@ class PaintSurface extends JComponent {
         }
         return null;
     }
-
+    
+    /**
+     * 删除Drawble对象
+     * @param s 要删除的Drawble对象
+     */
     private void eraseDrawable(Drawable s) {
         if (s != null) {
             stm.execute(new Command() {
@@ -206,6 +234,10 @@ class PaintSurface extends JComponent {
         }
     }
 
+    /**
+     * 获得点p所处的区域属于哪个Drawble对象的填充区
+     * @return 返回所处填充区对应的Drawble对象，否则返回null
+     */
     private Drawable getFillDrawable() {
         var l = stm.getAllDrawable();
         for (int i = l.size(); i-- > 0;) {
@@ -218,6 +250,9 @@ class PaintSurface extends JComponent {
         return null;
     }
 
+    /**
+     * 尝试生成一个临时绘制对象，并赋值给tmpDrawable
+     */
     private void tryCreateTmpDrawable() {
         switch (stm.getType()) {
             case LINE: {
@@ -275,6 +310,9 @@ class PaintSurface extends JComponent {
         }
     }
 
+    /** 
+     * 对目前对应的工具进行使用
+     */
     private void tryUseTools() {
         switch (stm.getType()) {
             case SELECT: {
@@ -321,6 +359,11 @@ class PaintSurface extends JComponent {
         }
     }
 
+    /**
+     * 获得Drawable对象的选择框
+     * @param shape 选中Drawable对象
+     * @return 选中对象的选择框
+     */
     private Drawable getSelectedTip(Drawable shape) {
         var rec = shape.getOutBound();
         var res = BasicDrawableFactory.makeRec((int) rec.getX(), (int) rec.getY(), (int) (rec.getX() + rec.getWidth()),
@@ -329,13 +372,19 @@ class PaintSurface extends JComponent {
                 new MyStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
         return res;
     }
-
+    
+    /**
+     * 在画板上创建橡皮擦对象，一个小矩形
+     */
     private Drawable createEraserDrawble() {
         var rec = BasicDrawableFactory.makeRec(startDrag.x - 3, startDrag.y - 3, startDrag.x + 3, startDrag.y + 3);
         return rec;
     }
 
-    // 初始化背景
+    /**
+     * 绘制画图板的背景
+     * @param g2 Graphics2D类型
+     */
     private void paintBackground(Graphics2D g2) {// TODO: 改的有创意一点，比如类似PS的灰白相间代表透明
         g2.setPaint(Color.WHITE);
 
@@ -350,18 +399,31 @@ class PaintSurface extends JComponent {
         }
     }
 
+    /**
+     * 绘制画图板，交给每一个图素来完成
+     * @param g2 Graphics2D类型
+     */
     private void paintBoard(Graphics2D g2) {
         for (var d : stm.getAllDrawable()) {
             d.drawOnGraphics2D(g2);
         }
     }
 
+    /**
+     * 返回坐标的绘制点
+     * @param mouseNow
+     * @return
+     */
     private Point getToolTipdrawPoint(Point mouseNow) {
         int newX = Math.max(Math.min(mouseNow.x, size.width - 70), 5);
         int newY = Math.min(Math.max(mouseNow.y, 15), size.height - 5);
         return new Point(newX, newY);
     }
 
+    /**
+     * 绘制画图板上的提示，如提示的虚线，移动的对象，橡皮擦对象
+     * @param g2 Graphics2D类型
+     */
     private void paintTips(Graphics2D g2) {
         // 提示的虚线
         if (startDrag != null && endDrag != null) {
@@ -385,6 +447,11 @@ class PaintSurface extends JComponent {
         }
     }
 
+    
+    /**
+     * 绘制画图板上的提示
+     * @param g2 Graphics2D类型
+     */
     public void paintComponent(Graphics g) {
         // System.out.println("paintComponent called");
 

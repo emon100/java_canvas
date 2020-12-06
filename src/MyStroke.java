@@ -1,12 +1,18 @@
 import java.awt.*;
 import java.io.Serializable;
 
+/**
+ * 自己实现的可序列化笔画类
+ */
 public class MyStroke implements Serializable {
     /**
      *
      */
     private static final long serialVersionUID = -5593482416116997360L;
-    float width;
+    /*
+     *这下面的属性与BasicStroke一一对应
+     */
+    float width; 
     int cap;
     int join;
     float miterlimit;
@@ -34,7 +40,10 @@ public class MyStroke implements Serializable {
     public MyStroke() {
         this(1.0f,BasicStroke. CAP_SQUARE, BasicStroke.JOIN_MITER, 10.0f, null, 0.0f);
     }
-
+    /**
+     * 返回MyStroke对应的BasicStroke对象
+     * @return
+     */
     BasicStroke getBasicStroke(){
         return new BasicStroke(width, cap, join,miterlimit, dash, 0.0f);
     }

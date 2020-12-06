@@ -2,6 +2,10 @@ import java.awt.*;
 import java.awt.geom.*;
 import java.io.Serializable;
 
+/**
+ * 所有可绘制对象的接口
+ * @author 王一蒙
+ */
 public interface Drawable extends Serializable {
     void drawOnGraphics2D(Graphics2D g);//实现往g上作画
     void setAlpha(float f);//设置整个图形透明度，from 0 to 1.0f
