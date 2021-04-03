@@ -178,7 +178,7 @@ public class TextBox implements Drawable {
 
     /**
      * 设置绘制结束点
-     * @param 绘制结束点
+     * @param p 绘制结束点
      */
     @Override
     public void putEndPoint(Float p) {
@@ -188,7 +188,8 @@ public class TextBox implements Drawable {
 
     /**
      * 设置绘制结束点
-     * @param 绘制结束点
+     * @param x 绘制结束点x
+     * @param y 绘制结束点y
      */
     @Override
     public void putEndPoint(float x, float y) {

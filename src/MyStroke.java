@@ -41,10 +41,10 @@ public class MyStroke implements Serializable {
         this(1.0f,BasicStroke. CAP_SQUARE, BasicStroke.JOIN_MITER, 10.0f, null, 0.0f);
     }
     /**
-     * 返回MyStroke对应的BasicStroke对象
-     * @return
+     *
+     * @return BasicStroke 返回MyStroke对应的BasicStroke对象
      */
-    BasicStroke getBasicStroke(){
+    public BasicStroke getBasicStroke(){
         return new BasicStroke(width, cap, join,miterlimit, dash, 0.0f);
     }
 }

@@ -81,8 +81,6 @@ public class BasicDrawableFactory {
      * 创造一个文本框
      * @param startx 绘制起始点的x
      * @param starty 绘制起始点的y
-     * @param endx 绘制终止点的x
-     * @param endy 绘制起始点的y
      * @return Drawble对象
      */     
     public static Drawable makeTextBox(int startx, int starty, PaintSurface outer) {

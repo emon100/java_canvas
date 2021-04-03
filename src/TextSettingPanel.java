@@ -78,6 +78,7 @@ public class TextSettingPanel extends JComponent {
                 textBox.setFont(new Font(fontName,fontStyle,fontSize));
                 outerComponent.repaint();
             } catch (NumberFormatException nfe) {
+                nfe.printStackTrace();
             }
         });
         //字形更换事件监听
@@ -87,6 +88,7 @@ public class TextSettingPanel extends JComponent {
                 textBox.setFont(new Font(fontName,fontStyle,fontSize));
                 outerComponent.repaint();
             } catch (NumberFormatException nfe) {
+                nfe.printStackTrace();
             }
         });
         //字号更换事件监听
@@ -129,9 +131,7 @@ public class TextSettingPanel extends JComponent {
         //确认按钮
         inputpanel.setLayout(new FlowLayout());
         JButton enterButton = new JButton("Enter");
-        enterButton.addActionListener(e -> {
-            dialog.dispose();
-        });
+        enterButton.addActionListener((e)->dialog.dispose());
         inputpanel.add(input);
         inputpanel.add(enterButton);
 

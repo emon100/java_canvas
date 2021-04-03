@@ -10,16 +10,12 @@ public class Canvas{
 
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
+        SwingUtilities.invokeLater(() -> {
                 States states = new States();
                 Chrome chrome = new Chrome(states);
                 chrome.add(new PaintSurface(states),new Chrome.GBC(0,3,15,7).setFill(Chrome.GBC.BOTH).setWeight(0,100));
                 chrome.setVisible(true);
-            }
-        });
-        
+            });
     }
 
 }

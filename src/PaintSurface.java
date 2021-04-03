@@ -15,30 +15,24 @@ class PaintSurface extends JComponent {
          * @param e 鼠标事件
          */
         public void mousePressed(MouseEvent e) {
-            if ((e.getModifiersEx() & InputEvent.BUTTON1_DOWN_MASK) != 0) {// left click
+            boolean isLeftClick = (e.getModifiersEx() & InputEvent.BUTTON1_DOWN_MASK)!=0;
+            if (isLeftClick) {// left click
                 startDrag = e.getPoint();
                 endDrag = new Point();
                 endDrag.setLocation(startDrag.getX(), startDrag.getY());
                 leftClickListener(e);
-            } else if ((e.getModifiersEx() & InputEvent.BUTTON3_DOWN_MASK) != 0) { // right click
-
-            } else {
-                // ignore
-
             }
-
         }
-
         /**
          * 监听鼠标释放
          * @param e 鼠标事件
          */
         public void mouseReleased(MouseEvent e) {
             if (selectedTip != null) {
-                stm.execute(new Command() {
-                    Drawable selected = selectedDrawable;
-                    double deltax = endDrag.getX() - startDrag.getX();
-                    double deltay = endDrag.getY() - startDrag.getY();
+                stm.execute(new Command() {//TODO: move away this closure.
+                    final Drawable selected = selectedDrawable;
+                    final double deltax = endDrag.getX() - startDrag.getX();
+                    final double deltay = endDrag.getY() - startDrag.getY();
                     boolean moved=false;
 
                     @Override
@@ -70,7 +64,7 @@ class PaintSurface extends JComponent {
                 startDrag = null;
                 endDrag = null;
                 stm.execute(new Command() {
-                    Drawable tmp = tmpDrawable;
+                    final Drawable tmp = tmpDrawable;
                     {
                         tmp.setColor(stm.getColor());
                         tmp.setAlpha(stm.getAlpha());
@@ -137,9 +131,10 @@ class PaintSurface extends JComponent {
          * @param e 鼠标事件
          */
         private void leftClickListener(MouseEvent e) {
+            //TODO: Please remove side effect.
             tmpDrawable = null; //清空临时绘制对象
             tryCreateTmpDrawable(); //检测是否应该创建新的临时绘制对象
-            if (tmpDrawable == null) {  
+            if (tmpDrawable == null) {
                 tryUseTools(); //未创建新的临时绘制对象，代表应当使用工具
             }
             repaint();
@@ -150,14 +145,12 @@ class PaintSurface extends JComponent {
     /**
      *
      */
-    private static final long serialVersionUID = 1L;
 
     SurfaceMouseEventListener listener = new SurfaceMouseEventListener(); //鼠标监听器
 
     final float[] dash1 = { 3.0f, 3.0f }; // 虚线的实心空心设置
 
-    Point startDrag, endDrag; // 鼠标起始点，终止点
-    Dimension size = getSize(); // 当前窗口大小
+    Point startDrag = null, endDrag = null; // 鼠标起始点，终止点
 
     StatesModel stm;// 程序中所有的的状态
 
@@ -170,16 +163,17 @@ class PaintSurface extends JComponent {
      * PaintSurface构造函数
      * @param stmo 接受一个非空的StatesModel对象
      */
-    public PaintSurface(StatesModel stmo) { 
+    public PaintSurface(StatesModel stmo) {
+        assert stmo!=null;
         stm = stmo;
 
         setPopupMenu(); //设置右键菜单
 
         // 监听鼠标点击，释放
-        this.addMouseListener(listener);
+        addMouseListener(listener);
 
         // 监听鼠标拖动
-        this.addMouseMotionListener(listener);
+        addMouseMotionListener(listener);
     }
 
 
@@ -210,7 +204,7 @@ class PaintSurface extends JComponent {
         }
         return null;
     }
-    
+
     /**
      * 删除Drawble对象
      * @param s 要删除的Drawble对象
@@ -218,8 +212,8 @@ class PaintSurface extends JComponent {
     private void eraseDrawable(Drawable s) {
         if (s != null) {
             stm.execute(new Command() {
-                Drawable removedDrawable = s;
-                int removedDrawableIndex = stm.getAllDrawable().indexOf(s);
+                final Drawable removedDrawable = s;
+                final int removedDrawableIndex = stm.getAllDrawable().indexOf(s);
 
                 public void execute() {
                     stm.getAllDrawable().remove(removedDrawableIndex);
@@ -310,7 +304,7 @@ class PaintSurface extends JComponent {
         }
     }
 
-    /** 
+    /**
      * 对目前对应的工具进行使用
      */
     private void tryUseTools() {
@@ -320,16 +314,15 @@ class PaintSurface extends JComponent {
                 if (selectedDrawable != null) {
                     System.out.println("selected");
                     selectedTip = getSelectedTip(selectedDrawable);
-                    repaint();
                 }
             }
                 break;
             case FILL: {
                 Optional.ofNullable(getFillDrawable()).ifPresent(s -> {
                     stm.execute(new Command() {
-                        boolean isFilledBefore = s.isFilled();
-                        Color filledColorBefore = isFilledBefore ? s.getFillColor() : Color.white;
-                        Color filledColorNow = stm.getColor();
+                        final boolean isFilledBefore = s.isFilled();
+                        final Color filledColorBefore = isFilledBefore ? s.getFillColor() : Color.white;
+                        final Color filledColorNow = stm.getColor();
 
                         public void execute() {
                             s.setFill(filledColorNow);
@@ -343,7 +336,6 @@ class PaintSurface extends JComponent {
                             }
                         }
                     });
-                    repaint();
                 });
             }
                 break;
@@ -351,7 +343,6 @@ class PaintSurface extends JComponent {
                 eraserDrawable = createEraserDrawble();
                 Drawable s = getIntersectDrawable(endDrag);
                 eraseDrawable(s);
-                repaint();
             }
                 break;
             default:
@@ -372,13 +363,12 @@ class PaintSurface extends JComponent {
                 new MyStroke(3.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 3.0f));
         return res;
     }
-    
+
     /**
      * 在画板上创建橡皮擦对象，一个小矩形
      */
     private Drawable createEraserDrawble() {
-        var rec = BasicDrawableFactory.makeRec(startDrag.x - 3, startDrag.y - 3, startDrag.x + 3, startDrag.y + 3);
-        return rec;
+        return BasicDrawableFactory.makeRec(startDrag.x - 3, startDrag.y - 3, startDrag.x + 3, startDrag.y + 3);
     }
 
     /**
@@ -386,15 +376,16 @@ class PaintSurface extends JComponent {
      * @param g2 Graphics2D类型
      */
     private void paintBackground(Graphics2D g2) {// TODO: 改的有创意一点，比如类似PS的灰白相间代表透明
+        Dimension surfaceDimension = getSize();
         g2.setPaint(Color.WHITE);
 
-        for (int i = 0; i < size.width; i += 10) {
-            Shape line = new Line2D.Float(i, 0, i, size.height);
+        for (int i = 0; i < surfaceDimension.width; i += 10) {
+            Shape line = new Line2D.Float(i, 0, i, surfaceDimension.height);
             g2.draw(line);
         }
 
-        for (int i = 0; i < size.height; i += 10) {
-            Shape line = new Line2D.Float(0, i, size.width, i);
+        for (int i = 0; i < surfaceDimension.height; i += 10) {
+            Shape line = new Line2D.Float(0, i, surfaceDimension.width, i);
             g2.draw(line);
         }
     }
@@ -415,8 +406,9 @@ class PaintSurface extends JComponent {
      * @return
      */
     private Point getToolTipdrawPoint(Point mouseNow) {
-        int newX = Math.max(Math.min(mouseNow.x, size.width - 70), 5);
-        int newY = Math.min(Math.max(mouseNow.y, 15), size.height - 5);
+        Dimension surfaceDimension = getSize();
+        int newX = Math.max(Math.min(mouseNow.x, surfaceDimension.width - 70), 5);
+        int newY = Math.min(Math.max(mouseNow.y, 15), surfaceDimension.height - 5);
         return new Point(newX, newY);
     }
 
@@ -427,14 +419,7 @@ class PaintSurface extends JComponent {
     private void paintTips(Graphics2D g2) {
         // 提示的虚线
         if (startDrag != null && endDrag != null) {
-            var oldComposite = g2.getComposite();
-            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
-
-            // 提示坐标
-            Point toolTipPoint = getToolTipdrawPoint(endDrag);
-            g2.setPaint(Color.BLACK);
-            g2.drawString("X: " + endDrag.x + " Y:" + endDrag.y, toolTipPoint.x, toolTipPoint.y);
-            g2.setComposite(oldComposite);
+            paintDottedLine(g2);
         }
         if (tmpDrawable != null) { // 提示对象的绘制
             tmpDrawable.drawOnGraphics2D(g2);
@@ -447,18 +432,30 @@ class PaintSurface extends JComponent {
         }
     }
 
-    
     /**
-     * 绘制画图板上的提示
+     * 绘制画图板上的虚线
      * @param g2 Graphics2D类型
      */
-    public void paintComponent(Graphics g) {
-        // System.out.println("paintComponent called");
+    private void paintDottedLine(Graphics2D g2) {
+        var oldComposite = g2.getComposite();
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 
-        size = getSize();
+        // 提示坐标
+        Point toolTipPoint = getToolTipdrawPoint(endDrag);
+        g2.setPaint(Color.BLACK);
+        g2.drawString("X: " + endDrag.x + " Y:" + endDrag.y, toolTipPoint.x, toolTipPoint.y);
+        g2.setComposite(oldComposite);
+    }
+
+
+    /**
+     * 绘制画图板，在repaint()被调用或重绘事件发生后会被自动调用。
+     * @param g Graphics类型
+     */
+    public void paintComponent(Graphics g) {
+
         // step0: initial g2
-        Graphics2D g2 = (Graphics2D) g;
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        Graphics2D g2 = initializeGraphics2D(g);
 
         // step1: paintBackground
         paintBackground(g2);
@@ -468,6 +465,12 @@ class PaintSurface extends JComponent {
 
         // step3: paintTips
         paintTips(g2);
+    }
+
+    private Graphics2D initializeGraphics2D(Graphics g) {
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        return g2;
     }
 
 }
